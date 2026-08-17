@@ -141,7 +141,7 @@ details{margin-top:10px}.settingsGrid{display:grid;gap:8px;margin-top:10px}.sett
   <div id="cgViewerTitle" class="cgViewerTitle"></div>
 </div>
 <script>
-const APP_BUILD='20260818-psych-restraint-balance-night1';
+const APP_BUILD='20260818-ai-playerline-earlygain-nightcg1';
 
 const CHARACTERS={
  risa:{id:'risa',name:'梨沙',age:18,height:153,startWeight:45,personality:'明るい、活発、前向き、しっかり者',speech:'タメ口、普通',relationship:'幼馴染かつクラスメイト',affection:50,mood:50,restraint:50,appetite:'普通',gainTendency:'普通',exercise:'普通',bodyView:'少し痩せたいと思っている。太りたくはない。',favoriteFoods:['甘いもの','パン類'],features:'幼馴染である主人公が少し気になっている。そのため、主人公にどう見られているかを気にする。ちょっと泣き虫。',rules:'基本ポジティブに話す。体重が増えると少しネガティブになる。抑止力が高いと食事は断る。甘いものの場合は抑止力が高くても断らない場合がある。',imageBase:'risa'},
@@ -375,6 +375,10 @@ function memoryCGPath(kind,key='',stage=stageNum()){
  if(kind==='date')return `assets/${activeId}/memories/date_${key}_${lv}.webp?v=${APP_BUILD}`;
  if(kind==='special')return `assets/${activeId}/memories/special_${key}_${lv}.webp?v=${APP_BUILD}`;
  if(kind==='shopping')return `assets/${activeId}/memories/date_shopping_${lv}.webp?v=${APP_BUILD}`;
+ if(kind==='night'){
+   const n=String(Math.max(1,Math.min(6,Number(key)||1))).padStart(2,'0');
+   return `assets/${activeId}/memories/night_thought_${n}.webp?v=${APP_BUILD}`;
+ }
  return `assets/${activeId}/memories/${kind}_${key}_${lv}.webp?v=${APP_BUILD}`;
 }
 function cgPath(c,type,stage){
@@ -619,12 +623,13 @@ async function resolveWeightEventChoice(index){
  if(!Array.isArray(state.seenWeightEvents))state.seenWeightEvents=[];
  state.seenWeightEvents.push(state.pendingWeightEvent.key);
 
- addBubble('user',choice.label,'体重変化イベント');
+ const playerLine=await generatePlayerChoiceLine(choice.label,choice.reply||choice.label);
+ addBubble('user',playerLine,'体重変化イベント');
  const yuiCgContext=c.id==='yui'?`結衣専用イベントテーマ:${YUI_WEIGHT_EVENT_TITLES[stage]||ev.title}。お腹や服のフィット感への本人の意識を中心に描写する。`:'';
  const ctx=`体重変化イベントの選択後。
 イベント:${ev.title}
 元の状況:${ev.text}
-主人公が選んだ行動:${choice.label}
+主人公が選んだ行動:${choice.label}\n主人公の実際の発言:${playerLine}
 ゲーム側の確定結果:
 好感度 ${before.affection}→${state.affection} (${choice.affection>=0?'+':''}${choice.affection||0})
 機嫌 ${before.mood}→${state.mood} (${choice.mood>=0?'+':''}${choice.mood||0})
@@ -632,7 +637,7 @@ async function resolveWeightEventChoice(index){
 現在体重:${state.weight.toFixed(1)}kg
 この選択直後の${c.name}の反応を、設定と現在ステータスに合わせて返すこと。
 既定文「${choice.reply||''}」は参考にしてよいが、会話文脈に自然になるよう言い換えてよい。`;
- const ok=await showEventAI(choice.label,ctx,'体重変化イベント');
+ const ok=await showEventAI(playerLine,ctx,'体重変化イベント');
  if(!ok){
    addNarration(`${c.name}はその言葉を受け、服や身体の変化を確かめるように視線を落とした。`,'体重変化イベント');
    addBubble('assistant',choice.reply||'……。','体重変化イベント');
@@ -916,15 +921,15 @@ async function resolveRestraintChoice(i){
  state.restraint=clamp(state.restraint+delta);
  if(outcome==='失敗')state.mood=clamp(state.mood-1);
  else state.mood=clamp(state.mood+1);
- addBubble('user',ch.label,'抑止力イベント');
+ const playerLine=await generatePlayerChoiceLine(ch.label,ch.tone);
+ addBubble('user',playerLine,'抑止力イベント');
  const ctx=`抑止力に働きかける会話イベントの結果。
-主人公の言葉:${ch.label}
-意図:${ch.tone}
+主人公が選んだ方針:${ch.label}\n主人公の実際の発言:${playerLine}\n意図:${ch.tone}
 判定:${outcome}
 成功率:${Math.round(prob)}%
 抑止力:${before}→${state.restraint} (${delta>=0?'+':''}${delta})
 この数値変化は確定。成功なら少し肩の力が抜ける反応、失敗なら逆に警戒・自制を強める反応をキャラクターらしく返すこと。`;
- try{const r=await askAI(ch.label,null,null,ctx);addAIResponse(r,'抑止力イベント')}
+ try{const r=await askAI(playerLine,null,null,ctx);addAIResponse(r,'抑止力イベント')}
  catch(e){addAIResponse({narration:`${CHARACTERS[activeId].name}はその言葉を聞いて、少し考え込んだ。`,dialogue:outcome==='失敗'?'……そう言われると、逆に気をつけたくなるかも。':'……少しくらいなら、気にしすぎなくてもいいのかな。',emotion:outcome==='失敗'?'troubled':'happy'},'抑止力イベント')}
  addBubble('system',`${outcome}：抑止力 ${delta>=0?'+':''}${delta}`,'抑止力判定');
  remember('restraint',`${CHARACTERS[activeId].name}への働きかけ「${ch.label}」は${outcome}し、抑止力が${Math.abs(delta)}${delta<0?'下がった':'上がった'}`,outcome==='大成功'?4:2,['restraint']);
@@ -1025,15 +1030,15 @@ async function resolveInitiativeChoice(i){
    state.selfFoodCount=(state.selfFoodCount||0)+1;maybeYuiOvereatHook('相手からの食事提案');
    unlockCG(`self_food:${activeId}:${key}`,`${CHARACTERS[activeId].name}からの食事のお誘い`,cgPath(CHARACTERS[activeId],`food_${key}`));
  }
- addBubble('user',ch.label,'自発イベント選択');
+ const playerLine=await generatePlayerChoiceLine(ch.label,ch.tone);
+ addBubble('user',playerLine,'自発イベント選択');
  const ctx=`キャラクター発イベントへの主人公の返答。
 元イベント:${p.type}
-主人公の選択:${ch.label}
-選択の意味:${ch.tone}
+主人公の選択方針:${ch.label}\n主人公の実際の発言:${playerLine}\n選択の意味:${ch.tone}
 ゲーム側確定結果: 好感度 ${before}→${state.affection} (${ch.affection>=0?'+':''}${ch.affection}) / 機嫌 ${ch.mood>=0?'+':''}${ch.mood}
 ${selfFoodEffect?`相手自身の提案で実際に${selfFoodName}を食べた。体重+${selfFoodEffect.weightGain.toFixed(2)}kg / 満腹度+${selfFoodEffect.fullnessDelta} / 抑止力${selfFoodEffect.restraintDelta>=0?'+':''}${selfFoodEffect.restraintDelta}。この事実を変更しないこと。`:''}
 この結果を覆さず、選択を受けた直後の反応を返すこと。`;
- try{const r=await askAI(ch.label,null,null,ctx);addAIResponse(r,'自発イベント')}
+ try{const r=await askAI(playerLine,null,null,ctx);addAIResponse(r,'自発イベント')}
  catch(e){addAIResponse({narration:`${CHARACTERS[activeId].name}はその返事を聞き、少しだけ表情を変えた。`,dialogue:'……そう。',emotion:ch.affection>=3?'embarrassed':ch.affection<0?'angry':'normal'},'自発イベント')}
  addBubble('system',`好感度 ${ch.affection>=0?'+':''}${ch.affection}｜機嫌 ${ch.mood>=0?'+':''}${ch.mood}`,'選択結果');
  remember('initiative_choice',`${CHARACTERS[activeId].name}からの話題に「${ch.label}」と返した`,ch.affection>=4?4:2,['initiative']);
@@ -1084,6 +1089,11 @@ async function maybeEndOfDayMonologue(endedDay){
  const c=CHARACTERS[activeId],before=state.restraint,drift=nightRestraintDrift();
  state.restraint=clamp(state.restraint+drift);
  const summary=recentDaySummary(endedDay);
+ const nightVariant=1+Math.floor(Math.random()*6);
+ const nightPath=memoryCGPath('night',nightVariant,stageNum());
+ const nightTitles=['鏡の前で自分を見る','ベッドで天井を見る','日記を書く','頬杖をついて考える','枕を抱えてため息','窓の外を見つめる'];
+ const nightTitle=`${c.name}の一人の夜：${nightTitles[nightVariant-1]}`;
+ unlockCG(`night:${activeId}:${nightVariant}`,nightTitle,nightPath);
  const ctx=`1日の終わりに、主人公がいない場所でキャラクターが一人で考えるランダム独白イベント。
 これはDAY ${endedDay}の夜、自宅など一人の時間。
 主人公はその場にいないため、主人公への直接の会話は禁止。
@@ -1097,8 +1107,10 @@ dialogueは独り言として1〜3文。narrationは一人で過ごす情景を1
  try{
    const r=await askAI('（一日の終わり、一人で今日を振り返る）',null,null,ctx);
    addBubble('system',`DAY ${endedDay} 終了後のひとりごと`,'夜のランダムイベント');
+   addCGMessage(nightTitle,nightPath,'夜の思い出CG');
    addAIResponse(r,'夜の独白');
  }catch(e){
+   addCGMessage(nightTitle,nightPath,'夜の思い出CG');
    addNarration(`${c.name}は一人になった部屋で、今日一日のことをぼんやり思い返した。`,'夜の独白');
    addBubble('assistant',state.restraint>=60?'……今日はちょっと気をつけた方がよかったかな。':'……まあ、今日くらいはいいか。','夜の独白');
  }
@@ -1267,7 +1279,14 @@ function getMealOffer(category){const cat=MEAL_CATEGORIES[category]||MEAL_CATEGO
 function detectFoodOffer(text){let category=null;if(/ラーメン/.test(text))category='ramen';else if(/揚げ|唐揚げ|からあげ|フライ|とんかつ/.test(text))category='fried';else if(/ケーキ|スイーツ|デザート|パフェ|アイス|チョコ/.test(text))category='dessert';else if(/和食|定食|ご飯|ごはん|寿司|魚/.test(text))category='japanese';if(!category||!/食べ|行こ|行か|どう|奢|おご/.test(text))return null;return getMealOffer(category)}
 async function foodEvent(){
  if(blockingEventType()){showBlockingNotice();return}if(state&&state.pendingWeightEvent){addBubble('system','体重変化イベントの選択肢を先に選んでください。','イベント中');return}const offer=getMealOffer($('mealSelect').value);state.money=state.money??2500;if(state.money<offer.price){addBubble('system',`${offer.name}を勧めるには ¥${offer.price.toLocaleString()} 必要です。バイトでお金を稼いでください。`,'所持金不足');return}state.money-=offer.price;const pressure=state.lastFoodWasRefused&&state.lastFoodTurnKey===currentTurnKey();let pressureResult=null;if(pressure){pressureResult=pressurePenalty('いいから食べてよ');addBubble('system',pressureResult.summary,'強引な再提案')}addBubble('user',`${offer.name}食べない？`,`購入 ¥${offer.price.toLocaleString()}`);const result=resolveFoodOffer(offer);if(result&&result.accepted)maybeYuiOvereatHook('食事');addBubble('system',result.summary,'食事判定');log(`${offer.name}を購入 ¥${offer.price}。${result.accepted?'食べた':'断った'}`);try{const aiResult=await askAI(`${offer.name}食べない？`,result,pressureResult);addAIResponse(aiResult,`${turns[state.turn].label} / DAY ${state.day}`)}catch(e){const errMsg=e&&e.message?e.message:String(e);addBubble('system','AI接続エラー：'+errMsg+'\nデモ返答に切り替えました。','API ERROR',false);addAIResponse(demoStructuredReply('',result,pressureResult),`${turns[state.turn].label} / DAY ${state.day}`);log('API接続エラー: '+errMsg)}save();render()}
-function gainFactor(c){return c.gainTendency==='太りやすい'?1.35:c.gainTendency==='太りにくい'?.75:c.gainTendency==='かなり太りにくい'?.55:1}
+function earlyStageGainBoost(){
+ const st=evolutionStage();
+ return [1.45,1.30,1.18,1.08,1,1,1][st]||1;
+}
+function gainFactor(c){
+ const tendency=c.gainTendency==='太りやすい'?1.35:c.gainTendency==='太りにくい'?.75:c.gainTendency==='かなり太りにくい'?.55:1;
+ return tendency*earlyStageGainBoost();
+}
 function foodAcceptanceChance(c,offer){let score=48;score+=(state.affection-50)*0.28;score+=(state.hunger-40)*0.42;score-=state.fullness*0.38;score-=state.restraint*0.42;if(c.appetite==='よく食べる')score+=14;if(c.appetite==='少食')score-=12;if(state.favoriteFoods.some(x=>offer.name.includes(x)||x.includes(offer.name)))score+=18;
  const learned=foodExperience(foodGrowthKey(offer));
  score+=(learned.liking||0)*.22;
@@ -1439,13 +1458,13 @@ async function resolveDateChoice(i){
  if(cost)txt+=`｜¥${cost.toLocaleString()}消費`;
  if(foodEffect)txt+=`\n食事効果：満腹度 +${foodEffect.fullnessDelta}｜体重 +${foodEffect.weightGain.toFixed(2)}kg｜抑止力 ${foodEffect.restraintDelta>=0?'+':''}${foodEffect.restraintDelta}`;
 
- addBubble('user',choice.label,'デート中の選択');
+ const playerLine=await generatePlayerChoiceLine(choice.label,choice.note||choice.label);
+ addBubble('user',playerLine,'デート中の選択');
 
  const ctx=`デート中イベントの選択後。
 デート先:${dateName}
 イベント状況:${ev.text}
-主人公の選択:${choice.label}
-選択の意味:${choice.note||choice.label}
+主人公の選択方針:${choice.label}\n主人公の実際の発言:${playerLine}\n選択の意味:${choice.note||choice.label}
 ゲーム側の確定結果:
 好感度 ${before.affection}→${state.affection} (${ag>=0?'+':''}${ag})
 機嫌 ${before.mood}→${state.mood} (${mg>=0?'+':''}${mg})
@@ -1458,7 +1477,7 @@ ${choice.restraint?`抑止力 ${before.restraint}→${state.restraint}\n`:''}${f
 上記は確定結果。特に食事がある場合、食べた事実を否定したり別の料理に変更しないこと。
 主人公の選択を受けた直後の情景描写とセリフを返すこと。`;
 
- const aiOK=await showEventAI(choice.label,ctx,'デートイベント');
+ const aiOK=await showEventAI(playerLine,ctx,'デートイベント');
  if(!aiOK){addNarration(`${c.name}はその選択に合わせて行動し、こちらへ反応を返した。`,'デートイベント')}
  addBubble('system',txt,'デートイベント結果');
  const dateLv=stageNum(),dateKey=state.pendingDate.key;
@@ -1736,6 +1755,40 @@ ${resolved}
    throw new Error('AI返答を取得できませんでした。'+responseDiagnostic(data));
  }
  return normalizeAIResult(raw);
+}
+
+async function generatePlayerChoiceLine(choiceLabel,eventContext=''){
+ const fallback=String(choiceLabel||'').replace(/^「|」$/g,'').trim()||'……';
+ const gs=globalSettings();
+ if(!gs.apiKey)return fallback;
+ const c=CHARACTERS[activeId];
+ const instructions=`あなたは恋愛シミュレーションゲームの主人公の発言文だけを書く。
+返答する相手は${c.name}。
+選択肢の意味を絶対に変えず、自然な会話文として1〜2文に言い換える。
+主人公の性格を勝手に極端化しない。説明文、情景描写、括弧、JSON、引用符は不要。
+相手の返答まで書かない。主人公が実際に口にする日本語だけ返す。`;
+ const input=`選択肢:${choiceLabel}
+選択肢の意図:${eventContext||choiceLabel}
+現在の関係:${relationshipLabel()} / 好感度${Math.round(state.affection)}
+現在の${c.name}の心理:${psychologicalProfile(c)}
+この選択を主人公の自然な発言にしてください。`;
+ const model=normalizeModel(gs.model);
+ const body={model,instructions,input,max_output_tokens:120};
+ if(/^gpt-5/.test(model))body.reasoning={effort:'minimal'};
+ try{
+   const res=await fetch('https://api.openai.com/v1/responses',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+gs.apiKey},
+    body:JSON.stringify(body)
+   });
+   if(!res.ok)return fallback;
+   const data=await res.json(),raw=extractResponseText(data);
+   if(!raw)return fallback;
+   let line=String(raw).trim().replace(/^```[\s\S]*?\n?/,'').replace(/```$/,'').trim();
+   line=line.replace(/^["「]|["」]$/g,'').trim();
+   if(!line||line.length>120)return fallback;
+   return line;
+ }catch(e){return fallback}
 }
 async function showEventAI(playerAction,eventContext,meta='イベント'){
  try{
