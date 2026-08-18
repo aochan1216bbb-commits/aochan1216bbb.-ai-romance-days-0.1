@@ -108,7 +108,12 @@ details{margin-top:10px}.settingsGrid{display:grid;gap:8px;margin-top:10px}.sett
   <div class="stats"><div class="stat"><b>♥ <span id="affection">0</span></b><span>好感度</span></div><div class="stat"><b>☺ <span id="mood">0</span></b><span>機嫌</span></div><div class="stat"><b>🍽 <span id="fullness">20</span></b><span>満腹度</span></div><div class="stat"><b>🛡 <span id="restraint">50</span></b><span>抑止力</span></div><div class="stat"><b><span id="weight">0</span>kg</b><span>体重</span></div><div class="stat"><b>¥<span id="money">0</span></b><span>所持金</span></div></div></div>
   <div class="hero"><img id="characterImage" alt="キャラクター立ち絵"><div id="emotionBadge" class="emotionBadge">通常</div><div class="badge"><span id="height">0</span>cm / <span id="weightBadge">0</span>kg ・ <span id="bodyType">-</span></div></div>
   <div class="panel"><div class="nameRow"><div class="name" id="charName">-</div><div class="bodyType" id="bodyTypeTop">-</div></div><div class="profileMini" id="profileMini"></div><div class="chat" id="chat"></div><div class="composer"><textarea id="message" placeholder="メッセージを入力…"></textarea><button type="button" class="send" id="sendBtn">送信</button></div><div class="settingsGrid" style="margin-top:10px"><label class="small">勧める食事</label><select id="mealSelect"><option value="japanese">和食</option><option value="ramen">ラーメン</option><option value="fried">揚げ物</option><option value="dessert">デザート</option></select><button type="button" class="btn accent" id="eventBtn">選んだ食事を勧める</button><label class="small">プレゼント</label><select id="giftSelect"></select><button type="button" class="btn accent" id="giftBtn">プレゼントする</button><label class="small">デート</label><select id="dateSelect"></select><button type="button" class="btn accent" id="dateBtn">デートに誘う</button></div>
-<div id="restraintEventPanel" class="panel hidden" style="margin-top:10px">
+<div id="nightChoicePanel" class="panel hidden" style="margin-top:10px">
+<div class="small" style="font-weight:800;margin-bottom:7px">夜の独白イベント</div>
+<div id="nightChoiceTitle" style="font-weight:800;margin-bottom:6px"></div>
+<div id="nightChoiceText" style="font-size:13px;line-height:1.6;margin-bottom:9px"></div>
+<div id="nightChoiceChoices" class="settingsGrid"></div>
+</div><div id="restraintEventPanel" class="panel hidden" style="margin-top:10px">
 <div class="small" style="font-weight:800;margin-bottom:7px">抑止力への働きかけ</div>
 <div id="restraintEventText" style="font-size:13px;line-height:1.55;margin-bottom:9px"></div>
 <div id="restraintEventChance" class="small" style="margin-bottom:8px"></div>
@@ -141,7 +146,7 @@ details{margin-top:10px}.settingsGrid{display:grid;gap:8px;margin-top:10px}.sett
   <div id="cgViewerTitle" class="cgViewerTitle"></div>
 </div>
 <script>
-const APP_BUILD='20260818-ai-playerline-earlygain-nightcg1';
+const APP_BUILD='20260818-yui-night-events15-v1';
 
 const CHARACTERS={
  risa:{id:'risa',name:'梨沙',age:18,height:153,startWeight:45,personality:'明るい、活発、前向き、しっかり者',speech:'タメ口、普通',relationship:'幼馴染かつクラスメイト',affection:50,mood:50,restraint:50,appetite:'普通',gainTendency:'普通',exercise:'普通',bodyView:'少し痩せたいと思っている。太りたくはない。',favoriteFoods:['甘いもの','パン類'],features:'幼馴染である主人公が少し気になっている。そのため、主人公にどう見られているかを気にする。ちょっと泣き虫。',rules:'基本ポジティブに話す。体重が増えると少しネガティブになる。抑止力が高いと食事は断る。甘いものの場合は抑止力が高くても断らない場合がある。',imageBase:'risa'},
@@ -223,7 +228,7 @@ async function testOpenAIConnection(){
  }catch(err){setApiStatus(`API接続失敗：${err.message||err}`,'error')}
  finally{if(btn){btn.disabled=false;btn.textContent='接続テスト'}}
 }
-function defaultState(id){const c=CHARACTERS[id];return {characterId:id,day:1,turn:0,affection:c.affection,mood:c.mood,fullness:20,hunger:40,restraint:c.restraint,weight:c.startWeight,startWeight:c.startWeight,history:[],gameLog:[],favoriteFoods:[...c.favoriteFoods],lastFoodResult:null,foodOfferTurnKey:null,foodPressureCount:0,money:2500,workCount:0,lastFoodTurnKey:null,lastFoodWasRefused:false,weightInterest:0,weightStage:0,pendingDate:null,seenWeightEvents:[],pendingWeightEvent:null,memories:[],foodExperience:{},growthTraits:{},memorySeq:0,lastInitiatedTurnKey:null,initiatedEventCount:0,lastRelationshipStage:null,pendingInitiatedChoice:null,lastEmotion:'normal',conversationRewards:[],cgGallery:[],selfFoodCount:0,yuiSpecialFlags:{},pendingRestraintEvent:null,restraintTalkRewards:[],lastNightEventDay:0}}
+function defaultState(id){const c=CHARACTERS[id];return {characterId:id,day:1,turn:0,affection:c.affection,mood:c.mood,fullness:20,hunger:40,restraint:c.restraint,weight:c.startWeight,startWeight:c.startWeight,history:[],gameLog:[],favoriteFoods:[...c.favoriteFoods],lastFoodResult:null,foodOfferTurnKey:null,foodPressureCount:0,money:2500,workCount:0,lastFoodTurnKey:null,lastFoodWasRefused:false,weightInterest:0,weightStage:0,pendingDate:null,seenWeightEvents:[],pendingWeightEvent:null,memories:[],foodExperience:{},growthTraits:{},memorySeq:0,lastInitiatedTurnKey:null,initiatedEventCount:0,lastRelationshipStage:null,pendingInitiatedChoice:null,lastEmotion:'normal',conversationRewards:[],cgGallery:[],selfFoodCount:0,yuiSpecialFlags:{},pendingRestraintEvent:null,restraintTalkRewards:[],lastNightEventDay:0,pendingNightChoice:null,nightEventHistory:[],dailyFoodLoad:0,dailyFoodCount:0,dailyFoodNames:[],todayDateKey:null,todayDateName:null}}
 function stateKey(id){return 'aiRomanceState_v3_'+id} function loadState(id){const base=defaultState(id),saved=safeGet(stateKey(id),{});const merged={...base,...saved};if(!Array.isArray(merged.history))merged.history=[];if(!Array.isArray(merged.gameLog))merged.gameLog=[];if(!Array.isArray(merged.favoriteFoods))merged.favoriteFoods=[...CHARACTERS[id].favoriteFoods];if(!Array.isArray(merged.seenWeightEvents))merged.seenWeightEvents=[];if(!('pendingWeightEvent' in merged))merged.pendingWeightEvent=null;if(!Array.isArray(merged.memories))merged.memories=[];if(!merged.foodExperience||typeof merged.foodExperience!=='object')merged.foodExperience={};if(!merged.growthTraits||typeof merged.growthTraits!=='object')merged.growthTraits={};merged.memorySeq=merged.memorySeq||0;if(!('lastInitiatedTurnKey' in merged))merged.lastInitiatedTurnKey=null;merged.initiatedEventCount=merged.initiatedEventCount||0;if(!('lastRelationshipStage' in merged))merged.lastRelationshipStage=null;
 if(!('pendingInitiatedChoice' in merged))merged.pendingInitiatedChoice=null;
 if(!('lastEmotion' in merged))merged.lastEmotion='normal';
@@ -233,6 +238,13 @@ merged.selfFoodCount=merged.selfFoodCount||0;
 if(!('pendingRestraintEvent' in merged))merged.pendingRestraintEvent=null;
 if(!Array.isArray(merged.restraintTalkRewards))merged.restraintTalkRewards=[];
 merged.lastNightEventDay=merged.lastNightEventDay||0;
+if(!('pendingNightChoice' in merged))merged.pendingNightChoice=null;
+if(!Array.isArray(merged.nightEventHistory))merged.nightEventHistory=[];
+merged.dailyFoodLoad=Number(merged.dailyFoodLoad||0);
+merged.dailyFoodCount=Number(merged.dailyFoodCount||0);
+if(!Array.isArray(merged.dailyFoodNames))merged.dailyFoodNames=[];
+if(!('todayDateKey' in merged))merged.todayDateKey=null;
+if(!('todayDateName' in merged))merged.todayDateName=null;
 return merged} function save(){if(activeId&&state)safeSet(stateKey(activeId),state)}
 
 
@@ -376,8 +388,7 @@ function memoryCGPath(kind,key='',stage=stageNum()){
  if(kind==='special')return `assets/${activeId}/memories/special_${key}_${lv}.webp?v=${APP_BUILD}`;
  if(kind==='shopping')return `assets/${activeId}/memories/date_shopping_${lv}.webp?v=${APP_BUILD}`;
  if(kind==='night'){
-   const n=String(Math.max(1,Math.min(6,Number(key)||1))).padStart(2,'0');
-   return `assets/${activeId}/memories/night_thought_${n}.webp?v=${APP_BUILD}`;
+   return `assets/${activeId}/memories/night_thought_${lv}.webp?v=${APP_BUILD}`;
  }
  return `assets/${activeId}/memories/${kind}_${key}_${lv}.webp?v=${APP_BUILD}`;
 }
@@ -418,11 +429,12 @@ function blockingEventType(){
  if(state?.pendingWeightEvent)return 'weight';
  if(state?.pendingDate)return 'date';
  if(state?.pendingInitiatedChoice)return 'initiative';
+ if(state?.pendingNightChoice)return 'night';
  if(state?.pendingRestraintEvent)return 'restraint';
  return null;
 }
 function blockingEventLabel(type=blockingEventType()){
- return {weight:'体型変化イベント',date:'デート中イベント',initiative:'相手からの問いかけ',restraint:'抑止力イベント'}[type]||'イベント';
+ return {weight:'体型変化イベント',date:'デート中イベント',initiative:'相手からの問いかけ',night:'夜の独白イベント',restraint:'抑止力イベント'}[type]||'イベント';
 }
 function showBlockingNotice(){
  const type=blockingEventType();if(!type)return;
@@ -439,16 +451,18 @@ function setMainControlsLocked(locked){
 function syncEventLockUI(){
  const active=blockingEventType();
  setMainControlsLocked(!!active);
- const w=$('weightEventChoices'),d=$('dateEventChoices'),i=$('initiativeChoices'),r=$('restraintEventChoices');
+ const w=$('weightEventChoices'),d=$('dateEventChoices'),i=$('initiativeChoices'),r=$('restraintEventChoices'),n=$('nightChoiceChoices');
  if(w)w.classList.toggle('eventLocked',!!active&&active!=='weight');
  if(d)d.classList.toggle('eventLocked',!!active&&active!=='date');
  if(i)i.classList.toggle('eventLocked',!!active&&active!=='initiative');
  if(r)r.classList.toggle('eventLocked',!!active&&active!=='restraint');
- const dp=$('dateEventPanel'),ip=$('initiativeChoicePanel'),rp=$('restraintEventPanel');
+ if(n)n.classList.toggle('eventLocked',!!active&&active!=='night');
+ const dp=$('dateEventPanel'),ip=$('initiativeChoicePanel'),rp=$('restraintEventPanel'),np=$('nightChoicePanel');
  // Only the highest-priority pending choice remains visible.
  if(dp&&active!=='date')dp.classList.add('hidden');
  if(ip&&active!=='initiative')ip.classList.add('hidden');
  if(rp&&active!=='restraint')rp.classList.add('hidden');
+ if(np&&active!=='night')np.classList.add('hidden');
 }
 function openCGViewer(path,title='思い出CG'){
  const modal=$('cgViewer'),img=$('cgViewerImage');if(!modal||!img)return;
@@ -719,7 +733,7 @@ function firstScene(c){
  return'朝の教室。怜は窓際で静かに過ごしていたが、こちらに気づくとじっと観察するように目を向けた。';
 }
 function firstGreeting(c){if(c.id==='risa')return'おはよ。今日も一緒だね。なんか話す？';if(c.id==='emi')return'おはよ。朝から何？ 私、部活あるんだけど。';if(c.id==='yui')return'おはよう。こんな時間から会うと、ちょっと不思議な感じだね。';if(c.id==='erika')return'……朝から何ですの？ 用があるなら手短にしてくださいませ。';return'……おはよう。今日は、何の話する？'}
-function render(){if(!activeId||!state)return;trackRelationshipStage();const c=CHARACTERS[activeId];$('day').textContent=state.day;$('turnLabel').textContent=turns[state.turn].label;$('affection').textContent=Math.round(state.affection);$('mood').textContent=Math.round(state.mood);$('fullness').textContent=Math.round(state.fullness);$('restraint').textContent=Math.round(state.restraint);$('weight').textContent=state.weight.toFixed(1);$('money').textContent=Math.round(state.money??2500).toLocaleString();$('weightBadge').textContent=state.weight.toFixed(1);$('height').textContent=c.height;$('charName').textContent=c.name;$('headerRelationship').textContent=`${c.relationship} / ${relationshipLabel()}`;const bt=bodyType();$('bodyType').textContent=bt;$('bodyTypeTop').textContent=bt;$('profileMini').textContent=`${c.age}歳｜関係:${relationshipLabel()}｜${c.speech}｜バイト${state.workCount||0}回`;const eb=$('emotionBadge');if(eb)eb.textContent=emotionLabel(state.lastEmotion||'normal');const img=$('characterImage');img.dataset.fallback='';img.dataset.stageFallback='0';img.onload=()=>{img.style.visibility='visible'};img.onerror=()=>{if(img.dataset.stageFallback==='0'){img.dataset.stageFallback='1';img.src=`assets/${c.id}/standing_01.webp?v=${APP_BUILD}`}else{placeholder(img,c.name)}};img.style.visibility='visible';img.src=imagePath(c);const chat=$('chat');chat.innerHTML='';state.history.forEach(m=>{if(m.role==='narration')addNarration(m.content,m.meta,false);else if(m.role==='cg')addCGMessage(m.title,m.path,m.meta,false);else addBubble(m.role,m.content,m.meta,false)});chat.scrollTop=chat.scrollHeight;$('gameLog').innerHTML=state.gameLog.slice().reverse().map(x=>`<div>• ${escapeHtml(x)}</div>`).join('')||'<div>まだログはありません。</div>';$('profileDetail').innerHTML=`<b>性格</b><br>${escapeHtml(c.personality)}<br><br><b>食欲 / 太りやすさ / 運動</b><br>${escapeHtml(c.appetite)} / ${escapeHtml(c.gainTendency)} / ${escapeHtml(c.exercise)}<br><br><b>体型・体重への考え</b><br>${escapeHtml(c.bodyView)}<br><br><b>好きな食べ物</b><br>${escapeHtml(state.favoriteFoods.length?state.favoriteFoods.join('、'):'特になし')}<br><br><b>その他</b><br>${escapeHtml(c.features)}`;renderDateEvent();renderWeightEvent();renderInitiativeChoices();renderRestraintEvent();renderCGGallery();syncEventLockUI();}
+function render(){if(!activeId||!state)return;trackRelationshipStage();const c=CHARACTERS[activeId];$('day').textContent=state.day;$('turnLabel').textContent=turns[state.turn].label;$('affection').textContent=Math.round(state.affection);$('mood').textContent=Math.round(state.mood);$('fullness').textContent=Math.round(state.fullness);$('restraint').textContent=Math.round(state.restraint);$('weight').textContent=state.weight.toFixed(1);$('money').textContent=Math.round(state.money??2500).toLocaleString();$('weightBadge').textContent=state.weight.toFixed(1);$('height').textContent=c.height;$('charName').textContent=c.name;$('headerRelationship').textContent=`${c.relationship} / ${relationshipLabel()}`;const bt=bodyType();$('bodyType').textContent=bt;$('bodyTypeTop').textContent=bt;$('profileMini').textContent=`${c.age}歳｜関係:${relationshipLabel()}｜${c.speech}｜バイト${state.workCount||0}回`;const eb=$('emotionBadge');if(eb)eb.textContent=emotionLabel(state.lastEmotion||'normal');const img=$('characterImage');img.dataset.fallback='';img.dataset.stageFallback='0';img.onload=()=>{img.style.visibility='visible'};img.onerror=()=>{if(img.dataset.stageFallback==='0'){img.dataset.stageFallback='1';img.src=`assets/${c.id}/standing_01.webp?v=${APP_BUILD}`}else{placeholder(img,c.name)}};img.style.visibility='visible';img.src=imagePath(c);const chat=$('chat');chat.innerHTML='';state.history.forEach(m=>{if(m.role==='narration')addNarration(m.content,m.meta,false);else if(m.role==='cg')addCGMessage(m.title,m.path,m.meta,false);else addBubble(m.role,m.content,m.meta,false)});chat.scrollTop=chat.scrollHeight;$('gameLog').innerHTML=state.gameLog.slice().reverse().map(x=>`<div>• ${escapeHtml(x)}</div>`).join('')||'<div>まだログはありません。</div>';$('profileDetail').innerHTML=`<b>性格</b><br>${escapeHtml(c.personality)}<br><br><b>食欲 / 太りやすさ / 運動</b><br>${escapeHtml(c.appetite)} / ${escapeHtml(c.gainTendency)} / ${escapeHtml(c.exercise)}<br><br><b>体型・体重への考え</b><br>${escapeHtml(c.bodyView)}<br><br><b>好きな食べ物</b><br>${escapeHtml(state.favoriteFoods.length?state.favoriteFoods.join('、'):'特になし')}<br><br><b>その他</b><br>${escapeHtml(c.features)}`;renderDateEvent();renderWeightEvent();renderInitiativeChoices();renderRestraintEvent();renderNightChoice();renderCGGallery();syncEventLockUI();}
 
 function normalizeEmotion(v){
  const x=String(v||'normal').toLowerCase();
@@ -1081,45 +1095,258 @@ function nightRestraintDrift(){
  if(state.restraint<=40)return -1;
  return Math.random()<.5?-1:1;
 }
-async function maybeEndOfDayMonologue(endedDay){
- if(!state||state.lastNightEventDay===endedDay)return false;
- state.lastNightEventDay=endedDay;
- // 毎日必ずではなく、約70%で発生。
- if(Math.random()>.70){save();return false}
+
+const YUI_NIGHT_EVENTS=[
+ {id:'mirror',title:'鏡の前の違和感',minLv:1,maxLv:3,baseWeight:13,cg:true,
+  effect:'restraint:+2..+4',
+  desc:'鏡で腰回りを確認し、以前より丸くなった感覚を一人で確かめる。'},
+ {id:'sitting_belly',title:'座った時のお腹',minLv:2,maxLv:4,baseWeight:12,cg:true,
+  effect:'restraint:+3',
+  desc:'ソファに座った時にできる腹部の段に触れ、立っている時との違いを実感する。'},
+ {id:'sweet_temptation',title:'夜の甘い誘惑',minLv:1,maxLv:7,baseWeight:11,cg:true,choice:true,
+  effect:'3choice',
+  desc:'冷蔵庫に残ったケーキを見つけ、食べるかどうか一人で迷う。'},
+ {id:'overeaten',title:'食べすぎた夜',minLv:1,maxLv:7,baseWeight:19,cg:true,
+  effect:'restraint:+5,mood:-2',
+  desc:'その日の食事量を思い返し、苦しいほど食べたことを後悔する。'},
+ {id:'old_clothes',title:'昔の服',minLv:4,maxLv:7,baseWeight:11,cg:true,
+  effect:'restraint:+5..+8',
+  desc:'昔よく着ていた服を試すが、ボタンやホックが閉まらず現実を突きつけられる。'},
+ {id:'photo_folder',title:'写真フォルダ',minLv:4,maxLv:7,baseWeight:10,cg:true,
+  effect:'restraint:+4,mood:±2',
+  desc:'スマホの昔の写真を偶然見つけ、現在の自分と見比べる。'},
+ {id:'side_view',title:'横から見る自分',minLv:5,maxLv:7,baseWeight:10,cg:true,
+  effect:'restraint:+3..+6',
+  desc:'鏡の前で横を向き、脇腹から下腹に手を添えて現在のシルエットを確認する。'},
+ {id:'whatever',title:'「まあ、いっか」',minLv:1,maxLv:7,baseWeight:15,cg:false,
+  effect:'restraint:-3..-6,mood:+2',
+  desc:'気にはなるものの、考え続けるのに疲れて「今日はもういい」と開き直る。'},
+ {id:'one_more_bite',title:'もう一口だけ',minLv:1,maxLv:7,baseWeight:14,cg:true,
+  effect:'weight:+,restraint:-4',
+  desc:'夜食を一口だけのつもりで始め、気づけば止まらなくなっている。'},
+ {id:'what_did_he_think',title:'あの人はどう思った？',minLv:1,maxLv:7,baseWeight:12,cg:false,
+  effect:'affection:+1,restraint:conditional',
+  desc:'今日のデートを思い返し、主人公が今の自分をどう見ていたか気にする。'},
+ {id:'date_photo',title:'デート写真',minLv:1,maxLv:7,baseWeight:10,cg:false,
+  effect:'restraint:+3,affection:+1',
+  desc:'今日撮った写真を見直し、昔の写真との体型差に気づく。'},
+ {id:'body_heavy',title:'身体が重い',minLv:5,maxLv:7,baseWeight:11,cg:true,
+  effect:'restraint:+5',
+  desc:'着替えや階段など何気ない動作で、以前より身体が重くなった感覚を思い返す。'},
+ {id:'past_self',title:'昔の私なら…',minLv:6,maxLv:7,baseWeight:9,cg:true,
+  effect:'restraint:+2..+5',
+  desc:'昔の細かった頃の自分を見ながら、現在との違いに自嘲気味に笑う。'},
+ {id:'catch_breath',title:'息を整えながら',minLv:7,maxLv:7,baseWeight:9,cg:true,
+  effect:'restraint:+4..+8',
+  desc:'ソファに座って息を整えながら、お腹に手を添えて体型変化を実感する。'},
+ {id:'child_tease',title:'子供にからかわれて赤面',minLv:4,maxLv:7,baseWeight:8,cg:false,
+  effect:'restraint:+3..+6,mood:-5',
+  desc:'昼間、幼い子供に体型の変化を無邪気に指摘されたことを夜になって思い返す。'}
+];
+
+function nightEventCGPath(ev,lv){
+ const n=String(Math.max(1,Math.min(7,lv))).padStart(2,'0');
+ const map={
+  mirror:'night_mirror',
+  sitting_belly:'night_sitting_belly',
+  sweet_temptation:'night_sweet_temptation',
+  overeaten:'night_overeat',
+  old_clothes:'night_old_clothes',
+  photo_folder:'night_photo_folder',
+  side_view:'night_side_view',
+  one_more_bite:'night_one_more_bite',
+  body_heavy:'night_body_heavy',
+  past_self:'night_past_self'
+ };
+ if(ev.id==='catch_breath')return `assets/yui/memories/night_thought_07.webp?v=${APP_BUILD}`;
+ const base=map[ev.id];return base?`assets/yui/memories/${base}_${n}.webp?v=${APP_BUILD}`:'';
+}
+function yuiNightEligible(ev){
+ const lv=stageNum();
+ if(lv<ev.minLv||lv>ev.maxLv)return false;
+ if(ev.id==='overeaten'&&(state.dailyFoodLoad||0)<78)return false;
+ if(ev.id==='whatever'&&state.restraint>30)return false;
+ if(ev.id==='one_more_bite'&&state.restraint>40)return false;
+ if((ev.id==='what_did_he_think'||ev.id==='date_photo')&&!state.todayDateKey)return false;
+ if(ev.id==='what_did_he_think'&&state.affection<50)return false;
+ if(ev.id==='date_photo'&&state.affection<60)return false;
+ return true;
+}
+function yuiNightWeight(ev){
+ let w=ev.baseWeight||10;
+ const lv=stageNum();
+ if(ev.id==='sweet_temptation')w+=Math.max(0,(state.hunger||0)-45)*.18+Math.max(0,45-state.restraint)*.15;
+ if(ev.id==='overeaten')w+=Math.max(0,(state.dailyFoodLoad||0)-78)*.28;
+ if(ev.id==='one_more_bite')w+=Math.max(0,40-state.restraint)*.35;
+ if(ev.id==='what_did_he_think'||ev.id==='date_photo')w+=Math.max(0,state.affection-50)*.08;
+ if(ev.id==='child_tease')w+=lv>=6?3:0;
+ const hist=(state.nightEventHistory||[]);
+ const last=hist[hist.length-1];
+ if(last&&last.id===ev.id)return 0; // consecutive repeat forbidden
+ const recent=hist.filter(x=>state.day-x.day<=3&&x.id===ev.id);
+ if(recent.length)w*=.20; // recent 3 days heavily suppressed
+ return Math.max(0,w);
+}
+function chooseYuiNightEvent(){
+ const pool=YUI_NIGHT_EVENTS.filter(yuiNightEligible).map(ev=>({ev,w:yuiNightWeight(ev)})).filter(x=>x.w>0);
+ if(!pool.length)return null;
+ const total=pool.reduce((a,x)=>a+x.w,0);let r=Math.random()*total;
+ for(const x of pool){r-=x.w;if(r<=0)return x.ev}
+ return pool[pool.length-1].ev;
+}
+function rememberNightEvent(ev,endedDay){
+ state.nightEventHistory=state.nightEventHistory||[];
+ state.nightEventHistory.push({id:ev.id,day:endedDay,lv:stageNum()});
+ state.nightEventHistory=state.nightEventHistory.slice(-12);
+}
+function randomInt(min,max){return min+Math.floor(Math.random()*(max-min+1))}
+function applySimpleNightEffect(ev){
+ let detail=[];
+ if(ev.id==='mirror'){const d=randomInt(2,4);state.restraint=clamp(state.restraint+d);detail.push(`抑止力 +${d}`)}
+ if(ev.id==='sitting_belly'){state.restraint=clamp(state.restraint+3);detail.push('抑止力 +3')}
+ if(ev.id==='overeaten'){state.restraint=clamp(state.restraint+5);state.mood=clamp(state.mood-2);detail.push('抑止力 +5','機嫌 -2')}
+ if(ev.id==='old_clothes'){const d=randomInt(5,8);state.restraint=clamp(state.restraint+d);detail.push(`抑止力 +${d}`)}
+ if(ev.id==='photo_folder'){state.restraint=clamp(state.restraint+4);const m=state.mood>=55?1:-2;state.mood=clamp(state.mood+m);detail.push('抑止力 +4',`機嫌 ${m>=0?'+':''}${m}`)}
+ if(ev.id==='side_view'){const d=randomInt(3,6);state.restraint=clamp(state.restraint+d);detail.push(`抑止力 +${d}`)}
+ if(ev.id==='whatever'){const d=randomInt(3,6);state.restraint=clamp(state.restraint-d);state.mood=clamp(state.mood+2);detail.push(`抑止力 -${d}`,'機嫌 +2')}
+ if(ev.id==='one_more_bite'){
+   const c=CHARACTERS[activeId],wg=.22*gainFactor(c)*(0.9+Math.random()*.25);
+   state.weight=Math.round((state.weight+wg)*10)/10;state.fullness=clamp(state.fullness+22);state.restraint=clamp(state.restraint-4);
+   state.dailyFoodLoad=(state.dailyFoodLoad||0)+22;state.dailyFoodCount=(state.dailyFoodCount||0)+1;
+   detail.push(`体重 +${wg.toFixed(2)}kg`,'満腹度 +22','抑止力 -4');
+   updateEvolution(c);
+ }
+ if(ev.id==='what_did_he_think'){state.affection=clamp(state.affection+1);const d=state.mood>=60?-2:2;state.restraint=clamp(state.restraint+d);detail.push('好感度 +1',`抑止力 ${d>=0?'+':''}${d}`)}
+ if(ev.id==='date_photo'){state.restraint=clamp(state.restraint+3);state.affection=clamp(state.affection+1);detail.push('抑止力 +3','好感度 +1')}
+ if(ev.id==='body_heavy'){state.restraint=clamp(state.restraint+5);detail.push('抑止力 +5')}
+ if(ev.id==='past_self'){const d=randomInt(2,5);state.restraint=clamp(state.restraint+d);detail.push(`抑止力 +${d}`)}
+ if(ev.id==='catch_breath'){const d=randomInt(4,8);state.restraint=clamp(state.restraint+d);detail.push(`抑止力 +${d}`)}
+ if(ev.id==='child_tease'){const d=randomInt(3,6);state.restraint=clamp(state.restraint+d);state.mood=clamp(state.mood-5);detail.push(`抑止力 +${d}`,'機嫌 -5')}
+ return detail;
+}
+function renderNightChoice(){
+ const panel=$('nightChoicePanel'),box=$('nightChoiceChoices'),title=$('nightChoiceTitle'),text=$('nightChoiceText');
+ if(!panel||!box||!title||!text)return;
+ const p=state?.pendingNightChoice;
+ if(!p){panel.classList.add('hidden');box.innerHTML='';return}
+ panel.classList.remove('hidden');title.textContent=p.title;text.textContent=p.text;box.innerHTML='';
+ p.choices.forEach((ch,i)=>{
+   const b=document.createElement('button');b.type='button';b.className='btn';b.textContent=ch.label;
+   b.addEventListener('click',()=>resolveNightChoice(i));box.appendChild(b);
+ });
+}
+function createSweetTemptationChoice(ev,endedDay){
+ const lv=stageNum(),path=nightEventCGPath(ev,lv),title=`結衣の夜 Lv.${lv}：${ev.title}`;
+ state.pendingNightChoice={
+  eventId:ev.id,endedDay,title,path,
+  text:'冷蔵庫を開けると、昼間に残しておいたケーキが目に入った。結衣は扉に手をかけたまま、しばらく迷っている。',
+  choices:[
+   {label:'「今日はやめておこう」と冷蔵庫を閉める',kind:'stop'},
+   {label:'「少しくらいなら…」と一切れだけ食べる',kind:'little'},
+   {label:'「もう今日は気にしない」と好きなだけ食べる',kind:'indulge'}
+  ]
+ };
+ if(path){unlockCG(`night:yui:${ev.id}:${lv}`,title,path);addCGMessage(title,path,'夜の思い出CG')}
+ rememberNightEvent(ev,endedDay);save();render();return 'pending';
+}
+async function resolveNightChoice(index){
+ const p=state?.pendingNightChoice;if(!p)return;
+ const ch=p.choices[index];if(!ch)return;
+ const c=CHARACTERS[activeId],before={r:state.restraint,m:state.mood,w:state.weight,f:state.fullness};
+ let result='',wg=0;
+ if(ch.kind==='stop'){
+   const chance=clamp(35+state.restraint*.55+(state.mood-50)*.15,25,90);
+   if(Math.random()*100<chance){state.restraint=clamp(state.restraint+5);result='誘惑に勝った。抑止力 +5'}
+   else{wg=.12*gainFactor(c);state.weight=Math.round((state.weight+wg)*10)/10;state.fullness=clamp(state.fullness+16);state.restraint=clamp(state.restraint-2);result=`我慢しきれず少し食べた。体重 +${wg.toFixed(2)}kg / 抑止力 -2`}
+ }else if(ch.kind==='little'){
+   wg=.18*gainFactor(c);state.weight=Math.round((state.weight+wg)*10)/10;state.fullness=clamp(state.fullness+24);state.restraint=clamp(state.restraint-4);state.mood=clamp(state.mood+2);result=`一切れ食べた。体重 +${wg.toFixed(2)}kg / 抑止力 -4 / 機嫌 +2`
+ }else{
+   wg=.36*gainFactor(c);state.weight=Math.round((state.weight+wg)*10)/10;state.fullness=clamp(state.fullness+42);state.restraint=clamp(state.restraint-8);state.mood=clamp(state.mood+3);result=`好きなだけ食べた。体重 +${wg.toFixed(2)}kg / 抑止力 -8 / 機嫌 +3`
+ }
+ if(wg>0){state.dailyFoodLoad=(state.dailyFoodLoad||0)+(ch.kind==='indulge'?42:24);state.dailyFoodCount=(state.dailyFoodCount||0)+1}
+ updateEvolution(c);
+ addBubble('system',result,'夜イベント結果');
+ const ctx=`結衣専用の夜イベント「夜の甘い誘惑」。
+主人公はその場にいない。これは結衣自身が一人で選んだ行動。
+選択:${ch.label}
+確定結果:${result}
+選択前:抑止力${before.r} / 機嫌${before.m} / 体重${before.w.toFixed(1)}kg / 満腹度${before.f}
+選択後:抑止力${state.restraint} / 機嫌${state.mood} / 体重${state.weight.toFixed(1)}kg / 満腹度${state.fullness}
+一人の独白として、誘惑に負けた/勝った感情を自然に描写する。主人公へ話しかけない。`;
+ try{const r=await askAI('（夜、一人でケーキを前に決断した）',null,null,ctx);addAIResponse(r,'夜の独白')}
+ catch(e){addNarration('結衣はしばらくケーキを見つめ、自分で決めた行動を受け止めるように小さく息を吐いた。','夜の独白')}
+ const endedDay=p.endedDay;
+ state.pendingNightChoice=null;save();
+ await finishEndOfDayTransition(endedDay);
+}
+function nightEventPrompt(ev,endedDay,effects){
+ const c=CHARACTERS[activeId];
+ return `結衣専用の夜のランダムイベント。
+イベント名:${ev.title}
+イベント内容:${ev.desc}
+これはDAY ${endedDay}の夜。主人公はその場にいない。
+現在体型:Lv.${stageNum()} / ${state.weight.toFixed(1)}kg
+現在心理:${psychologicalProfile(c)}
+今日の食事量指標:${Math.round(state.dailyFoodLoad||0)} / 食事回数:${state.dailyFoodCount||0}
+今日食べたもの:${(state.dailyFoodNames||[]).slice(-6).join('、')||'特になし'}
+今日のデート:${state.todayDateName||'なし'}
+今回の確定ステータス変化:${effects.join(' / ')||'なし'}
+主人公への直接の会話は禁止。結衣が一人で自問自答する。
+イベント内容から逸脱せず、現在Lvに合った身体感覚と心理を反映する。
+抑止力が高いほど焦り・後悔・自制を強く、低いほど開き直りや誘惑への弱さを強くする。
+機嫌が高い時は必要以上に落ち込ませず、低い時は自嘲や後悔を強めてもよい。
+毎回同じ語尾・同じ「明日から頑張ろう」で終えない。
+dialogueは独り言1〜3文、narrationは1〜3文。`;
+}
+async function genericEndOfDayMonologue(endedDay){
  const c=CHARACTERS[activeId],before=state.restraint,drift=nightRestraintDrift();
  state.restraint=clamp(state.restraint+drift);
  const summary=recentDaySummary(endedDay);
- const nightVariant=1+Math.floor(Math.random()*6);
- const nightPath=memoryCGPath('night',nightVariant,stageNum());
- const nightTitles=['鏡の前で自分を見る','ベッドで天井を見る','日記を書く','頬杖をついて考える','枕を抱えてため息','窓の外を見つめる'];
- const nightTitle=`${c.name}の一人の夜：${nightTitles[nightVariant-1]}`;
- unlockCG(`night:${activeId}:${nightVariant}`,nightTitle,nightPath);
- const ctx=`1日の終わりに、主人公がいない場所でキャラクターが一人で考えるランダム独白イベント。
-これはDAY ${endedDay}の夜、自宅など一人の時間。
-主人公はその場にいないため、主人公への直接の会話は禁止。
-今日の主な出来事:${summary}
+ const ctx=`1日の終わりに主人公がいない場所で一人で考える独白。
+DAY ${endedDay}。今日の主な出来事:${summary}
 現在の心理:${psychologicalProfile(c)}
 抑止力:${before}→${state.restraint} (${drift>=0?'+':''}${drift})
-現在体重:${state.weight.toFixed(1)}kg / 体型Lv.${stageNum()}
-独白では、今日食べたこと、我慢したこと、主人公との出来事、服や身体の変化などから1〜2個だけ選び、自問自答する。
-毎回「明日から頑張ろう」で終わらず、後悔・開き直り・楽しさ・戸惑い・興味など、その日の状態に合わせて変える。
-dialogueは独り言として1〜3文。narrationは一人で過ごす情景を1〜3文。`;
- try{
-   const r=await askAI('（一日の終わり、一人で今日を振り返る）',null,null,ctx);
-   addBubble('system',`DAY ${endedDay} 終了後のひとりごと`,'夜のランダムイベント');
-   addCGMessage(nightTitle,nightPath,'夜の思い出CG');
-   addAIResponse(r,'夜の独白');
- }catch(e){
-   addCGMessage(nightTitle,nightPath,'夜の思い出CG');
-   addNarration(`${c.name}は一人になった部屋で、今日一日のことをぼんやり思い返した。`,'夜の独白');
-   addBubble('assistant',state.restraint>=60?'……今日はちょっと気をつけた方がよかったかな。':'……まあ、今日くらいはいいか。','夜の独白');
- }
- addBubble('system',`独白後の抑止力 ${drift>=0?'+':''}${drift}`,'心理変化');
- remember('night',`DAY ${endedDay}の夜、${c.name}は一人で今日を振り返った`,2,['night']);
- log(`夜の独白イベント / 抑止力 ${drift>=0?'+':''}${drift}`);
- save();
+主人公への直接会話は禁止。`;
+ try{const r=await askAI('（一日の終わり、一人で今日を振り返る）',null,null,ctx);addBubble('system',`DAY ${endedDay} 終了後のひとりごと`,'夜のランダムイベント');addAIResponse(r,'夜の独白')}
+ catch(e){addNarration(`${c.name}は一人で今日一日のことを思い返した。`,'夜の独白')}
  return true;
 }
+async function maybeEndOfDayMonologue(endedDay){
+ if(!state||state.lastNightEventDay===endedDay)return false;
+ state.lastNightEventDay=endedDay;
+ if(Math.random()>.70){save();return false}
+ if(activeId!=='yui')return await genericEndOfDayMonologue(endedDay);
+ const ev=chooseYuiNightEvent();if(!ev)return false;
+ if(ev.choice)return createSweetTemptationChoice(ev,endedDay);
+ const lv=stageNum(),path=ev.cg?nightEventCGPath(ev,lv):'',title=`結衣の夜 Lv.${lv}：${ev.title}`;
+ const effects=applySimpleNightEffect(ev);
+ rememberNightEvent(ev,endedDay);
+ if(path){unlockCG(`night:yui:${ev.id}:${lv}`,title,path);addCGMessage(title,path,'夜の思い出CG')}
+ addBubble('system',`DAY ${endedDay}｜${ev.title}`,'夜のランダムイベント');
+ const ctx=nightEventPrompt(ev,endedDay,effects);
+ try{const r=await askAI(`（夜、一人で「${ev.title}」の出来事を振り返る）`,null,null,ctx);addAIResponse(r,'夜の独白')}
+ catch(e){addNarration(`結衣は一人になった部屋で、「${ev.title}」のことを静かに考えた。`,'夜の独白')}
+ if(effects.length)addBubble('system',effects.join('｜'),'夜イベント効果');
+ remember('night',`DAY ${endedDay}の夜、「${ev.title}」が起きた`,3,['night',ev.id]);
+ log(`夜イベント: ${ev.title}${effects.length?' / '+effects.join(' / '):''}`);
+ save();return true;
+}
+function resetDailyNightTrackers(){
+ state.dailyFoodLoad=0;state.dailyFoodCount=0;state.dailyFoodNames=[];state.todayDateKey=null;state.todayDateName=null;
+}
+async function finishEndOfDayTransition(endedDay){
+ state.turn=0;state.day++;
+ if(state.day%5===0)remember('milestone',`${cnameSafe()}との時間がDAY ${state.day}まで続いている`,2,['milestone']);
+ const prevStage=evolutionStage();
+ state.weight=Math.max(30,state.weight+(state.fullness>70?.08:state.fullness<20?-.03:0));
+ updateEvolution(CHARACTERS[activeId]);queueWeightEventIfNeeded(CHARACTERS[activeId],prevStage);
+ resetDailyNightTrackers();
+ state.lastFoodWasRefused=false;state.lastFoodTurnKey=null;
+ log('翌日に進みました');addBubble('system',`${turns[state.turn].label}になりました。`);
+ save();render();
+ if(!state.pendingWeightEvent&&!state.pendingDate){maybeYuiBellyGrab(false);await maybeCharacterInitiatedEvent(false)}
+}
+
 function decay(){state.fullness=clamp(state.fullness-20);state.hunger=clamp(state.hunger+18);state.mood=clamp(state.mood+(Math.random()*4-2))}
 async function advance(){
  if(blockingEventType()){showBlockingNotice();return}
@@ -1129,15 +1356,10 @@ async function advance(){
  decay();
  if(state.turn>=2){
    const endedDay=state.day;
-   // 夜ターンのまま独白を生成してから翌朝へ進める。
-   await maybeEndOfDayMonologue(endedDay);
-   state.turn=0;state.day++;
-   if(state.day%5===0)remember('milestone',`${cnameSafe()}との時間がDAY ${state.day}まで続いている`,2,['milestone']);
-   const prevStage=evolutionStage();
-   state.weight=Math.max(30,state.weight+(state.fullness>70?.08:state.fullness<20?-.03:0));
-   updateEvolution(CHARACTERS[activeId]);
-   queueWeightEventIfNeeded(CHARACTERS[activeId],prevStage);
-   log('翌日に進みました');
+   const nightResult=await maybeEndOfDayMonologue(endedDay);
+   if(nightResult==='pending'){save();render();return}
+   await finishEndOfDayTransition(endedDay);
+   return;
  }else{
    state.turn++;
    log('次の時間帯へ進みました');
@@ -1145,7 +1367,6 @@ async function advance(){
  state.lastFoodWasRefused=false;state.lastFoodTurnKey=null;
  addBubble('system',`${turns[state.turn].label}になりました。`);
  save();render();
- // 体型変化イベントが発生した場合はそちらを優先し、自発イベントは起こさない。
  if(!state.pendingWeightEvent&&!state.pendingDate){maybeYuiBellyGrab(false);await maybeCharacterInitiatedEvent(false);}
 }
 const MEAL_CATEGORIES={
@@ -1302,6 +1523,9 @@ function resolveFoodOffer(offer,text){
  const before={fullness:state.fullness,hunger:state.hunger,restraint:state.restraint,weight:state.weight,weightInterest:state.weightInterest||0};
  let regret=0,weightGain=0,restraintDelta=0,fullnessDelta=0;
  if(accepted){
+   state.dailyFoodLoad=(state.dailyFoodLoad||0)+(offer.fullness||0);
+   state.dailyFoodCount=(state.dailyFoodCount||0)+1;
+   state.dailyFoodNames=state.dailyFoodNames||[];state.dailyFoodNames.push(offer.name||'食事');
    fullnessDelta=Math.max(6,Math.round(offer.fullness*(100-state.fullness)/100+offer.fullness*.35));
    state.fullness=clamp(state.fullness+fullnessDelta);state.hunger=clamp(state.hunger-fullnessDelta);
    weightGain=offer.weight*gainFactor(c)*(0.85+Math.random()*.3);
@@ -1334,6 +1558,9 @@ function doWork(){if(state&&state.pendingWeightEvent){addBubble('system','体重
 function applyGuaranteedFoodEffect(food,sourceLabel='食事'){
  const c=CHARACTERS[activeId];updateEvolution(c);
  const before={fullness:state.fullness,hunger:state.hunger,restraint:state.restraint,weight:state.weight,weightInterest:state.weightInterest||0};
+ state.dailyFoodLoad=(state.dailyFoodLoad||0)+(food.fullness||0);
+ state.dailyFoodCount=(state.dailyFoodCount||0)+1;
+ state.dailyFoodNames=state.dailyFoodNames||[];state.dailyFoodNames.push(food.name||sourceLabel||'食事');
  const fullnessDelta=Math.max(5,Math.round(food.fullness*(100-state.fullness)/100+food.fullness*.35));
  state.fullness=clamp(state.fullness+fullnessDelta);state.hunger=clamp(state.hunger-fullnessDelta);
  const prevStage=evolutionStage();let weightGain=(food.weight||.1)*gainFactor(c)*(0.85+Math.random()*.3);
@@ -1416,6 +1643,7 @@ async function doDate(){
  const ag=1,mg=Math.max(1,Math.round(d.mood*(1+Math.max(0,j.pref)*.1)));
  state.affection=clamp(state.affection+ag);state.mood=clamp(state.mood+mg);
  state.pendingDate={key,name:d.name,pref:j.pref,affectionGained:ag};
+ state.todayDateKey=key;state.todayDateName=d.name;
  const ev=getDateEvent(key);
  const ctx=`デートへの誘い判定。
 行き先:${d.name}
