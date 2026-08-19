@@ -146,7 +146,7 @@ details{margin-top:10px}.settingsGrid{display:grid;gap:8px;margin-top:10px}.sett
   <div id="cgViewerTitle" class="cgViewerTitle"></div>
 </div>
 <script>
-const APP_BUILD='20260818-yui-night-events15-v1';
+const APP_BUILD='20260819-yui-weight-cg-sync-v1';
 
 const CHARACTERS={
  risa:{id:'risa',name:'梨沙',age:18,height:153,startWeight:45,personality:'明るい、活発、前向き、しっかり者',speech:'タメ口、普通',relationship:'幼馴染かつクラスメイト',affection:50,mood:50,restraint:50,appetite:'普通',gainTendency:'普通',exercise:'普通',bodyView:'少し痩せたいと思っている。太りたくはない。',favoriteFoods:['甘いもの','パン類'],features:'幼馴染である主人公が少し気になっている。そのため、主人公にどう見られているかを気にする。ちょっと泣き虫。',rules:'基本ポジティブに話す。体重が増えると少しネガティブになる。抑止力が高いと食事は断る。甘いものの場合は抑止力が高くても断らない場合がある。',imageBase:'risa'},
@@ -531,14 +531,57 @@ function renderCGGallery(){
 }
 
 const YUI_WEIGHT_EVENT_TITLES=[
- 'お腹が気になる',
- 'ウエストがきつい',
- 'デニムのホックが外れる',
- 'トップスが耐えきれない',
- '昔のドレスが入らない',
- '鏡の前で立ち止まる',
- '今の自分と向き合う'
+ '',
+ 'お腹が出てきたことを認知',
+ 'ズボンのウエストがきつい',
+ 'ズボンのホックが外れる',
+ '昔着ていたドレスが入らない',
+ 'シャツが破れ、お腹が溢れる',
+ 'ホックが全く閉まらず太ったことを再確認'
 ];
+const YUI_WEIGHT_STAGE_SCENES={
+ 1:{
+   title:'お腹が出てきたことを認知',
+   text:'結衣はふと鏡の前で立ち止まり、以前より下腹部が少し前に出ていることに気づく。服の上からそっとお腹へ手を添え、自分でも分かる程度の変化に戸惑っている。',
+   fallbackDialogue:'……あれ。前より少し、お腹出てきてるよね。気のせいじゃないかも。'
+ },
+ 2:{
+   title:'ズボンのウエストがきつい',
+   text:'結衣はいつものズボンを履こうとするが、ウエストが以前より明らかにきつい。腰回りを整えながら何度か位置を直し、サイズ感の変化を認識する。',
+   fallbackDialogue:'……これ、こんなにきつかったっけ。前はもう少し普通に履けたはずなんだけど。'
+ },
+ 3:{
+   title:'ズボンのホックが外れる',
+   text:'結衣がきつくなったズボンを気にしながら動いた瞬間、張っていたウエストのホックが外れる。結衣は驚いて動きを止め、外れた部分と自分のお腹を交互に見ている。',
+   fallbackDialogue:'えっ……今、外れた？ うそ……さすがにこれは、ちょっとショックかも。'
+ },
+ 4:{
+   title:'昔着ていたドレスが入らない',
+   text:'結衣は昔よく着ていたドレスを久しぶりに試すが、身体に引っかかって最後まで着られない。何度か整えようとしたあと、以前とのサイズ差をはっきり実感する。',
+   fallbackDialogue:'……これ、昔は普通に着てたのに。まさか、ここまで入らなくなってるなんて。'
+ },
+ 5:{
+   title:'シャツが破れ、お腹が溢れる',
+   text:'結衣がきつくなったシャツを無理に整えようとした拍子に、生地の一部が裂ける。裾から柔らかな腹部が押し出され、結衣は慌ててそこを隠そうとして強く赤面している。',
+   fallbackDialogue:'ちょ、ちょっと待って……破れた？ もう……こんなの、恥ずかしすぎるよ。'
+ },
+ 6:{
+   title:'ホックが全く閉まらず太ったことを再確認',
+   text:'結衣はズボンの左右を力を入れて引き寄せるが、ホック同士の距離は大きく開いたままで全く届かない。何度試しても閉まらず、以前よりかなり太ったことを改めて認めざるを得ない。',
+   fallbackDialogue:'……全然届かない。前は閉まってたのに……私、本当にずいぶん太ったんだね。'
+ }
+};
+function yuiWeightStageEvent(stage){
+ const spec=YUI_WEIGHT_STAGE_SCENES[stage];
+ if(!spec)return null;
+ const lv=String(stage+1).padStart(2,'0');
+ const commonChoices=[
+   {label:'気持ちを受け止めて安心させる',affection:4,mood:3,restraint:1,reply:'「……ありがとう。そう言ってもらえると、少し落ち着く。」'},
+   {label:'本人がどう感じているか聞く',affection:4,mood:1,restraint:3,reply:'「どう感じてるか、か……うん。ちゃんと考えないとね。」'},
+   {label:'変化を率直に認めつつ今後を気遣う',affection:1,mood:-2,restraint:6,reply:'「……やっぱり分かるよね。自分でも、もう誤魔化せないかな。」'}
+ ];
+ return {title:spec.title,text:spec.text,image:`assets/yui/event_stage_${lv}.webp`,choices:commonChoices,sceneSpec:spec};
+}
 const WEIGHT_STAGE_EVENTS={
   risa:{
     1:{title:'制服が少しきつい…？',text:'朝、制服に着替えた梨沙はスカートのウエストにいつもと違う窮屈さを感じた。鏡の前で何度か位置を直しながら、少しだけ表情を曇らせている。',image:'assets/risa/event_stage_02.webp',choices:[
@@ -554,13 +597,7 @@ const WEIGHT_STAGE_EVENTS={
       {label:'見た目を直接指摘する',affection:-4,mood:-5,restraint:9,reply:'「は！？ 太ってないし！」'}
     ]}
   },
-  yui:{
-    1:{title:'いつもの服が少し窮屈',text:'結衣は外出前、いつもの服の腰回りが少しきつくなっていることに気づいた。',image:'assets/yui/event_stage_02.webp',choices:[
-      {label:'似合っていると伝える',affection:3,mood:2,restraint:2,reply:'「ふふ、ありがとう。でも……ちょっとだけ気になるかな。」'},
-      {label:'一緒に服を見に行こうと提案する',affection:4,mood:3,restraint:1,reply:'「それなら、お願いしようかな。」'},
-      {label:'体型変化を指摘する',affection:-1,mood:-4,restraint:6,reply:'「うん……自分でも分かってる。言われるとやっぱり刺さるね。」'}
-    ]}
-  },
+  yui:{},
   erika:{
     1:{title:'あり得ませんわ…',text:'絵里香は鏡の前で、いつもの服がわずかにきつくなっていることに気づいた。本人はかなり動揺している。',image:'assets/erika/event_stage_02.webp',choices:[
       {label:'何も変わらないとフォローする',affection:3,mood:2,restraint:3,reply:'「と、当然ですわ！ わたくしが太るなどあり得ませんもの。」'},
@@ -585,6 +622,10 @@ function genericWeightEvent(c,stage){
  ]};
 }
 function getWeightStageEvent(c,stage){
+ if(c.id==='yui'){
+   const yui=yuiWeightStageEvent(stage);
+   if(yui)return yui;
+ }
  const own=WEIGHT_STAGE_EVENTS[c.id]&&WEIGHT_STAGE_EVENTS[c.id][stage];
  return own||genericWeightEvent(c,stage);
 }
@@ -618,17 +659,22 @@ async function generateWeightEventOpeningAI(){
  if(!state?.pendingWeightEvent||state.pendingWeightEvent.aiGenerating||state.pendingWeightEvent.aiIntroShown)return false;
  const p=state.pendingWeightEvent,c=CHARACTERS[activeId],stage=p.stage,ev=getWeightStageEvent(c,stage),gs=globalSettings();
  p.aiGenerating=true;save();renderWeightEvent();
- const fallbackDialogue=c.id==='yui'?'……最近、服の感じが前と違うの。自分でも分かるくらい変わってきたかも。':c.id==='emi'?'……なんか前より動きにくい。ちょっと気になるんだけど。':c.id==='erika'?'……少しだけ、服の感触が違う気がしますわ。気のせいですわよね？':c.id==='rei'?'……前と感触が違う。こういう変化、ちょっと気になる。':'……前より少し変わったよね。自分でも分かる。';
+ const yuiSpec=c.id==='yui'?YUI_WEIGHT_STAGE_SCENES[stage]:null;
+ const fallbackDialogue=yuiSpec?.fallbackDialogue||(c.id==='emi'?'……なんか前より動きにくい。ちょっと気になるんだけど。':c.id==='erika'?'……少しだけ、服の感触が違う気がしますわ。気のせいですわよね？':c.id==='rei'?'……前と感触が違う。こういう変化、ちょっと気になる。':'……前より少し変わったよね。自分でも分かる。');
  const fallback={situation:ev.text,dialogue:fallbackDialogue,emotion:'troubled',choices:(ev.choices||[]).map(x=>x.label).slice(0,3)};
  if(!gs.apiKey){Object.assign(p,{aiGenerating:false,aiIntroShown:true,aiSituation:fallback.situation,aiDialogue:fallback.dialogue,aiEmotion:fallback.emotion,aiChoices:fallback.choices});save();renderWeightEvent();return true}
  const choiceIntents=(ev.choices||[]).slice(0,3).map((x,i)=>`${i+1}. ${x.label}（好感度効果:${(x.affection||0)>=0?'+':''}${x.affection||0} / 機嫌効果:${(x.mood||0)>=0?'+':''}${x.mood||0} / 元の返答:${x.reply||''}）`).join('\n');
  const instructions=`恋愛シミュレーションゲームの体型変化イベント開始文を生成する。JSONのみ返す。
 形式:{"situation":"状況説明1〜3文","dialogue":"キャラクター本人の発言1〜2文","emotion":"normal|happy|embarrassed|angry|troubled|surprised","choices":["主人公の返答1","主人公の返答2","主人公の返答3"]}
-状況説明と発言は明確に分離する。主人公の行動や発言を勝手に確定しない。choicesは必ず3件で、下記の3つの元選択肢と同じ意味・順番を保ちながら、直前のキャラクター発言へ自然に返せる主人公の短い発言にする。体型を侮辱せず、現在Lvとキャラクター設定を守る。`;
+状況説明と発言は明確に分離する。主人公の行動や発言を勝手に確定しない。choicesは必ず3件で、下記の3つの元選択肢と同じ意味・順番を保ちながら、直前のキャラクター発言へ自然に返せる主人公の短い発言にする。体型を侮辱せず、現在Lvとキャラクター設定を守る。
+【最重要】イベントに「CG対応シーン」が指定されている場合、CGで起きている出来事を変更・追加・省略しない。状況説明とキャラクター発言は必ずそのCGの瞬間から自然につなげる。別の服、別の事故、別の場所へ勝手に置き換えない。`;
  const input=`キャラクター:${c.name} / ${c.age}歳
 体型Lv:${stage+1}/7 / 現在体重:${state.weight.toFixed(1)}kg
 イベント:${ev.title}
 元の状況:${ev.text}
+${c.id==='yui'&&yuiSpec?`CG対応シーン（厳守）: Lv${stage}→Lv${stage+1}。${yuiSpec.text}
+CGファイル: assets/yui/event_stage_${String(stage+1).padStart(2,'0')}.webp
+このCGの出来事を会話の起点にすること。`:''}
 現在の関係:${relationshipLabel()} / 好感度:${Math.round(state.affection)}
 心理:${psychologicalProfile(c)}
 キャラクター設定:${c.personality} / ${c.speech}
@@ -681,9 +727,10 @@ async function resolveWeightEventChoice(index){
 
  const playerLine=await generatePlayerChoiceLine(generatedLabel,`直前の${c.name}の発言:${state.pendingWeightEvent.aiDialogue||''} / 元の選択意図:${choice.label} / ${choice.reply||choice.label}`);
  addBubble('user',playerLine,'体重変化イベント');
- const yuiCgContext=c.id==='yui'?`結衣専用イベントテーマ:${YUI_WEIGHT_EVENT_TITLES[stage]||ev.title}。お腹や服のフィット感への本人の意識を中心に描写する。`:'';
+ const yuiCgContext=c.id==='yui'&&YUI_WEIGHT_STAGE_SCENES[stage]?`CG対応シーン（変更禁止）: Lv${stage}→Lv${stage+1} / ${YUI_WEIGHT_STAGE_SCENES[stage].text}`:'';
  const ctx=`体重変化イベントの選択後。
 イベント:${ev.title}
+${yuiCgContext}
 元の状況:${state.pendingWeightEvent.aiSituation||ev.text}
 イベント開始時の${c.name}の発言:${state.pendingWeightEvent.aiDialogue||''}
 主人公が選んだ行動:${generatedLabel}\n主人公の実際の発言:${playerLine}
@@ -692,6 +739,7 @@ async function resolveWeightEventChoice(index){
 機嫌 ${before.mood}→${state.mood} (${choice.mood>=0?'+':''}${choice.mood||0})
 抑止力 ${before.restraint}→${state.restraint} (${choice.restraint>=0?'+':''}${choice.restraint||0})
 現在体重:${state.weight.toFixed(1)}kg
+${c.id==='yui'?'CGで起きた出来事をなかったことにしたり別シーンへ移動したりせず、その場の直後として反応を続けること。':''}
 この選択直後の${c.name}の反応を、設定と現在ステータスに合わせて返すこと。
 既定文「${choice.reply||''}」は参考にしてよいが、会話文脈に自然になるよう言い換えてよい。`;
  const ok=await showEventAI(playerLine,ctx,'体重変化イベント');
