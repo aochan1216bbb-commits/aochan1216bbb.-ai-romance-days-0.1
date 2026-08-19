@@ -55,10 +55,10 @@ details{margin-top:10px}.settingsGrid{display:grid;gap:8px;margin-top:10px}.sett
 <body>
 <noscript><div style="max-width:640px;margin:12px auto;padding:12px;background:#ffe4e6;color:#9f1239;border-radius:12px;font-family:sans-serif">JavaScriptが無効です。Safari/Chromeなどで開いてください。</div></noscript>
 <div id="runtimeStatus" style="max-width:640px;margin:8px auto 0;padding:8px 12px;border-radius:10px;background:#fff3cd;color:#664d03;font:12px -apple-system,BlinkMacSystemFont,sans-serif">JavaScript確認中…</div>
-<div id="buildVersion" style="max-width:640px;margin:2px auto 6px;text-align:right;color:#8a7b82;font:10px -apple-system,BlinkMacSystemFont,sans-serif">BUILD 20260818-yui-memories1</div>
+<div id="buildVersion" style="max-width:640px;margin:2px auto 6px;text-align:right;color:#8a7b82;font:10px -apple-system,BlinkMacSystemFont,sans-serif">BUILD 20260820-erika-routine-coverage-v19</div>
 <script>
 (function(){
-  var BUILD='20260817-relation-initiative1';
+  var BUILD='20260820-erika-routine-coverage-v19';
   try {
     var u=new URL(window.location.href);
     if(u.protocol==='http:'||u.protocol==='https:') {
@@ -118,6 +118,12 @@ details{margin-top:10px}.settingsGrid{display:grid;gap:8px;margin-top:10px}.sett
 <div id="restraintEventText" style="font-size:13px;line-height:1.55;margin-bottom:9px"></div>
 <div id="restraintEventChance" class="small" style="margin-bottom:8px"></div>
 <div id="restraintEventChoices" class="settingsGrid"></div>
+</div><div id="routineChoicePanel" class="panel hidden" style="margin-top:10px">
+<div class="small" style="font-weight:800;margin-bottom:7px">特殊イベント後の返答</div>
+<div id="routineChoiceTitle" style="font-weight:800;margin-bottom:6px"></div>
+<div id="routineChoiceText" style="font-size:13px;line-height:1.55;margin-bottom:9px"></div>
+<div id="routineChoiceHint" class="small" style="margin-bottom:8px"></div>
+<div id="routineChoices" class="settingsGrid"></div>
 </div><div id="initiativeChoicePanel" class="panel hidden" style="margin-top:10px">
 <div class="small" style="font-weight:800;margin-bottom:7px">相手からの問いかけ</div>
 <div id="initiativeChoiceText" style="font-size:13px;line-height:1.55;margin-bottom:9px"></div>
@@ -127,6 +133,7 @@ details{margin-top:10px}.settingsGrid{display:grid;gap:8px;margin-top:10px}.sett
 <div id="dateEventText" style="font-size:13px;line-height:1.55;margin-bottom:9px"></div>
 <div id="dateEventChoices" class="settingsGrid"></div>
 </div><div class="controls"><button type="button" class="btn primary" id="advanceBtn">次の時間帯へ</button><button type="button" class="btn" id="workBtn">バイトする</button><button type="button" class="btn" id="statusBtn">ステータス表示</button><button type="button" class="btn accent" id="restraintBtn">抑止力に働きかける</button><button type="button" class="btn" id="albumBtn">思い出アルバム</button><button type="button" class="btn" id="debugWeightBtn">デバッグ：体重 +5kg</button><button type="button" class="btn accent" id="characterSelectBtn">キャラ選択へ</button><button type="button" class="btn danger" id="resetBtn" style="grid-column:1/-1">このキャラを最初から</button></div></div>
+  <div id="hookDebugPanel" class="panel hidden"><div class="small" style="font-weight:800;margin-bottom:7px">イベント発生デバッグ</div><div id="hookDebugText" class="log"></div></div>
   <div class="panel"><details><summary><b>キャラクタープロフィール</b></summary><div class="log" id="profileDetail"></div></details><details><summary><b>ゲームログ</b></summary><div class="log" id="gameLog"></div></details></div>
 </section>
 </div>
@@ -146,7 +153,7 @@ details{margin-top:10px}.settingsGrid{display:grid;gap:8px;margin-top:10px}.sett
   <div id="cgViewerTitle" class="cgViewerTitle"></div>
 </div>
 <script>
-const APP_BUILD='20260819-erika-daily-routine-v15';
+const APP_BUILD='20260820-erika-routine-coverage-v19';
 
 const CHARACTERS={
  risa:{id:'risa',name:'梨沙',age:18,height:153,startWeight:45,personality:'明るい、活発、前向き、しっかり者',speech:'タメ口、普通',relationship:'幼馴染かつクラスメイト',affection:50,mood:50,restraint:50,appetite:'普通',gainTendency:'普通',exercise:'普通',bodyView:'少し痩せたいと思っている。太りたくはない。',favoriteFoods:['甘いもの','パン類'],features:'幼馴染である主人公が少し気になっている。そのため、主人公にどう見られているかを気にする。ちょっと泣き虫。',rules:'基本ポジティブに話す。体重が増えると少しネガティブになる。抑止力が高いと食事は断る。甘いものの場合は抑止力が高くても断らない場合がある。',imageBase:'risa'},
@@ -228,7 +235,7 @@ async function testOpenAIConnection(){
  }catch(err){setApiStatus(`API接続失敗：${err.message||err}`,'error')}
  finally{if(btn){btn.disabled=false;btn.textContent='接続テスト'}}
 }
-function defaultState(id){const c=CHARACTERS[id];return {characterId:id,day:1,turn:0,affection:c.affection,mood:c.mood,fullness:20,hunger:40,restraint:c.restraint,weight:c.startWeight,startWeight:c.startWeight,history:[],gameLog:[],favoriteFoods:[...c.favoriteFoods],lastFoodResult:null,foodOfferTurnKey:null,foodPressureCount:0,money:2500,workCount:0,lastFoodTurnKey:null,lastFoodWasRefused:false,weightInterest:0,weightStage:0,pendingDate:null,seenWeightEvents:[],pendingWeightEvent:null,memories:[],foodExperience:{},growthTraits:{},memorySeq:0,lastInitiatedTurnKey:null,initiatedEventCount:0,lastRelationshipStage:null,pendingInitiatedChoice:null,lastEmotion:'normal',conversationRewards:[],cgGallery:[],selfFoodCount:0,yuiSpecialFlags:{},pendingRestraintEvent:null,restraintTalkRewards:[],lastNightEventDay:0,pendingNightChoice:null,nightEventHistory:[],seenNightEventIds:[],seenNightEventStage:1,dailyFoodLoad:0,dailyFoodCount:0,dailyFoodNames:[],todayDateKey:null,todayDateName:null,isLover:false,confessionCompleted:false,confessionDeferredUntilDay:0,ageGapTalkCount:0,lastYuiInitiatedDay:0,yuiWeightEventSchemaVersion:2,forceYuiWeightEventMigration:false,lastErikaAttentionTurnKey:null,lastErikaAttentionDay:0,erikaNeglectTurns:0,erikaJealousyCount:0,lastErikaJealousyDay:0,pendingErikaRoutine:null,erikaRoutineHistory:[],lastErikaRoutineKey:null,erikaDayHungerStrain:false,erikaFoodGuiltToday:0}}
+function defaultState(id){const c=CHARACTERS[id];return {characterId:id,day:1,turn:0,affection:c.affection,mood:c.mood,fullness:20,hunger:40,restraint:c.restraint,weight:c.startWeight,startWeight:c.startWeight,history:[],gameLog:[],favoriteFoods:[...c.favoriteFoods],lastFoodResult:null,foodOfferTurnKey:null,foodPressureCount:0,money:2500,workCount:0,lastFoodTurnKey:null,lastFoodWasRefused:false,weightInterest:0,weightStage:0,pendingDate:null,seenWeightEvents:[],pendingWeightEvent:null,memories:[],foodExperience:{},growthTraits:{},memorySeq:0,lastInitiatedTurnKey:null,initiatedEventCount:0,lastRelationshipStage:null,pendingInitiatedChoice:null,lastEmotion:'normal',conversationRewards:[],cgGallery:[],selfFoodCount:0,yuiSpecialFlags:{},pendingRestraintEvent:null,restraintTalkRewards:[],lastNightEventDay:0,pendingNightChoice:null,nightEventHistory:[],seenNightEventIds:[],seenNightEventStage:1,dailyFoodLoad:0,dailyFoodCount:0,dailyFoodNames:[],todayDateKey:null,todayDateName:null,isLover:false,confessionCompleted:false,confessionDeferredUntilDay:0,ageGapTalkCount:0,lastYuiInitiatedDay:0,yuiWeightEventSchemaVersion:2,forceYuiWeightEventMigration:false,lastErikaAttentionTurnKey:null,lastErikaAttentionDay:0,erikaNeglectTurns:0,erikaJealousyCount:0,lastErikaJealousyDay:0,pendingErikaRoutine:null,erikaRoutineHistory:[],lastErikaRoutineKey:null,erikaDayHungerStrain:false,erikaFoodGuiltToday:0,erikaRoutineCoverage:{morning:{},night:{}}}}
 function stateKey(id){return 'aiRomanceState_v3_'+id} function loadState(id){const base=defaultState(id),saved=safeGet(stateKey(id),{});const merged={...base,...saved};if(!Array.isArray(merged.history))merged.history=[];if(!Array.isArray(merged.gameLog))merged.gameLog=[];if(!Array.isArray(merged.favoriteFoods))merged.favoriteFoods=[...CHARACTERS[id].favoriteFoods];if(!Array.isArray(merged.seenWeightEvents))merged.seenWeightEvents=[];
 if(!Number.isFinite(Number(merged.yuiWeightEventSchemaVersion)))merged.yuiWeightEventSchemaVersion=0;
 if(id==='yui'&&Number(merged.yuiWeightEventSchemaVersion)<2){
@@ -276,6 +283,9 @@ if(!Array.isArray(merged.erikaRoutineHistory))merged.erikaRoutineHistory=[];
 if(!('lastErikaRoutineKey' in merged))merged.lastErikaRoutineKey=null;
 merged.erikaDayHungerStrain=!!merged.erikaDayHungerStrain;
 merged.erikaFoodGuiltToday=Math.max(0,Number(merged.erikaFoodGuiltToday||0));
+if(!merged.erikaRoutineCoverage||typeof merged.erikaRoutineCoverage!=='object')merged.erikaRoutineCoverage={morning:{},night:{}};
+if(!merged.erikaRoutineCoverage.morning||typeof merged.erikaRoutineCoverage.morning!=='object')merged.erikaRoutineCoverage.morning={};
+if(!merged.erikaRoutineCoverage.night||typeof merged.erikaRoutineCoverage.night!=='object')merged.erikaRoutineCoverage.night={};
 merged.erikaJealousyCount=Math.max(0,Number(merged.erikaJealousyCount||0));
 merged.lastErikaJealousyDay=Math.max(0,Number(merged.lastErikaJealousyDay||0));
 return merged} function save(){if(activeId&&state)safeSet(stateKey(activeId),state)}
@@ -437,6 +447,50 @@ function cgPath(c,type,stage){
  if(type.startsWith('food_'))return `assets/${c.id}/cg_${type}.webp?v=${APP_BUILD}`;
  return `assets/${c.id}/cg_${type}.webp?v=${APP_BUILD}`;
 }
+function hookEventSeenCount(charId,lv){
+ if(charId==='erika')return (state.erikaRoutineHistory||[]).filter(e=>e.kind==='noon_hook'&&e.lv===lv).length;
+ if(charId==='yui')return (state.cgGallery||[]).filter(x=>x.id===`special:yui:overeat_hook:${lv}`).length;
+ return 0;
+}
+function hookTriggerProfile(charId,lv,fullness){
+ const profiles={
+  erika:{3:{minFullness:70,baseChance:0.48},4:{minFullness:68,baseChance:0.55},5:{minFullness:65,baseChance:0.70},6:{minFullness:60,baseChance:0.80},7:{minFullness:55,baseChance:0.90}},
+  yui:{4:{minFullness:88,baseChance:0.46},5:{minFullness:84,baseChance:0.60},6:{minFullness:80,baseChance:0.76},7:{minFullness:74,baseChance:0.88}}
+ };
+ const profile=(profiles[charId]||{})[lv]||null;
+ if(!profile)return {eligible:false,minFullness:999,chance:0,seenCount:0};
+ let chance=profile.baseChance;
+ if(charId==='erika'&&fullness>=90&&lv>=4)chance=Math.max(chance,0.98);
+ if(charId==='yui'&&fullness>=95&&lv>=5)chance=Math.max(chance,0.96);
+ const seenCount=hookEventSeenCount(charId,lv);
+ if(seenCount>0){const decay=charId==='erika'?0.15:0.12;chance=Math.max(0.22,chance-(decay*Math.min(seenCount,2)));}
+ return {eligible:fullness>=profile.minFullness,minFullness:profile.minFullness,chance,seenCount};
+}
+function hookDebugSummary(){
+ if(!activeId||!state)return '';
+ const lines=[];const fullness=Math.round(state.fullness),lv=stageNum();
+ if(activeId==='erika'){
+  const p=hookTriggerProfile('erika',lv,state.fullness);
+  lines.push('対象: 絵里香 / 昼のホック事故');
+  lines.push(`現在Lv.${lv} / 満腹度 ${fullness}`);
+  if(p.minFullness>=999)lines.push('このLvではホック事故なし');
+  else{lines.push(`発生条件: 満腹度 ${p.minFullness}以上`);lines.push(`現在の発生率: ${Math.round(p.chance*100)}%`);lines.push(`条件達成: ${p.eligible?'はい':'いいえ'}`);lines.push(`同Lv既出回数: ${p.seenCount}回`);}
+ }else if(activeId==='yui'){
+  const p=hookTriggerProfile('yui',lv,state.fullness);
+  lines.push('対象: 結衣 / 食べすぎホック事件');
+  lines.push(`現在Lv.${lv} / 満腹度 ${fullness}`);
+  if(p.minFullness>=999)lines.push('このLvではホックイベントなし');
+  else{lines.push(`発生条件: 満腹度 ${p.minFullness}以上`);lines.push(`現在の発生率: ${Math.round(p.chance*100)}%`);lines.push(`条件達成: ${p.eligible?'はい':'いいえ'}`);lines.push(`同Lv既出回数: ${p.seenCount}回`);}
+ }
+ return lines.join('<br>');
+}
+function renderHookDebugPanel(){
+ const panel=$('hookDebugPanel'),box=$('hookDebugText');
+ if(!panel||!box)return;
+ if(!['erika','yui'].includes(activeId||'')){panel.classList.add('hidden');box.innerHTML='';return;}
+ panel.classList.remove('hidden');
+ box.innerHTML=hookDebugSummary()||'表示できるデータがありません。';
+}
 function yuiSpecialEvent(kind,title,detail){
  if(activeId!=='yui')return false;
  const lv=stageNum(),id=`special:yui:${kind}:${lv}`;
@@ -450,16 +504,14 @@ function yuiSpecialEvent(kind,title,detail){
  return true;
 }
 async function maybeYuiOvereatHook(source='食事'){
- if(activeId!=='yui'||stageNum()<4||state.fullness<90)return false;
- const fired=yuiSpecialEvent('overeat_hook','食べすぎてホックが弾ける',
-   `${source}のあと、結衣は苦しそうにウエストへ手を添えた。次の瞬間、張りつめていたホックが外れ、本人は思わず固まった。`);
+ const lv=stageNum();
+ const profile=hookTriggerProfile('yui',lv,state.fullness);
+ if(activeId!=='yui'||!profile.eligible||Math.random()>=profile.chance)return false;
+ const fired=yuiSpecialEvent('overeat_hook','食べすぎてホックが弾ける',`${source}のあと、結衣は苦しそうにウエストへ手を添えた。次の瞬間、張りつめていたホックが外れ、本人は思わず固まった。`);
  if(!fired)return false;
-
- // 特殊CGの直後に、ホックが外れたことそのものへの結衣の反応を出す。
- const c=CHARACTERS[activeId];
  const ctx=`結衣専用の食べすぎ特殊イベント直後。
 直前に起きたこと:${source}で食事を終えたあと、満腹で張ったお腹に押されてズボンのホックが外れた。
-現在体型:Lv.${stageNum()} / ${state.weight.toFixed(1)}kg
+現在体型:Lv.${lv} / ${state.weight.toFixed(1)}kg
 満腹度:${Math.round(state.fullness)}
 好感度:${Math.round(state.affection)}
 抑止力:${Math.round(state.restraint)}
@@ -468,13 +520,9 @@ async function maybeYuiOvereatHook(source='食事'){
 ホックが外れたことへの恥ずかしさ、驚き、食べすぎへの後悔を中心に、現在の関係性と体型Lvに合った自然な反応を返す。
 体型Lvが高いほど「また太ったかも」「さすがに食べすぎた」などの自覚を少し強めてよい。
 dialogueは1〜2文。narrationは1〜2文。食事前の話には戻らず、必ずホックが外れた直後のコメントにする。`;
- try{
-   const r=await askAI('（食後、ズボンのホックが外れた）',null,null,ctx);
-   addAIResponse(r,'食べすぎ特殊イベント');
- }catch(e){
-   addNarration('結衣は外れたホックを見下ろし、慌ててウエストを押さえた。','食べすぎ特殊イベント');
-   addBubble('assistant','……うそ。さすがに食べすぎたかな……ちょっと恥ずかしい。','食べすぎ特殊イベント');
- }
+ try{const r=await askAI('（食後、ズボンのホックが外れた）',null,null,ctx);addAIResponse(r,'食べすぎ特殊イベント');}
+ catch(e){addNarration('結衣は外れたホックを見下ろし、慌ててウエストを押さえた。','食べすぎ特殊イベント');addBubble('assistant','……うそ。さすがに食べすぎたかな……ちょっと恥ずかしい。','食べすぎ特殊イベント');}
+ openYuiHookFollowup(lv,source);
  return true;
 }
 function maybeYuiBellyGrab(force=false){
@@ -487,9 +535,50 @@ function maybeYuiBellyGrab(force=false){
    `鏡の前で、結衣は増えたお腹に両手を添え、柔らかくなった肉をそっと掴んだ。以前との違いを改めて実感している。`);
 }
 
+function openRoutineFollowup(config){
+ state.pendingErikaRoutine={kind:config.kind||'routine_followup',title:config.title||'イベントへの返答',intro:config.intro||'',hint:config.hint||'',openingDialogue:config.openingDialogue||'',situation:config.situation||'',choices:(config.choices||[]).map(ch=>({label:ch.label,affection:ch.affection||0,mood:ch.mood||0,restraintDelta:ch.restraintDelta||0,tone:ch.tone||ch.label,charId:config.charId||activeId}))};
+ save();render();
+}
+function renderRoutineChoices(){
+ const panel=$('routineChoicePanel'),title=$('routineChoiceTitle'),text=$('routineChoiceText'),hint=$('routineChoiceHint'),box=$('routineChoices');
+ if(!panel||!title||!text||!hint||!box)return;
+ const p=state?.pendingErikaRoutine;
+ if(!p){panel.classList.add('hidden');box.innerHTML='';return}
+ panel.classList.remove('hidden');title.textContent=p.title||'イベントへの返答';text.textContent=p.intro||'';hint.textContent=p.hint||'';box.innerHTML='';
+ const selectedType=blockingEventType();
+ (p.choices||[]).forEach((ch,i)=>{const b=document.createElement('button');b.type='button';b.className='btn';b.textContent=ch.label;b.disabled=selectedType!=='erikaRoutine';b.addEventListener('click',()=>resolveRoutineChoice(i));box.appendChild(b);});
+}
+async function resolveRoutineChoice(i){
+ if(blockingEventType()!=='erikaRoutine'){showBlockingNotice();return}
+ const p=state?.pendingErikaRoutine,ch=p?.choices?.[i];if(!p||!ch)return;
+ const box=$('routineChoices');if(box)box.querySelectorAll('button').forEach(b=>b.disabled=true);
+ const charId=ch.charId||activeId;const c=CHARACTERS[charId]||CHARACTERS[activeId];
+ const beforeAff=state.affection,beforeMood=state.mood,beforeRes=state.restraint;
+ state.affection=clamp(state.affection+(ch.affection||0));state.mood=clamp(state.mood+(ch.mood||0));if(ch.restraintDelta)state.restraint=clamp(state.restraint+ch.restraintDelta);
+ const playerLine=await generatePlayerChoiceLine(ch.label,`特殊イベント後の返答 / キャラクター:${c.name} / 状況:${p.situation||p.intro||''} / 返答意図:${ch.tone}`);
+ addBubble('user',playerLine,'特殊イベントへの返答');
+ const ctx=`特殊イベント直後の会話分岐。
+キャラクター:${c.name}
+イベント種別:${p.kind}
+イベント状況:${p.situation||p.intro||''}
+直前のキャラクター発言:${p.openingDialogue||''}
+主人公の選択肢:${ch.label}
+主人公の実際の発言:${playerLine}
+返答意図:${ch.tone}
+確定数値変化: 好感度 ${beforeAff}→${state.affection} (${(ch.affection||0)>=0?'+':''}${ch.affection||0}) / 機嫌 ${beforeMood}→${state.mood} (${(ch.mood||0)>=0?'+':''}${ch.mood||0})${ch.restraintDelta?` / 抑止力 ${beforeRes}→${state.restraint} (${ch.restraintDelta>=0?'+':''}${ch.restraintDelta})`:''}
+この数値変化は確定。イベント直後の気まずさ、恥ずかしさ、安堵、後悔などを反映した自然な反応を返すこと。
+${charId==='yui'?'結衣は主人公より年上。主人公の台詞は敬語で、交際前は明確な恋愛告白にしない。':''}`;
+ try{const r=await askAI(playerLine,null,null,ctx);addAIResponse(r,'特殊イベント後の返答');}
+ catch(e){addAIResponse({narration:`${c.name}は主人公の言葉を聞き、少しだけ表情を緩めた。`,dialogue:charId==='yui'?'……ありがとうございます。ちょっと、恥ずかしかったです。':'……べ、別に助かったわけではありませんけれど……その、少し落ち着きましたわ。',emotion:'embarrassed'},'特殊イベント後の返答');}
+ addBubble('system',`好感度 ${(ch.affection||0)>=0?'+':''}${ch.affection||0}｜機嫌 ${(ch.mood||0)>=0?'+':''}${ch.mood||0}${ch.restraintDelta?`｜抑止力 ${ch.restraintDelta>=0?'+':''}${ch.restraintDelta}`:''}`,'選択結果');
+ remember('routine_followup',`${c.name}の特殊イベント後に「${ch.label}」と返した`,ch.affection>=4?4:2,['routine','followup',p.kind||'hook']);
+ state.pendingErikaRoutine=null;save();render();
+}
+function openErikaHookFollowup(lv){openRoutineFollowup({charId:'erika',kind:'noon_hook_followup',title:`絵里香 Lv.${lv}：ホック事故のあと`,intro:'昼の事故で気まずそうにしている絵里香へ、どう声をかける？',hint:'事故後の専用会話分岐です。返答後、絵里香の反応も生成されます。',openingDialogue:lv>=6?'……っ、見ないでくださいまし……こんなの、最悪ですわ。':'……い、今のは見なかったことになさい。まったく、ありえませんわ……。',situation:erikaHookScene(lv),choices:[{label:'「大丈夫か。いったん落ち着こう」',affection:3,mood:4,tone:'落ち着かせ、まず本人の動揺を和らげる。'},{label:'「人目が気になるなら、隠せるようにしよう」',affection:4,mood:3,tone:'周囲の視線への不安を減らすよう具体的に助ける。'},{label:'「今日は無理せず、少し休んだ方がいい」',affection:2,mood:2,restraintDelta:1,tone:'体調や恥ずかしさを気遣い、無理をしないよう促す。'}]});}
+function openYuiHookFollowup(lv,source){openRoutineFollowup({charId:'yui',kind:'yui_overeat_hook_followup',title:`結衣 Lv.${lv}：食べすぎてホックが外れたあと`,intro:`${source}のあと、結衣さんは外れたホックを押さえてかなり気まずそうにしています。どう声をかけますか？`,hint:'結衣向けの専用会話分岐です。主人公の返答は敬語寄りで処理されます。',openingDialogue:lv>=6?'……すみません、さすがに食べすぎました。こんなところ、見せたくなかったのに……。':'……あの、今のはちょっと恥ずかしいです。食べすぎちゃいましたね……。',situation:`${source}のあと、満腹で張ったお腹に押されてズボンのホックが外れた。`,choices:[{label:'「大丈夫ですか。いったん落ち着きましょう」',affection:3,mood:4,tone:'動揺を責めず、まず安心させる。'},{label:'「見えないように整えましょうか」',affection:4,mood:3,tone:'人目や服の乱れを気遣って助ける。'},{label:'「今日はもう無理なさらないでください」',affection:2,mood:2,restraintDelta:1,tone:'食べすぎた後悔に寄り添い、休むよう勧める。'}]});}
 function blockingEventType(){
  if(state?.pendingWeightEvent)return 'weight';
- if(state?.pendingDate)return 'date';
+ if(state?.pendingDateEvent)return 'date';
  if(state?.pendingInitiatedChoice)return 'initiative';
  if(state?.pendingErikaRoutine)return 'erikaRoutine';
  if(state?.pendingNightChoice)return 'night';
@@ -497,7 +586,7 @@ function blockingEventType(){
  return null;
 }
 function blockingEventLabel(type=blockingEventType()){
- return {weight:'体型変化イベント',date:'デート中イベント',initiative:'相手からの問いかけ',erikaRoutine:'絵里香の日常イベント',night:'夜の独白イベント',restraint:'抑止力イベント'}[type]||'イベント';
+ return {weight:'体型変化イベント',date:'デート中イベント',initiative:'相手からの問いかけ',erikaRoutine:'特殊イベント後の返答',night:'夜の独白イベント',restraint:'抑止力イベント'}[type]||'イベント';
 }
 function showBlockingNotice(){
  const type=blockingEventType();if(!type)return;
@@ -514,18 +603,19 @@ function setMainControlsLocked(locked){
 function syncEventLockUI(){
  const active=blockingEventType();
  setMainControlsLocked(!!active);
- const w=$('weightEventChoices'),d=$('dateEventChoices'),i=$('initiativeChoices'),r=$('restraintEventChoices'),n=$('nightChoiceChoices');
+ const w=$('weightEventChoices'),d=$('dateEventChoices'),i=$('initiativeChoices'),r=$('restraintEventChoices'),n=$('nightChoiceChoices'),ru=$('routineChoices');
  if(w)w.classList.toggle('eventLocked',!!active&&active!=='weight');
  if(d)d.classList.toggle('eventLocked',!!active&&active!=='date');
  if(i)i.classList.toggle('eventLocked',!!active&&active!=='initiative');
  if(r)r.classList.toggle('eventLocked',!!active&&active!=='restraint');
  if(n)n.classList.toggle('eventLocked',!!active&&active!=='night');
- const dp=$('dateEventPanel'),ip=$('initiativeChoicePanel'),rp=$('restraintEventPanel'),np=$('nightChoicePanel');
- // Only the highest-priority pending choice remains visible.
+ if(ru)ru.classList.toggle('eventLocked',!!active&&active!=='erikaRoutine');
+ const dp=$('dateEventPanel'),ip=$('initiativeChoicePanel'),rp=$('restraintEventPanel'),np=$('nightChoicePanel'),rup=$('routineChoicePanel');
  if(dp&&active!=='date')dp.classList.add('hidden');
  if(ip&&active!=='initiative')ip.classList.add('hidden');
  if(rp&&active!=='restraint')rp.classList.add('hidden');
  if(np&&active!=='night')np.classList.add('hidden');
+ if(rup&&active!=='erikaRoutine')rup.classList.add('hidden');
 }
 function openCGViewer(path,title='思い出CG'){
  const modal=$('cgViewer'),img=$('cgViewerImage');if(!modal||!img)return;
@@ -861,7 +951,9 @@ function characterFoodModifier(c,offer){
    accept-=anxiety*.08;
    accept+=dep*.38;
    if(dep>=70)accept+=8;
-   restraintMult=1.12;
+   // 初期は食後の焦りで自制しやすいが、体型Lvが上がるほど
+   // 食欲・習慣化が勝ち、同じ罪悪感でも抑止力へ戻りにくい。
+   restraintMult=Math.max(.48,1.02-st*.09);
  }
  if(c.id==='rei'){
    const wi=state.weightInterest||0;accept+=wi*.16;restraintMult=wi>=50?0:Math.max(.2,1-wi/80);
@@ -884,15 +976,18 @@ function erikaFoodGuilt(food,before){
  const alreadyFull=Math.max(0,Math.round(((before?.fullness||0)-55)*.10));
  const guilt=Math.max(1,Math.min(70,lvBase+amount+alreadyFull));
  const moodLoss=Math.max(0,Math.min(9,Math.round(guilt/10)));
- const restraintBonus=Math.max(0,Math.min(8,Math.round(guilt/11)));
+ // 罪悪感そのものは体型Lvとともに強くなるが、
+ // 体型Lvが上がるほど「後悔しても次の自制に結びつきにくい」。
+ const conversion=[1,.90,.75,.60,.45,.30,.20][Math.max(0,Math.min(6,lv-1))];
+ const restraintBonus=Math.max(0,Math.min(5,Math.round((guilt/14)*conversion)));
  return {guilt,moodLoss,restraintBonus};
 }
 function restraintGainAfterEating(c,offer,before){
- let base={risa:5,emi:10,yui:7,erika:12,rei:5}[c.id]||6;
+ let base={risa:5,emi:10,yui:7,erika:8,rei:5}[c.id]||6;
  base+=Math.round(offer.restraintHit*.45);
  base+=Math.floor(evolutionStage()/2);
- // 絵里香は上下しやすい。今回は「食後の焦り」で大きめに上がる。
- if(c.id==='erika')base+=Math.round(Math.random()*7);
+ // 絵里香は食後に後悔はするが、高Lvほどそれが強い自制へ直結しない。
+ if(c.id==='erika')base+=Math.round(Math.random()*3);
  // 結衣は高い抑止力で食べた時ほど後悔が強く、抑止力も戻りやすい。
  if(c.id==='yui'&&before.restraint>=65)base+=5;
  // 怜は体重増加への興味が育つほど罪悪感が弱くなる。興味50以上なら上昇しない。
@@ -909,7 +1004,7 @@ function characterEvolutionText(c){
  if(c.id==='risa')return common+(st>=2?'以前より体型への意識が強く、食べた後は罪悪感から自制しようとする。':'まだ大きな変化ではないが、食べ過ぎには気をつけようとしている。');
  if(c.id==='emi')return common+(st>=1?'体重増加への危機感が強く、食べた後ほど強く自制しようとする。':'活発さを保ちたい意識が強い。');
  if(c.id==='yui')return common+`油物嗜好${state.growthTraits?.oilyPreference||0}/100。`+(st>=2?'体型を気にする発言が増え、体重増加と経験に伴って油物を好みやすくなっている。':'体型を気にしつつも、勧められると断り切れないことがある。');
- if(c.id==='erika')return common+(st>=1?'太った経験がなかったため焦りが強く、食後は抑止力が大きく上がりやすい。好感度が高いほど主人公へのデレ・依存が増える。':'まだ自分が太るとはほとんど考えていない。');
+ if(c.id==='erika')return common+(st>=1?`太った経験がなかったため食後の罪悪感は強い。一方、体型Lv.${st+1}まで進んだことで食欲・我慢疲れも強くなり、罪悪感があっても抑止力は以前ほど戻りにくく、時間経過でも下がりやすい。好感度が高いほど主人公へのデレ・依存も増える。`:'まだ自分が太るとはほとんど考えていない。');
  return common+`体重増加への興味 ${interest}/100。`+(interest>=50?'増えること自体に明確な興味・快感を覚え始めており、食後も罪悪感による抑止力上昇が起こらない。':interest>=25?'体重が増える現象そのものを面白いと感じ始めている。':'まだ体重増加を特別に好んではいない。');
 }
 function placeholder(el,name){if(el.dataset.fallback==='1')return;el.dataset.fallback='1';const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000"><rect width="100%" height="100%" fill="#f1e2e8"/><text x="50%" y="48%" text-anchor="middle" font-family="sans-serif" font-size="72" fill="#7d5365">${name}</text><text x="50%" y="56%" text-anchor="middle" font-family="sans-serif" font-size="28" fill="#9f7b8a">立ち絵を assets に追加</text></svg>`;el.src='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg)}
@@ -931,7 +1026,7 @@ function firstScene(c){
  return'朝の教室。怜は窓際で静かに過ごしていたが、こちらに気づくとじっと観察するように目を向けた。';
 }
 function firstGreeting(c){if(c.id==='risa')return'おはよ。今日も一緒だね。なんか話す？';if(c.id==='emi')return'おはよ。朝から何？ 私、部活あるんだけど。';if(c.id==='yui')return'おはよう。こんな時間から会うと、ちょっと不思議な感じだね。';if(c.id==='erika')return'……朝から何ですの？ 用があるなら手短にしてくださいませ。';return'……おはよう。今日は、何の話する？'}
-function render(){if(!activeId||!state)return;trackRelationshipStage();const c=CHARACTERS[activeId];$('day').textContent=state.day;$('turnLabel').textContent=turns[state.turn].label;$('affection').textContent=Math.round(state.affection);$('mood').textContent=Math.round(state.mood);$('fullness').textContent=Math.round(state.fullness);$('restraint').textContent=Math.round(state.restraint);$('weight').textContent=state.weight.toFixed(1);$('money').textContent=Math.round(state.money??2500).toLocaleString();$('weightBadge').textContent=state.weight.toFixed(1);$('height').textContent=c.height;$('charName').textContent=c.name;$('headerRelationship').textContent=`${c.relationship} / ${relationshipLabel()}`;const bt=bodyType();$('bodyType').textContent=bt;$('bodyTypeTop').textContent=bt;$('profileMini').textContent=`${c.age}歳｜関係:${relationshipLabel()}｜${c.speech}｜バイト${state.workCount||0}回`;const eb=$('emotionBadge');if(eb)eb.textContent=emotionLabel(state.lastEmotion||'normal');const img=$('characterImage');img.dataset.fallback='';img.dataset.stageFallback='0';img.onload=()=>{img.style.visibility='visible'};img.onerror=()=>{if(img.dataset.stageFallback==='0'){img.dataset.stageFallback='1';img.src=`assets/${c.id}/standing_01.webp?v=${APP_BUILD}`}else{placeholder(img,c.name)}};img.style.visibility='visible';img.src=imagePath(c);const chat=$('chat');chat.innerHTML='';state.history.forEach(m=>{if(m.role==='narration')addNarration(m.content,m.meta,false);else if(m.role==='cg')addCGMessage(m.title,m.path,m.meta,false);else addBubble(m.role,m.content,m.meta,false)});chat.scrollTop=chat.scrollHeight;$('gameLog').innerHTML=state.gameLog.slice().reverse().map(x=>`<div>• ${escapeHtml(x)}</div>`).join('')||'<div>まだログはありません。</div>';$('profileDetail').innerHTML=`<b>性格</b><br>${escapeHtml(c.personality)}<br><br><b>食欲 / 太りやすさ / 運動</b><br>${escapeHtml(c.appetite)} / ${escapeHtml(c.gainTendency)} / ${escapeHtml(c.exercise)}<br><br><b>体型・体重への考え</b><br>${escapeHtml(c.bodyView)}<br><br><b>好きな食べ物</b><br>${escapeHtml(state.favoriteFoods.length?state.favoriteFoods.join('、'):'特になし')}<br><br><b>その他</b><br>${escapeHtml(c.features)}`;renderDateEvent();renderWeightEvent();renderInitiativeChoices();renderRestraintEvent();renderNightChoice();renderCGGallery();syncEventLockUI();}
+function render(){if(!activeId||!state)return;trackRelationshipStage();const c=CHARACTERS[activeId];$('day').textContent=state.day;$('turnLabel').textContent=turns[state.turn].label;$('affection').textContent=Math.round(state.affection);$('mood').textContent=Math.round(state.mood);$('fullness').textContent=Math.round(state.fullness);$('restraint').textContent=Math.round(state.restraint);$('weight').textContent=state.weight.toFixed(1);$('money').textContent=Math.round(state.money??2500).toLocaleString();$('weightBadge').textContent=state.weight.toFixed(1);$('height').textContent=c.height;$('charName').textContent=c.name;$('headerRelationship').textContent=`${c.relationship} / ${relationshipLabel()}`;const bt=bodyType();$('bodyType').textContent=bt;$('bodyTypeTop').textContent=bt;$('profileMini').textContent=`${c.age}歳｜関係:${relationshipLabel()}｜${c.speech}｜バイト${state.workCount||0}回`;const eb=$('emotionBadge');if(eb)eb.textContent=emotionLabel(state.lastEmotion||'normal');const img=$('characterImage');img.dataset.fallback='';img.dataset.stageFallback='0';img.onload=()=>{img.style.visibility='visible'};img.onerror=()=>{if(img.dataset.stageFallback==='0'){img.dataset.stageFallback='1';img.src=`assets/${c.id}/standing_01.webp?v=${APP_BUILD}`}else{placeholder(img,c.name)}};img.style.visibility='visible';img.src=imagePath(c);const chat=$('chat');chat.innerHTML='';state.history.forEach(m=>{if(m.role==='narration')addNarration(m.content,m.meta,false);else if(m.role==='cg')addCGMessage(m.title,m.path,m.meta,false);else addBubble(m.role,m.content,m.meta,false)});chat.scrollTop=chat.scrollHeight;$('gameLog').innerHTML=state.gameLog.slice().reverse().map(x=>`<div>• ${escapeHtml(x)}</div>`).join('')||'<div>まだログはありません。</div>';$('profileDetail').innerHTML=`<b>性格</b><br>${escapeHtml(c.personality)}<br><br><b>食欲 / 太りやすさ / 運動</b><br>${escapeHtml(c.appetite)} / ${escapeHtml(c.gainTendency)} / ${escapeHtml(c.exercise)}<br><br><b>体型・体重への考え</b><br>${escapeHtml(c.bodyView)}<br><br><b>好きな食べ物</b><br>${escapeHtml(state.favoriteFoods.length?state.favoriteFoods.join('、'):'特になし')}<br><br><b>その他</b><br>${escapeHtml(c.features)}`;renderDateEvent();renderWeightEvent();renderInitiativeChoices();renderRestraintEvent();renderRoutineChoices();renderNightChoice();renderCGGallery();renderHookDebugPanel();syncEventLockUI();}
 
 function normalizeEmotion(v){
  const x=String(v||'normal').toLowerCase();
@@ -1149,7 +1244,11 @@ function restraintEventChance(style){
  if(style==='gentle')chance+=12;
  if(style==='empathy')chance+=6;
  if(style==='push')chance-=10;
- if(c.id==='erika'&&state.restraint>=65)chance-=10;
+ if(c.id==='erika'){
+   const lv=stageNum();
+   if(state.restraint>=65)chance-=Math.max(0,10-(lv-1)*2);
+   chance+=(lv-1)*4;
+ }
  if(c.id==='yui')chance+=5;
  if(c.id==='rei'&&(state.weightInterest||0)>=45)chance+=8;
  if(c.id==='emi'&&evolutionStage()>=2)chance-=7;
@@ -1190,7 +1289,10 @@ function renderRestraintEvent(){
   b.disabled=selectedType!=='restraint';
   b.addEventListener('click',()=>resolveRestraintChoice(i));box.appendChild(b);
  });
- chance.textContent='成功すると抑止力が約8〜12低下。大成功では最大15程度。失敗すると5〜10上昇します。';
+ const lv=activeId==='erika'?stageNum():1;
+ chance.textContent=activeId==='erika'
+   ?`成功すると抑止力が低下。絵里香は体型Lv.${lv}のため、高Lvほど成功率・低下量が大きくなります。`
+   :'成功すると抑止力が約8〜12低下。大成功では最大15程度。失敗すると5〜10上昇します。';
 }
 async function resolveRestraintChoice(i){
  if(blockingEventType()!=='restraint'){showBlockingNotice();return}
@@ -1198,12 +1300,15 @@ async function resolveRestraintChoice(i){
  const box=$('restraintEventChoices');if(box)box.querySelectorAll('button').forEach(b=>b.disabled=true);
  const before=state.restraint,prob=restraintEventChance(ch.style),roll=Math.random()*100;
  let delta,outcome;
+ const erikaLv=activeId==='erika'?stageNum():1;
+ const erikaDrop=activeId==='erika'?Math.floor((erikaLv-1)*1.25):0;
  if(roll<prob*.18){
-   delta=-(13+Math.floor(Math.random()*3));outcome='大成功';
+   delta=-(13+Math.floor(Math.random()*3)+erikaDrop);outcome='大成功';
  }else if(roll<prob){
-   delta=-(8+Math.floor(Math.random()*5));outcome='成功';
+   delta=-(8+Math.floor(Math.random()*5)+erikaDrop);outcome='成功';
  }else{
-   delta=5+Math.floor(Math.random()*6);outcome='失敗';
+   const failRise=5+Math.floor(Math.random()*6);
+   delta=activeId==='erika'?Math.max(2,failRise-Math.floor((erikaLv-1)/2)):failRise;outcome='失敗';
  }
  state.restraint=clamp(state.restraint+delta);
  if(outcome==='失敗')state.mood=clamp(state.mood-1);
@@ -1711,6 +1816,9 @@ function erikaHookScene(lv){
  };
  return scenes[lv]||'';
 }
+function erikaHookTriggerProfile(lv,fullness){
+ return hookTriggerProfile('erika',lv,fullness);
+}
 function erikaBodyCheckScene(lv){
  const scenes={
  2:'夜、鏡の前で横向きになり、以前よりわずかに丸くなった下腹のラインを気にしている。',
@@ -1754,42 +1862,90 @@ async function runErikaRoutineNarrative(kind,detail,effects=[],cg=false){
  log(`絵里香日常: ${kind}${effects.length?' / '+effects.join(' / '):''}`);
  save();render();
 }
+function chooseErikaRoutineWithCoverage(daypart,outcomes,eligibleKinds){
+ // 「5回に1回は各パターン」を守るための救済。条件を満たしているイベントだけを対象にする。
+ // eligibleKinds が3種なら3回未登場で救済開始、2種なら4回、1種なら5回。
+ state.erikaRoutineCoverage=state.erikaRoutineCoverage||{morning:{},night:{}};
+ const bucket=state.erikaRoutineCoverage[daypart]||(state.erikaRoutineCoverage[daypart]={});
+ const eligible=[...new Set((eligibleKinds||[]).filter(Boolean))];
+ const n=Math.max(1,eligible.length);
+ const forceThreshold=Math.max(1,6-n);
+ eligible.forEach(k=>{bucket[k]=Math.max(0,Number(bucket[k]||0))+1});
+ // 今回は条件外の種類のカウンタは進めない。
+ const due=eligible.filter(k=>(bucket[k]||0)>=forceThreshold).sort((a,b)=>(bucket[b]||0)-(bucket[a]||0));
+ let chosen=null;
+ if(due.length){
+   // 同率なら通常ウェイトの高いものを優先する。
+   const maxMiss=bucket[due[0]]||0;
+   const tied=due.filter(k=>(bucket[k]||0)===maxMiss);
+   tied.sort((a,b)=>{
+     const wa=(outcomes.find(x=>x.kind===a)?.weight||0),wb=(outcomes.find(x=>x.kind===b)?.weight||0);
+     return wb-wa;
+   });
+   chosen=tied[0];
+ }else{
+   const pool=(outcomes||[]).filter(x=>(x.weight||0)>0);
+   const total=pool.reduce((s,x)=>s+x.weight,0);
+   if(total>0){
+     let r=Math.random()*total;
+     for(const x of pool){r-=x.weight;if(r<=0){chosen=x.kind||null;break}}
+   }
+ }
+ if(chosen&&eligible.includes(chosen))bucket[chosen]=0;
+ return chosen;
+}
 async function maybeErikaMorningEvent(){
  if(activeId!=='erika'||!state||state.turn!==0)return false;
  const lv=stageNum(),key=`${state.day}:morning`;
  if(state.lastErikaRoutineKey===key)return false;
  state.lastErikaRoutineKey=key;
- const r=Math.random()*100;
- // Lvが上がるほど「服と格闘」が出やすい。
+ // 元の重みを維持。Lv6〜7では体重計の通常ウェイトが0でも、5回保証で救済される。
  const clothesChance=[12,22,35,48,60,72,82][lv-1];
- if(r<clothesChance){
+ const yogaChance=Math.max(0,Math.min(28,100-clothesChance));
+ const scaleChance=lv>=2?Math.max(0,100-clothesChance-yogaChance):0;
+ const outcomes=[
+   {kind:'morning_clothes',weight:clothesChance},
+   {kind:'morning_yoga',weight:yogaChance},
+   {kind:'morning_scale',weight:scaleChance},
+   {kind:null,weight:lv===1?Math.max(0,100-clothesChance-yogaChance):0}
+ ];
+ const eligible=lv>=2?['morning_clothes','morning_yoga','morning_scale']:['morning_clothes','morning_yoga'];
+ const chosen=chooseErikaRoutineWithCoverage('morning',outcomes,eligible);
+ if(chosen==='morning_clothes'){
   const effects=[];
   if(lv>=3){const d=Math.min(6,lv-1);state.restraint=clamp(state.restraint+d);effects.push(`抑止力 +${d}`)}
   if(lv>=5){state.mood=clamp(state.mood-2);effects.push('機嫌 -2')}
   await runErikaRoutineNarrative('morning_clothes',erikaClothesScene(lv),effects,lv>=2);return true;
  }
- if(r<clothesChance+28){
+ if(chosen==='morning_yoga'){
   const effects=[];
   if(lv>=3){const d=Math.min(7,lv);state.restraint=clamp(state.restraint+d);effects.push(`抑止力 +${d}`)}
   if(lv>=5){state.mood=clamp(state.mood-2);effects.push('機嫌 -2')}
   await runErikaRoutineNarrative('morning_yoga',erikaYogaScene(lv),effects,true);return true;
  }
- if(lv>=2){
+ if(chosen==='morning_scale'&&lv>=2){
   const effects=[];const d=Math.min(7,lv);state.restraint=clamp(state.restraint+d);effects.push(`抑止力 +${d}`);
   if(lv>=5){state.mood=clamp(state.mood-2);effects.push('機嫌 -2')}
   await runErikaRoutineNarrative('morning_scale',erikaScaleScene(lv),effects,true);return true;
  }
  return false;
 }
+
 async function maybeErikaNoonEvent(){
  if(activeId!=='erika'||!state||state.turn!==1)return false;
  const lv=stageNum(),key=`${state.day}:noon`;
  if(state.lastErikaRoutineKey===key)return false;
  state.lastErikaRoutineKey=key;
  // 最優先：高満腹時のホック事故
- if(lv>=3&&state.fullness>=70&&Math.random()<(0.25+lv*.08)){
-  const moodLoss=Math.min(8,lv);state.mood=clamp(state.mood-moodLoss);state.restraint=clamp(state.restraint+lv);
-  await runErikaRoutineNarrative('noon_hook',erikaHookScene(lv),[`機嫌 -${moodLoss}`,`抑止力 +${lv}`],true);return true;
+ const hook=erikaHookTriggerProfile(lv,state.fullness);
+ if(lv>=3&&hook.eligible&&Math.random()<hook.chance){
+  const moodLoss=Math.min(8,lv+1);
+  const restraintGain=Math.min(9,lv+(state.fullness>=90?2:1));
+  state.mood=clamp(state.mood-moodLoss);
+  state.restraint=clamp(state.restraint+restraintGain);
+  await runErikaRoutineNarrative('noon_hook',erikaHookScene(lv),[`機嫌 -${moodLoss}`,`抑止力 +${restraintGain}`],true);
+  openErikaHookFollowup(lv);
+  return true;
  }
  // 空腹を我慢してイライラ＋抑止力低下
  if(lv>=2&&state.hunger>=60&&state.restraint>=45&&Math.random()<0.55){
@@ -1831,25 +1987,45 @@ async function maybeErikaNightEvent(){
  state.lastErikaRoutineKey=key;
  updateGrowthTraits(CHARACTERS[activeId]);
  const dep=state.growthTraits?.dependence||0;
- // 日中我慢した or 強い空腹＋低抑止力なら爆食を優先
  const bingeScore=(state.hunger||0)+(state.erikaDayHungerStrain?24:0)+Math.max(0,55-state.restraint)*.8+lv*5;
- if(lv>=2&&bingeScore>=95&&Math.random()<0.72){
+ const bingeEligible=lv>=2&&bingeScore>=95;
+ const bodyEligible=lv>=2;
+ const messageEligible=dep>=50;
+ // 元の順次判定を「無条件ウェイト」に変換して、通常時の重みをほぼ維持する。
+ // binge 72% → 残りに bodycheck 55%（罪悪感高なら100%）→ さらに残りに message 58%。
+ const pBinge=bingeEligible?.72:0;
+ const pBody=bodyEligible?(state.erikaFoodGuiltToday>=18?1:.55):0;
+ const pMessage=messageEligible?.58:0;
+ const wBinge=pBinge;
+ const wBody=(1-pBinge)*pBody;
+ const wMessage=(1-pBinge)*(1-pBody)*pMessage;
+ const wNone=Math.max(0,1-wBinge-wBody-wMessage);
+ const outcomes=[
+   {kind:'night_binge',weight:wBinge},
+   {kind:'night_bodycheck',weight:wBody},
+   {kind:'night_message',weight:wMessage},
+   {kind:null,weight:wNone}
+ ];
+ const eligible=[];
+ if(bingeEligible)eligible.push('night_binge');
+ if(bodyEligible)eligible.push('night_bodycheck');
+ if(messageEligible)eligible.push('night_message');
+ const chosen=chooseErikaRoutineWithCoverage('night',outcomes,eligible);
+ if(chosen==='night_binge'&&bingeEligible){
   const base=[0,12,24,38,54,72,90][lv-1];
   const food={name:'夜の爆食',fullness:base,weight:[0,.08,.18,.32,.52,.78,1.08][lv-1],restraintHit:[0,5,8,12,17,22,27][lv-1],tags:['sweet','fried']};
   const ef=applyGuaranteedFoodEffect(food,'夜の爆食');
-  state.mood=clamp(state.mood+2); // 食べている最中の一時的満足。ただし guilt 側で既に低下。
+  state.mood=clamp(state.mood+2);
   const detail=erikaBingeScene(lv);
   await runErikaRoutineNarrative('night_binge',detail,[`満腹度 +${ef.fullnessDelta}`,`体重 +${ef.weightGain.toFixed(2)}kg`,`罪悪感 ${ef.regret||0}`],true);return true;
  }
- // 食後罪悪感が強い日は体型確認を優先
- if(lv>=2&&(state.erikaFoodGuiltToday>=18||Math.random()<0.55)){
+ if(chosen==='night_bodycheck'&&bodyEligible){
   const d=Math.min(9,1+lv);state.restraint=clamp(state.restraint+d);state.mood=clamp(state.mood-(lv>=5?3:1));
   let detail=erikaBodyCheckScene(lv);
   if(dep>=60)detail+=' そして最後に、「今の自分を主人公がどう見ているのか」が頭をよぎる。';
   await runErikaRoutineNarrative('night_bodycheck',detail,[`抑止力 +${d}`,`機嫌 -${lv>=5?3:1}`],true);return true;
  }
- // 依存度が高い場合のメッセージ確認
- if(dep>=50&&Math.random()<0.58){
+ if(chosen==='night_message'&&messageEligible){
   const gotAttention=state.lastErikaAttentionDay===state.day;
   let detail,effects=[];
   if(gotAttention){
@@ -1863,6 +2039,7 @@ async function maybeErikaNightEvent(){
  }
  return false;
 }
+
 async function maybeErikaDaypartEvent(){
  if(activeId!=='erika'||!state||blockingEventType())return false;
  if(state.turn===0)return await maybeErikaMorningEvent();
@@ -1995,7 +2172,20 @@ async function finishEndOfDayTransition(endedDay){
  if(!state.pendingWeightEvent&&!state.pendingDate){maybeYuiBellyGrab(false);if(activeId==='erika')await maybeErikaDaypartEvent();if(!blockingEventType())await maybeCharacterInitiatedEvent(false)}
 }
 
-function decay(){state.fullness=clamp(state.fullness-20);state.hunger=clamp(state.hunger+18);state.mood=clamp(state.mood+(Math.random()*4-2))}
+function decay(){
+ state.fullness=clamp(state.fullness-20);
+ state.hunger=clamp(state.hunger+18);
+ state.mood=clamp(state.mood+(Math.random()*4-2));
+ if(activeId==='erika'){
+   const lv=stageNum();
+   // 体型が大きくなるほど、食欲・食習慣・我慢疲れで自制が自然に摩耗する。
+   const erosion=[0,1,2,3,5,7,9][lv-1];
+   if(erosion>0){
+     state.restraint=clamp(state.restraint-erosion);
+     log(`絵里香の我慢疲れ：抑止力 -${erosion}（体型Lv.${lv}）`);
+   }
+ }
+}
 async function advance(){
  if(blockingEventType()){showBlockingNotice();return}
  if(state&&state.pendingInitiatedChoice){addBubble('system','相手からの問いかけに先に答えてください。','イベント中');return}
@@ -2277,7 +2467,11 @@ function resolveFoodOffer(offer,text){
  }else{
    // 断る＝我慢で消耗。ここは従来通り抑止力を下げる。
    restraintDelta=-Math.max(1,Math.round(2+state.restraint/40));
-   if(c.id==='erika')restraintDelta-=1;
+   if(c.id==='erika'){
+     const lv=stageNum();
+     // 高Lvほど、食べたいのに断る行為そのものが大きな我慢疲れになる。
+     restraintDelta-=Math.max(1,lv);
+   }
    state.restraint=clamp(state.restraint+restraintDelta);state.mood=clamp(state.mood-1);
  }
  recordFoodGrowth(offer,accepted,offer.isGift?'食べ物プレゼント':'主人公からの食事提案');
@@ -2479,7 +2673,11 @@ ${c.id==='erika'&&choice.erikaDependency?`絵里香専用の依存反応: 現在
 }
 function populateActionSelects(){const g=$('giftSelect'),d=$('dateSelect');if(g){g.innerHTML='';for(const[k,v]of Object.entries(GIFTS)){const o=document.createElement('option');o.value=k;o.textContent=`${v.name} ¥${v.price.toLocaleString()}`;g.appendChild(o)}}if(d){d.innerHTML='';for(const[k,v]of Object.entries(DATES)){const o=document.createElement('option');o.value=k;o.textContent=`${v.name} ¥${v.price.toLocaleString()}`;d.appendChild(o)}}}
 
-function status(){const c=CHARACTERS[activeId];addBubble('system',`DAY ${state.day} / ${turns[state.turn].label}\n関係 ${relationshipLabel()}｜好感度 ${Math.round(state.affection)}｜機嫌 ${Math.round(state.mood)}｜空腹 ${Math.round(state.hunger)}｜満腹 ${Math.round(state.fullness)}｜抑止力 ${Math.round(state.restraint)}\n${c.height}cm / ${state.weight.toFixed(1)}kg｜体型 ${bodyType()}｜開始時から ${(state.weight-state.startWeight).toFixed(1)}kg\n所持金 ¥${Math.round(state.money??2500).toLocaleString()}｜バイト ${state.workCount||0}回｜次回収入 ¥${workIncome().toLocaleString()}｜食事Lv.${mealTier()+1}（${mealTierLabel()}）\n体重変化: ${evolutionLabel()}${c.id==='rei'?`｜体重増加への興味 ${state.weightInterest||0}/100`:''}${c.id==='erika'?`｜依存度 ${state.growthTraits?.dependence||0}/100｜体型焦り ${state.growthTraits?.weightAnxiety||0}/100｜放置感 ${state.erikaNeglectTurns||0}｜本日罪悪感 ${state.erikaFoodGuiltToday||0}`:''}`)}
+function status(){const c=CHARACTERS[activeId];const hookInfo=activeId==='erika'?(()=>{const p=hookTriggerProfile('erika',stageNum(),state.fullness);return p.minFullness<999?`｜昼ホック条件 満腹${p.minFullness}+ / 発生率${Math.round(p.chance*100)}% / 判定${p.eligible?'可':'不可'}`:'';})():activeId==='yui'?(()=>{const p=hookTriggerProfile('yui',stageNum(),state.fullness);return p.minFullness<999?`｜食べすぎホック条件 満腹${p.minFullness}+ / 発生率${Math.round(p.chance*100)}% / 判定${p.eligible?'可':'不可'}`:'';})():'';addBubble('system',`DAY ${state.day} / ${turns[state.turn].label}
+関係 ${relationshipLabel()}｜好感度 ${Math.round(state.affection)}｜機嫌 ${Math.round(state.mood)}｜空腹 ${Math.round(state.hunger)}｜満腹 ${Math.round(state.fullness)}｜抑止力 ${Math.round(state.restraint)}
+${c.height}cm / ${state.weight.toFixed(1)}kg｜体型 ${bodyType()}｜開始時から ${(state.weight-state.startWeight).toFixed(1)}kg
+所持金 ¥${Math.round(state.money??2500).toLocaleString()}｜バイト ${state.workCount||0}回｜次回収入 ¥${workIncome().toLocaleString()}｜食事Lv.${mealTier()+1}（${mealTierLabel()}）
+体重変化: ${evolutionLabel()}${c.id==='rei'?`｜体重増加への興味 ${state.weightInterest||0}/100`:''}${c.id==='erika'?`｜依存度 ${state.growthTraits?.dependence||0}/100｜体型焦り ${state.growthTraits?.weightAnxiety||0}/100｜放置感 ${state.erikaNeglectTurns||0}｜本日罪悪感 ${state.erikaFoodGuiltToday||0}`:''}${hookInfo}`)}
 function pressurePenalty(text){const c=CHARACTERS[activeId];const forceful=/お願い|頼む|いいから|食べてよ|食べなよ|絶対|もっと|無理やり|断らないで|せっかく/.test(text);let affLoss=forceful?6:3,moodLoss=forceful?5:2;if(c.id==='erika'){affLoss+=2;moodLoss+=1}if(c.id==='yui'&&state.affection<50)affLoss+=1;state.affection=clamp(state.affection-affLoss);state.mood=clamp(state.mood-moodLoss);const result={affectionDelta:-affLoss,moodDelta:-moodLoss,forceful,summary:`一度断った直後にさらに強く勧めたため、${c.name}は圧を感じた。好感度 -${affLoss}、機嫌 -${moodLoss}`,log:`断った直後の強引な再提案。好感度 -${affLoss} / 機嫌 -${moodLoss}`};log(result.log);return result}
 function pressureDemoReply(){const c=CHARACTERS[activeId];if(c.id==='risa')return'もう、さっき断ったでしょ。しつこいのは嫌だよ。';if(c.id==='emi')return'だからいらないって。しつこい。';if(c.id==='yui')return'ごめんね、そんなに押されるとちょっと困っちゃう。';if(c.id==='erika')return'しつこいですわ。不愉快です。';return'……断ったのに。そういうの、少し嫌。'}
 function demoReply(text,foodResult=null){const c=CHARACTERS[activeId];let aff=0,mood=0,reply='……うん。';if(foodResult){if(foodResult.accepted){if(c.id==='risa')reply=foodResult.food==='甘いもの'||foodResult.food==='パン'?'……それなら食べる。ちょっとだけね！':'うーん……まあ、今日はいいか。食べよ。';if(c.id==='emi')reply='……分かった。食べる。でもこれで部活に響いたら最悪だからね。';if(c.id==='yui')reply=foodResult.regret>0?'……また食べちゃった。断ろうとは思ったんだけどな。あとで絶対後悔するやつ……。':'え、いいの？ ……じゃあ、少しだけもらおうかな。';if(c.id==='erika'){const dep=state.growthTraits?.dependence||0;reply=dep>=60?'……本当は控えるつもりでしたのよ？ でも、あなたがそこまで言うなら……今回だけですわ。':'べ、別にあなたに勧められたからではありませんわ。今回は特別ですの。';}if(c.id==='rei')reply='……食べる。こういうのも、悪くないかも。'}else{if(c.id==='risa')reply='今日はやめとく。ちょっと気にしてるし。';if(c.id==='emi')reply='いらない。今は部活優先。';if(c.id==='yui')reply='ごめんね。今日はさすがにやめておく。';if(c.id==='erika')reply='結構ですわ。わたくし、今は要りませんの。';if(c.id==='rei')reply='……今日はいい。お腹、そこまで空いてない。'}return reply}if(c.id==='risa')reply='うんうん、それで？';if(c.id==='emi')reply=/太|体重/.test(text)?'は？ 太ってないし。変なこと言わないでよ。':'で、何？';if(c.id==='yui')reply='ふふ、そうなんだ。';if(c.id==='erika')reply=state.affection<40?'べ、別にあなたと話したいわけではありませんわ。':'……少しくらいなら、お付き合いしてあげてもよろしくてよ。';if(c.id==='rei')reply=state.affection<50?'……そう。あなたって、やっぱり少し変わってるね。':'……あなたと話すの、前より好きかも。';if(/好き|可愛い|かわいい|会いた/.test(text)){aff+=2;mood+=2}state.affection=clamp(state.affection+aff);state.mood=clamp(state.mood+mood);return reply}
