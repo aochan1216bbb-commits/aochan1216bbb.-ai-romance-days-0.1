@@ -146,13 +146,13 @@ details{margin-top:10px}.settingsGrid{display:grid;gap:8px;margin-top:10px}.sett
   <div id="cgViewerTitle" class="cgViewerTitle"></div>
 </div>
 <script>
-const APP_BUILD='20260819-yui-preconfession-boundary-v10';
+const APP_BUILD='20260819-erika-college20-v13';
 
 const CHARACTERS={
  risa:{id:'risa',name:'梨沙',age:18,height:153,startWeight:45,personality:'明るい、活発、前向き、しっかり者',speech:'タメ口、普通',relationship:'幼馴染かつクラスメイト',affection:50,mood:50,restraint:50,appetite:'普通',gainTendency:'普通',exercise:'普通',bodyView:'少し痩せたいと思っている。太りたくはない。',favoriteFoods:['甘いもの','パン類'],features:'幼馴染である主人公が少し気になっている。そのため、主人公にどう見られているかを気にする。ちょっと泣き虫。',rules:'基本ポジティブに話す。体重が増えると少しネガティブになる。抑止力が高いと食事は断る。甘いものの場合は抑止力が高くても断らない場合がある。',imageBase:'risa'},
  emi:{id:'emi',name:'絵美',age:17,height:170,startWeight:52,personality:'男勝り、活発、衝動型、少し怒りっぽい',speech:'ちょっと暴力的、キツめ、タメ口',relationship:'クラスメイト',affection:30,mood:40,restraint:90,appetite:'よく食べる',gainTendency:'かなり太りにくい',exercise:'頻繁',bodyView:'今がベスト。部活もあるので、このままキープしたい。',favoriteFoods:['揚げ物','ご飯類'],features:'陸上部のエース。部活に命をかけている。タイムが伸びなくなることに強い危機感を覚える。',rules:'基本勝気な話し方。太ったことを指摘されると認めずに怒る。太ると過度な食事制限をして抑止力を下げがち。',imageBase:'emi'},
  yui:{id:'yui',name:'結衣',age:30,height:158,startWeight:50,personality:'おっとり、少し自虐的、母性あり',speech:'柔らかい、タメ口',relationship:'お隣さん',affection:30,mood:70,restraint:30,appetite:'普通',gainTendency:'太りやすい',exercise:'基本なし',bodyView:'最近太り始めて気にしている。痩せたい。',favoriteFoods:['甘いもの','ご飯類','麺類'],features:'シングルマザー。昔はかなりモテていた。最近は子育てなどもあり、あまりチヤホヤされていない。また、最近太りやすくなったのでかなり気にしているが、食欲を抑えられない。',rules:'主人公との年齢差に躊躇いがちだが、かっこいいとは思っている。体型を気にした発言が多い。好感度が低いうちは誘いにも慎重。プレゼントは基本断れない。抑止力が高いほど躊躇はするものの結局食べてしまう。抑止力が高い状態で食べると強く後悔する。体重が増えると油物を好むようになる。',imageBase:'yui'},
- erika:{id:'erika',name:'絵里香',age:18,height:160,startWeight:48,personality:'わがまま、高圧的、高飛車',speech:'お嬢様口調、生意気',relationship:'クラスメイト',affection:10,mood:10,restraint:80,appetite:'少食',gainTendency:'太りにくい',exercise:'あまりしない',bodyView:'ずっとこのままの体型だったので、そもそも太るとは思っていない。太ったら焦る。',favoriteFoods:[],features:'主人公に悪い印象あり。ただ、チョロい。性格のせいで友達が少ない。相手に依存する癖あり。',rules:'序盤はずっとツンデレ。好感度が上がるとデレ要素が高くなり、依存度も上がる。太ったことがないので太るとかなり焦る。抑止力は上がりやすく下がりやすい。抑止力が高いと食事やプレゼントも断る。主人公の誘いによって好きな食べ物が増える。',imageBase:'erika'},
+ erika:{id:'erika',name:'絵里香',age:20,height:160,startWeight:48,personality:'わがまま、高圧的、高飛車',speech:'お嬢様口調、生意気',relationship:'大学の同級生',affection:10,mood:10,restraint:80,appetite:'少食',gainTendency:'太りにくい',exercise:'あまりしない',bodyView:'ずっとこのままの体型だったので、そもそも太るとは思っていない。太ったら焦る。',favoriteFoods:[],features:'20歳の大学生。主人公とは大学の同級生で、主人公に悪い印象あり。ただ、チョロい。性格のせいで友達が少ない。相手に依存する癖あり。',rules:'序盤はずっとツンデレ。好感度が上がるとデレ要素が高くなり、依存度も上がる。太ったことがないので太るとかなり焦る。抑止力は上がりやすく下がりやすい。抑止力が高いと食事やプレゼントも断る。主人公の誘いによって好きな食べ物が増える。',imageBase:'erika'},
  rei:{id:'rei',name:'怜',age:18,height:155,startWeight:42,personality:'不思議ちゃん、独特、他人の目を気にしない',speech:'小声でボソボソ、タメ口',relationship:'クラスメイト',affection:20,mood:50,restraint:60,appetite:'少食',gainTendency:'普通',exercise:'あまりしない',bodyView:'興味なし。太り始めると、太ることに快感を覚え始める。',favoriteFoods:[],features:'他人の目を気にしない。独特。基本他人と分かり合えないと思っている。',rules:'基本淡々と話す。主人公には人として興味はあるが恋愛感情はない。好感度が上がると心を開き、最終的には好きになる。体重が増えるたびに、体重が増えることに快感を覚え始める。主人公の誘いによって好きな食べ物が増える。',imageBase:'rei'}
 };
 const turns=[{label:'☀ 朝',key:'morning'},{label:'☁ 昼',key:'noon'},{label:'🌙 夜',key:'night'}];
@@ -228,7 +228,7 @@ async function testOpenAIConnection(){
  }catch(err){setApiStatus(`API接続失敗：${err.message||err}`,'error')}
  finally{if(btn){btn.disabled=false;btn.textContent='接続テスト'}}
 }
-function defaultState(id){const c=CHARACTERS[id];return {characterId:id,day:1,turn:0,affection:c.affection,mood:c.mood,fullness:20,hunger:40,restraint:c.restraint,weight:c.startWeight,startWeight:c.startWeight,history:[],gameLog:[],favoriteFoods:[...c.favoriteFoods],lastFoodResult:null,foodOfferTurnKey:null,foodPressureCount:0,money:2500,workCount:0,lastFoodTurnKey:null,lastFoodWasRefused:false,weightInterest:0,weightStage:0,pendingDate:null,seenWeightEvents:[],pendingWeightEvent:null,memories:[],foodExperience:{},growthTraits:{},memorySeq:0,lastInitiatedTurnKey:null,initiatedEventCount:0,lastRelationshipStage:null,pendingInitiatedChoice:null,lastEmotion:'normal',conversationRewards:[],cgGallery:[],selfFoodCount:0,yuiSpecialFlags:{},pendingRestraintEvent:null,restraintTalkRewards:[],lastNightEventDay:0,pendingNightChoice:null,nightEventHistory:[],seenNightEventIds:[],seenNightEventStage:1,dailyFoodLoad:0,dailyFoodCount:0,dailyFoodNames:[],todayDateKey:null,todayDateName:null,isLover:false,confessionCompleted:false,confessionDeferredUntilDay:0,ageGapTalkCount:0,lastYuiInitiatedDay:0,yuiWeightEventSchemaVersion:2,forceYuiWeightEventMigration:false}}
+function defaultState(id){const c=CHARACTERS[id];return {characterId:id,day:1,turn:0,affection:c.affection,mood:c.mood,fullness:20,hunger:40,restraint:c.restraint,weight:c.startWeight,startWeight:c.startWeight,history:[],gameLog:[],favoriteFoods:[...c.favoriteFoods],lastFoodResult:null,foodOfferTurnKey:null,foodPressureCount:0,money:2500,workCount:0,lastFoodTurnKey:null,lastFoodWasRefused:false,weightInterest:0,weightStage:0,pendingDate:null,seenWeightEvents:[],pendingWeightEvent:null,memories:[],foodExperience:{},growthTraits:{},memorySeq:0,lastInitiatedTurnKey:null,initiatedEventCount:0,lastRelationshipStage:null,pendingInitiatedChoice:null,lastEmotion:'normal',conversationRewards:[],cgGallery:[],selfFoodCount:0,yuiSpecialFlags:{},pendingRestraintEvent:null,restraintTalkRewards:[],lastNightEventDay:0,pendingNightChoice:null,nightEventHistory:[],seenNightEventIds:[],seenNightEventStage:1,dailyFoodLoad:0,dailyFoodCount:0,dailyFoodNames:[],todayDateKey:null,todayDateName:null,isLover:false,confessionCompleted:false,confessionDeferredUntilDay:0,ageGapTalkCount:0,lastYuiInitiatedDay:0,yuiWeightEventSchemaVersion:2,forceYuiWeightEventMigration:false,lastErikaAttentionTurnKey:null,erikaNeglectTurns:0,erikaJealousyCount:0,lastErikaJealousyDay:0}}
 function stateKey(id){return 'aiRomanceState_v3_'+id} function loadState(id){const base=defaultState(id),saved=safeGet(stateKey(id),{});const merged={...base,...saved};if(!Array.isArray(merged.history))merged.history=[];if(!Array.isArray(merged.gameLog))merged.gameLog=[];if(!Array.isArray(merged.favoriteFoods))merged.favoriteFoods=[...CHARACTERS[id].favoriteFoods];if(!Array.isArray(merged.seenWeightEvents))merged.seenWeightEvents=[];
 if(!Number.isFinite(Number(merged.yuiWeightEventSchemaVersion)))merged.yuiWeightEventSchemaVersion=0;
 if(id==='yui'&&Number(merged.yuiWeightEventSchemaVersion)<2){
@@ -268,6 +268,10 @@ if(!('isLover' in merged))merged.isLover=false;
 if(!('confessionCompleted' in merged))merged.confessionCompleted=false;
 if(!('confessionDeferredUntilDay' in merged))merged.confessionDeferredUntilDay=0;
 if(!('ageGapTalkCount' in merged))merged.ageGapTalkCount=0;
+if(!('lastErikaAttentionTurnKey' in merged))merged.lastErikaAttentionTurnKey=null;
+merged.erikaNeglectTurns=Math.max(0,Number(merged.erikaNeglectTurns||0));
+merged.erikaJealousyCount=Math.max(0,Number(merged.erikaJealousyCount||0));
+merged.lastErikaJealousyDay=Math.max(0,Number(merged.lastErikaJealousyDay||0));
 return merged} function save(){if(activeId&&state)safeSet(stateKey(activeId),state)}
 
 
@@ -290,10 +294,11 @@ function relationshipLabel(){return relationshipStage().label}
 function characterRelationshipGuidance(c){
  const i=relationshipIndex(),base=relationshipStage().desc;
  if(c.id==='erika'){
-   if(i<=1)return base+' 絵里香はツンの比率が非常に高く、好意を認めない。';
-   if(i===2)return base+' 絵里香はツンを保つが、ときどき無意識に主人公を気にする。';
-   if(i===3)return base+' 絵里香はデレが増え、主人公への執着・依存の芽が見え始める。';
-   return base+' 絵里香はツンを残しながらも、デレと主人公への依存がかなり強い。';
+   const dep=state.growthTraits?.dependence||0,neglect=state.erikaNeglectTurns||0;
+   if(i<=1)return base+' 絵里香はツンの比率が非常に高く、好意を認めない。主人公を気にしていても素直には認めない。';
+   if(i===2)return base+` 絵里香はツンを保つが、主人公の予定や反応を無意識に気にし始める。依存傾向${dep}/100。`;
+   if(i===3)return base+` 絵里香はデレが増え、主人公への執着・依存が表に出始める。嫌われていないかを気にし、構ってもらえないと不機嫌になりやすい。依存傾向${dep}/100 / 放置感${neglect}。`;
+   return base+` 絵里香はツンを残しながらも主人公への依存がかなり強い。体型を気にしていても主人公からのお願いは断りづらく、主人公の動向・自分が嫌われていないか・構ってもらえているかを強く気にする。依存傾向${dep}/100 / 放置感${neglect}。`;
  }
  if(c.id==='rei'){
    if(i<=1)return base+' 怜は主人公に人として興味があるだけで、恋愛感情はない。恋愛的な発言は禁止。';
@@ -641,10 +646,35 @@ const WEIGHT_STAGE_EVENTS={
   },
   yui:{},
   erika:{
-    1:{title:'あり得ませんわ…',text:'絵里香は鏡の前で、いつもの服がわずかにきつくなっていることに気づいた。本人はかなり動揺している。',image:'assets/erika/event_stage_02.webp',choices:[
+    1:{title:'あり得ませんわ…',text:'絵里香は鏡の前で、いつもの服がわずかにきつくなっていることに気づいた。本人はかなり動揺している。',image:'assets/erika/event_stage_02.webp',fallbackDialogue:'……少しだけ服がきつい気がしますけれど、気のせいですわよね？ わたくしが太るなんて、あり得ませんもの。',choices:[
       {label:'何も変わらないとフォローする',affection:3,mood:2,restraint:3,reply:'「と、当然ですわ！ わたくしが太るなどあり得ませんもの。」'},
       {label:'サイズを変えるのもありと提案する',affection:0,mood:-2,restraint:7,reply:'「サイズを変える！？ 失礼ですわね！」'},
       {label:'少し太ったと指摘する',affection:-5,mood:-7,restraint:10,reply:'「な、何をおっしゃってますの！？ あり得ませんわ！」'}
+    ]},
+    2:{title:'見られましたの…？',text:'絵里香はトップスの上から少し増えたお腹の肉を指先でつまみ、信じられないものを見るように確かめている。その姿を主人公に見られたことに気づき、慌てて手を離して顔を赤くする。',image:'assets/erika/event_stage_03.webp',fallbackDialogue:'い、今のは見なかったことになさい！ ただ少し、気になっただけですわ！',choices:[
+      {label:'見なかったことにして安心させる',affection:4,mood:3,restraint:2,reply:'「……本当に？ なら、余計なことは言わないでくださいまし。」'},
+      {label:'気になっているのか優しく聞く',affection:4,mood:1,restraint:4,reply:'「べ、別に気にしてなど……少しだけですわ。」'},
+      {label:'少し増えたように見えると伝える',affection:-3,mood:-5,restraint:8,reply:'「あなたまでそんなことを言うんですの！？」'}
+    ]},
+    3:{title:'ホックが弾けましたわ…！',text:'絵里香がきつくなったスカートを気にしながら動いた瞬間、ウエストのホックが弾けて外れる。スカートの隙間からお腹が露わになり、絵里香は驚きと羞恥で真っ赤になって慌てて隠そうとする。',image:'assets/erika/event_stage_04.webp',fallbackDialogue:'なっ……！ い、今のは事故ですわ！ 見ないでくださいます！？',choices:[
+      {label:'視線を外して落ち着かせる',affection:5,mood:3,restraint:3,reply:'「……その、助かりますわ。今は見ないでくださいまし。」'},
+      {label:'大丈夫かと声をかける',affection:4,mood:1,restraint:5,reply:'「大丈夫ですわ！ ……大丈夫、ですけれど……。」'},
+      {label:'サイズが合っていないと率直に言う',affection:-4,mood:-6,restraint:10,reply:'「分かっていますわよ！ 今それを言いますの！？」'}
+    ]},
+    4:{title:'息が上がるなんて…',text:'絵里香は少し歩いただけなのに以前より早く息が上がり、額にうっすら汗を浮かべている。本人も最近こうしたことが増えたと気づいており、体力のせいだと言い聞かせながらも体型変化との関係を気にしている。',image:'assets/erika/event_stage_05.webp',fallbackDialogue:'この程度で息が上がるなんて……最近、妙に汗もかきますの。べ、別に体重のせいとは限りませんわよね？',choices:[
+      {label:'無理せず休もうと気遣う',affection:5,mood:3,restraint:3,reply:'「……仕方ありませんわね。少しだけ休みますわ。」'},
+      {label:'最近いつから気になるのか聞く',affection:4,mood:1,restraint:5,reply:'「ここ最近ですわ。以前はこんなこと、ありませんでしたのに……。」'},
+      {label:'体重の影響もありそうだと伝える',affection:-2,mood:-4,restraint:9,reply:'「そ、それくらい自分でも考えていますわ！」'}
+    ]},
+    5:{title:'ブラウスのボタンが…！',text:'絵里香がきつくなったお気に入りのブラウスを整えようとした瞬間、上のボタンが張力に耐えきれず弾け飛ぶ。本人は一瞬固まったあと、胸元からお腹周りを押さえながら強い羞恥と焦りを隠せずにいる。',image:'assets/erika/event_stage_06.webp',fallbackDialogue:'う、嘘でしょう……ブラウスのボタンまで……。こんなの、絶対に誰にも言わないでくださいまし！',choices:[
+      {label:'誰にも言わないと約束する',affection:6,mood:4,restraint:3,reply:'「……約束ですわよ。絶対ですからね。」'},
+      {label:'怪我がないか確認する',affection:5,mood:2,restraint:4,reply:'「怪我はありませんわ。……それより、今のを見られた方が問題ですの。」'},
+      {label:'もう少し余裕のある服にした方がいいと言う',affection:-2,mood:-4,restraint:10,reply:'「それは……分かっていますけれど、認めたくありませんの！」'}
+    ]},
+    6:{title:'認めたくありませんでしたのに',text:'絵里香は鏡の前で現在の自分の身体を見つめ、もう一時的な変化ではないと悟る。これまで意地でも否定してきたが、とうとう自分が太ったことを認め、悔しさと恥ずかしさから目に涙を浮かべている。',image:'assets/erika/event_stage_07.webp',fallbackDialogue:'……太りましたわ。もう、誤魔化せませんもの。こんなはずではなかったのに……悔しいですわ……。',choices:[
+      {label:'そばにいて気持ちを受け止める',affection:7,mood:4,restraint:2,reply:'「……今だけは、何も言わずそばにいてくださる？」'},
+      {label:'今どうしたいのか静かに聞く',affection:5,mood:1,restraint:5,reply:'「どうしたいかなんて……まだ分かりませんわ。でも、このままは嫌ですの。」'},
+      {label:'以前より太ったのは事実だと認める',affection:-3,mood:-6,restraint:10,reply:'「分かっていますわよ……だから悔しいんですの！」'}
     ]}
   },
   rei:{
@@ -702,7 +732,7 @@ async function generateWeightEventOpeningAI(){
  const p=state.pendingWeightEvent,c=CHARACTERS[activeId],stage=p.stage,ev=getWeightStageEvent(c,stage),gs=globalSettings();
  p.aiGenerating=true;save();renderWeightEvent();
  const yuiSpec=c.id==='yui'?YUI_WEIGHT_STAGE_SCENES[stage]:null;
- const fallbackDialogue=yuiSpec?.fallbackDialogue||(c.id==='emi'?'……なんか前より動きにくい。ちょっと気になるんだけど。':c.id==='erika'?'……少しだけ、服の感触が違う気がしますわ。気のせいですわよね？':c.id==='rei'?'……前と感触が違う。こういう変化、ちょっと気になる。':'……前より少し変わったよね。自分でも分かる。');
+ const fallbackDialogue=ev.fallbackDialogue||yuiSpec?.fallbackDialogue||(c.id==='emi'?'……なんか前より動きにくい。ちょっと気になるんだけど。':c.id==='erika'?'……少しだけ、服の感触が違う気がしますわ。気のせいですわよね？':c.id==='rei'?'……前と感触が違う。こういう変化、ちょっと気になる。':'……前より少し変わったよね。自分でも分かる。');
  const fallback={situation:ev.text,dialogue:fallbackDialogue,emotion:'troubled',choices:(ev.choices||[]).map(x=>x.label).slice(0,3)};
  if(!gs.apiKey){Object.assign(p,{aiGenerating:false,aiIntroShown:true,aiSituation:fallback.situation,aiDialogue:fallback.dialogue,aiEmotion:fallback.emotion,aiChoices:fallback.choices});save();renderWeightEvent();return true}
  const choiceIntents=(ev.choices||[]).slice(0,3).map((x,i)=>`${i+1}. ${x.label}（好感度効果:${(x.affection||0)>=0?'+':''}${x.affection||0} / 機嫌効果:${(x.mood||0)>=0?'+':''}${x.mood||0} / 元の返答:${x.reply||''}）`).join('\n');
@@ -818,9 +848,13 @@ function characterFoodModifier(c,offer){
    if(key==='fried'){accept+=(g.oilyPreference||0)*.24+st*3;restraintMult=Math.max(.45,1-(g.oilyPreference||0)/180);weightMult=1+st*.035}
  }
  if(c.id==='erika'){
-   const ex=foodExperience(key);accept+=(ex.liking||0)*.28;
+   const ex=foodExperience(key),dep=g.dependence||0,anxiety=g.weightAnxiety||0;
+   accept+=(ex.liking||0)*.28;
    if(state.restraint>=65)accept-=12;
-   restraintMult=1.12; // 食後の焦り
+   accept-=anxiety*.08;
+   accept+=dep*.38;
+   if(dep>=70)accept+=8;
+   restraintMult=1.12;
  }
  if(c.id==='rei'){
    const wi=state.weightInterest||0;accept+=wi*.16;restraintMult=wi>=50?0:Math.max(.2,1-wi/80);
@@ -874,7 +908,7 @@ function firstScene(c){
  if(c.id==='risa')return'朝の教室。梨沙は茶色のポニーテールを揺らしながら、いつものように明るい表情でこちらへ近づいてきた。';
  if(c.id==='emi')return'朝の教室。絵美は部活の準備をしながら、少し忙しそうにこちらを見る。';
  if(c.id==='yui')return'朝の静かな時間。結衣は柔らかい表情でこちらに気づき、軽く会釈した。';
- if(c.id==='erika')return'朝の教室。絵里香は姿勢よく座ったまま、こちらの気配に気づいてわずかに視線だけを向けた。';
+ if(c.id==='erika')return'朝の大学キャンパス。講義前の教室で、絵里香は姿勢よく座ったまま、こちらの気配に気づいてわずかに視線だけを向けた。';
  return'朝の教室。怜は窓際で静かに過ごしていたが、こちらに気づくとじっと観察するように目を向けた。';
 }
 function firstGreeting(c){if(c.id==='risa')return'おはよ。今日も一緒だね。なんか話す？';if(c.id==='emi')return'おはよ。朝から何？ 私、部活あるんだけど。';if(c.id==='yui')return'おはよう。こんな時間から会うと、ちょっと不思議な感じだね。';if(c.id==='erika')return'……朝から何ですの？ 用があるなら手短にしてくださいませ。';return'……おはよう。今日は、何の話する？'}
@@ -943,16 +977,61 @@ function addBubble(role,content,meta='',persist=true){if(content&&typeof content
 function log(text){state.gameLog.push(`DAY ${state.day} ${turns[state.turn].label}: ${text}`);if(state.gameLog.length>120)state.gameLog=state.gameLog.slice(-120);save()}
 function cnameSafe(){return activeId&&CHARACTERS[activeId]?CHARACTERS[activeId].name:'相手'}
 function currentTurnKey(){return `${state.day}:${state.turn}`}
+function markErikaAttention(reason='interaction'){
+ if(activeId!=='erika'||!state)return;
+ state.lastErikaAttentionTurnKey=currentTurnKey();
+ state.erikaNeglectTurns=0;
+}
+function applyErikaNeglectTick(){
+ if(activeId!=='erika'||!state)return 0;
+ updateGrowthTraits(CHARACTERS[activeId]);
+ const dep=state.growthTraits?.dependence||0;
+ if(dep<25){state.erikaNeglectTurns=0;return 0}
+ if(state.lastErikaAttentionTurnKey===currentTurnKey()){state.erikaNeglectTurns=0;return 0}
+ state.erikaNeglectTurns=(state.erikaNeglectTurns||0)+1;
+ let loss=dep>=75?2:dep>=55?1:(dep>=35&&state.erikaNeglectTurns>=2)?1:(dep>=25&&state.erikaNeglectTurns>=3)?1:0;
+ if(loss){state.mood=clamp(state.mood-loss);log(`絵里香は構ってもらえず機嫌 -${loss}（依存度${dep}/100・放置感${state.erikaNeglectTurns}）`)}
+ return -loss;
+}
+function evaluateErikaJealousy(text){
+ if(activeId!=='erika'||!state||!text)return null;
+ updateGrowthTraits(CHARACTERS[activeId]);
+ const dep=state.growthTraits?.dependence||0;
+ if(dep<25)return null;
+ const mentionsGirl=/(他の女|ほかの女|別の女|女子|女の子|梨沙|絵美|結衣|怜|可愛い子|かわいい子)/.test(text);
+ const romantic=/(デート|遊んだ|二人で|可愛い|かわいい|好き|気になる|会って|一緒にいた)/.test(text);
+ if(!mentionsGirl)return null;
+ let moodLoss=dep>=90?6:dep>=75?4:dep>=55?3:dep>=35?2:1;
+ let affectionLoss=0;
+ if(romantic&&dep>=60)affectionLoss=dep>=85?2:1;
+ state.mood=clamp(state.mood-moodLoss);
+ if(affectionLoss)state.affection=clamp(state.affection-affectionLoss);
+ state.erikaJealousyCount=(state.erikaJealousyCount||0)+1;
+ state.lastErikaJealousyDay=state.day;
+ const level=dep>=90?'かなり強い嫉妬':dep>=70?'強い嫉妬':dep>=45?'明確な嫉妬':'少し気になる';
+ log(`絵里香の嫉妬: ${level} / 機嫌-${moodLoss}${affectionLoss?` / 好感度-${affectionLoss}`:''}`);
+ return {dep,moodLoss,affectionLoss,level,romantic};
+}
+function erikaRequestConflict(kind='お願い',accepted=true){
+ if(activeId!=='erika'||!state)return '';
+ updateGrowthTraits(CHARACTERS[activeId]);
+ const dep=state.growthTraits?.dependence||0,anx=state.growthTraits?.weightAnxiety||0;
+ if(dep<40)return '';
+ if(accepted){
+  return `絵里香専用心理: 依存度${dep}/100、体型への焦り${anx}/100。本来は${kind}を断ったり控えたりしたい気持ちがあっても、主人公から頼まれると断りづらい。「あなたがそこまで言うなら」「今回だけですわ」など、主人公だから受け入れたニュアンスを自然に出してよい。ただし毎回同じ台詞にしない。`;
+ }
+ return `絵里香専用心理: 依存度${dep}/100。今回は断ったが、主人公のお願いを断ったこと自体を少し気にしている。高依存ほど「嫌われないか」が一瞬よぎってもよい。`;
+}
 function foodOfferAlreadyUsed(){return false}
 function markFoodOfferUsed(){}
 
 function initiatedEventChance(){
  const base=[12,16,21,27,34,40,45][relationshipIndex()]||15;
  let bonus=0;
- const c=CHARACTERS[activeId],g=state.growthTraits||{};
+ const c=CHARACTERS[activeId];updateGrowthTraits(c);const g=state.growthTraits||{};
  if(c.id==='yui'&&(g.oilyPreference||0)>=45)bonus+=4;
  if(c.id==='rei'&&(state.weightInterest||0)>=35)bonus+=8;
- if(c.id==='erika'&&relationshipIndex()>=3)bonus+=6;
+ if(c.id==='erika'&&relationshipIndex()>=3){bonus+=6;const dep=state.growthTraits?.dependence||0;bonus+=Math.round(dep*.10);if((state.erikaNeglectTurns||0)>=1)bonus+=6;}
  if((c.id==='risa'&&(g.bodyConcern||0)>=35)||(c.id==='emi'&&(g.weightAlarm||0)>=35))bonus+=5;
  let chance=base+bonus;
  // 結衣は年齢差・食嗜好など専用イベント候補が多いため、他キャラより発生頻度を抑える。
@@ -960,7 +1039,7 @@ function initiatedEventChance(){
  return clamp(chance,c.id==='yui'?7:8,c.id==='yui'?32:55);
 }
 function chooseInitiatedEvent(){
- const c=CHARACTERS[activeId],g=state.growthTraits||{},stage=relationshipStage(),fav=(state.favoriteFoods||[])[0]||'好きなもの';
+ const c=CHARACTERS[activeId];updateGrowthTraits(c);const g=state.growthTraits||{},stage=relationshipStage(),fav=(state.favoriteFoods||[])[0]||'好きなもの';
  const candidates=[];
  const canSelfFood=!state.lastFoodWasRefused&&state.fullness<72;
  if(canSelfFood&&c.id==='yui'&&(g.oilyPreference||0)>=55)candidates.push({
@@ -998,8 +1077,26 @@ function chooseInitiatedEvent(){
  });
  if(c.id==='erika'&&relationshipIndex()>=3)candidates.push({
    type:'attention',
-   situation:`${c.name}は主人公への好意と依存傾向が以前より高まっている。現在の関係段階は「${stage.label}」。`,
+   situation:`${c.name}は主人公への好意と依存傾向が以前より高まっている。現在の関係段階は「${stage.label}」。依存度は${g.dependence||0}/100。`,
    goal:'ツンデレらしさを残しつつ、自分から主人公の予定や反応を気にして話しかける。'
+ });
+ if(c.id==='erika'&&(g.dependence||0)>=35)candidates.push({type:'whereabouts',situation:`${c.name}は主人公が今日どこで何をしていたのか妙に気になっている。依存度は${g.dependence||0}/100。`,goal:'強がりながら主人公の予定・誰といたのか・次に何をするのかを聞く。'});
+ if(c.id==='erika'&&(g.dependence||0)>=55)candidates.push({type:'reassurance',situation:`${c.name}は最近、自分が主人公に嫌われていないかを必要以上に気にしている。体型への焦りは${g.weightAnxiety||0}/100。`,goal:'自分に飽きていないか・嫌になっていないかを遠回しに確かめる。体型変化があれば不安の理由に少し混ぜてもよい。'});
+ if(c.id==='erika'&&(g.dependence||0)>=60&&(state.erikaNeglectTurns||0)>=1)candidates.push({type:'neglect',situation:`${c.name}は主人公に構ってもらえていないと感じている。放置感は${state.erikaNeglectTurns||0}、依存度は${g.dependence||0}/100。`,goal:'寂しいとは素直に言わず、不機嫌さと寂しさをツンデレらしく出す。'});
+ if(c.id==='erika'&&stageNum()>=3&&(g.dependence||0)>=45)candidates.push({
+   type:'body_reassurance',
+   situation:`${c.name}は体型Lv.${stageNum()}まで変化し、以前より自分の見た目を気にしている。依存度${g.dependence||0}/100、体型への焦り${g.weightAnxiety||0}/100。`,
+   goal:'太った自分を主人公がどう見ているのか気になるが、露骨に「可愛いと言って」とは言わず、遠回しに嫌われていないか確かめる。'
+ });
+ if(c.id==='erika'&&stageNum()>=4&&(g.dependence||0)>=60)candidates.push({
+   type:'comparison',
+   situation:`${c.name}は最近、自分の体型変化と周囲の女子を無意識に比べてしまっている。依存度${g.dependence||0}/100。`,
+   goal:'他の女子と自分を比べて主人公の好みを気にする。嫉妬を露骨な悪口にはせず、強がりの裏に不安を出す。'
+ });
+ if(c.id==='erika'&&stageNum()>=6&&(g.dependence||0)>=75)candidates.push({
+   type:'cling_body',
+   situation:`${c.name}は体型Lv.${stageNum()}となり、以前との違いを強く自覚している。それでも主人公が自分を構ってくれるかが気になって仕方ない。依存度${g.dependence||0}/100。`,
+   goal:'「今のわたくしでも変わらず相手をしてくださる？」という不安を、プライドを保ちながら遠回しに確かめる。'
  });
  if(c.id==='risa'&&(g.bodyConcern||0)>=30)candidates.push({
    type:'body_concern',
@@ -1164,6 +1261,36 @@ function initiativeChoiceSet(ev){
   {label:'「少し休んだ方がいいんじゃない？」',affection:2,mood:1,tone:'部活を否定せず、身体を気遣って休息を提案する。'},
   {label:'「練習不足なんじゃない？」',affection:-2,mood:-3,tone:'体型より努力不足の可能性をぶっきらぼうに指摘する。'}
  ];
+ if(c.id==='erika'&&ev.type==='whereabouts')return [
+  {label:'「今日はこうしてたよ」と普通に教える',affection:4,mood:3,tone:'今日の予定や行動を自然に教えて安心させる。'},
+  {label:'「どうしてそんなに気になるの？」',affection:2,mood:0,tone:'主人公の動向を気にする理由を本人に聞く。'},
+  {label:'「別に言わなくてもいいだろ」',affection:-3,mood:-4,tone:'距離を置き、絵里香の依存心を刺激する。'}
+ ];
+ if(c.id==='erika'&&ev.type==='reassurance')return [
+  {label:'「嫌ってないよ。心配しなくていい」',affection:5,mood:5,tone:'嫌っていないとはっきり伝えて安心させる。告白前なら恋愛告白まではしない。'},
+  {label:'「何か気になることでもある？」',affection:4,mood:2,tone:'不安の理由を急かさず聞く。'},
+  {label:'「急にどうしたんだよ」',affection:-2,mood:-3,tone:'不安に十分寄り添わず少し面倒そうに返す。'}
+ ];
+ if(c.id==='erika'&&ev.type==='neglect')return [
+  {label:'「ごめん。ちゃんと話そう」',affection:5,mood:6,tone:'構えなかったことを謝り、今は向き合う。'},
+  {label:'「そんなに構ってほしかった？」',affection:2,mood:0,tone:'少しからかいながら寂しかったのか確かめる。'},
+  {label:'「こっちにも予定があるんだよ」',affection:-4,mood:-6,tone:'不満を突き放し依存心と不機嫌さを刺激する。'}
+ ];
+ if(c.id==='erika'&&ev.type==='body_reassurance')return [
+  {label:'「見た目が変わっても気にしてないよ」',affection:5,mood:5,tone:'体型変化だけで絵里香への態度が変わらないと安心させる。告白前なら恋愛告白まではしない。'},
+  {label:'「それが気になってたの？」',affection:4,mood:2,tone:'主人公にどう見られているか気にしていたことを、責めずに聞く。'},
+  {label:'「前とは結構変わったよな」',affection:-3,mood:-5,tone:'見た目の変化を率直に強調し、絵里香の不安を刺激する。'}
+ ];
+ if(c.id==='erika'&&ev.type==='comparison')return [
+  {label:'「他の子と比べなくていいだろ」',affection:5,mood:4,tone:'他の女子との比較をやめるよう安心させ、絵里香本人に目を向ける。'},
+  {label:'「急に他の女子のこと気にしてどうした？」',affection:3,mood:1,tone:'嫉妬や比較の理由を少し掘り下げる。'},
+  {label:'「まあ、細い子は多いよな」',affection:-4,mood:-6,tone:'周囲の女子との比較を肯定し、絵里香の嫉妬と不安を強く刺激する。'}
+ ];
+ if(c.id==='erika'&&ev.type==='cling_body')return [
+  {label:'「今まで通りでいいだろ」',affection:6,mood:6,tone:'体型が変わっても距離を変えるつもりはないと伝え、強い不安を安心させる。'},
+  {label:'「そんなに嫌われるのが怖い？」',affection:3,mood:1,tone:'絵里香の依存と不安を本人に自覚させるよう問いかける。'},
+  {label:'「そこまで気にされると重いよ」',affection:-5,mood:-7,tone:'依存の強さを負担だと伝え、絵里香の最も恐れている拒絶を刺激する。'}
+ ];
  if(c.id==='erika'&&ev.type==='attention'){
    if(ri<=1)return [
     {label:'「絵里香はどうしたいの？」',affection:4,mood:3,tone:'強がりを茶化さず、絵里香自身の希望を自然に聞く。'},
@@ -1190,12 +1317,13 @@ function initiativeChoiceSet(ev){
 
 async function generateInitiativeOpeningAndChoices(c,ev,baseChoices){
  const gs=globalSettings();
- const fallbackDialogue=ev.type==='self_food'?'……ねえ、今日は何か食べに行かない？':ev.type==='age_gap'?'……私の方がずっと年上だけど、やっぱり気になったりする？':ev.type==='craving'?'……最近、ちょっとこってりしたものが気になるんだよね。':ev.type==='weight_curiosity'?'……最近の変化、自分でも少し気になってる。あなたはどう見える？':ev.type==='training'?'……最近ちょっと動きの感覚が違うんだよね。どう思う？':ev.type==='body_concern'?'……最近、服の感じが少し違う気がするんだけど、気のせいかな？':'……ちょっと聞いてもいい？';
+ const fallbackDialogue=ev.type==='body_reassurance'?'……最近、前より見た目が変わったでしょう？ あなた、別に……嫌になったりしてませんわよね？':ev.type==='comparison'?'……あなた、細い子の方がお好みだったりしますの？ べ、別に深い意味はありませんけれど。':ev.type==='cling_body'?'……今のわたくしでも、今まで通り相手をしてくださいますわよね？':ev.type==='whereabouts'?'……今日、何をしていましたの？ べ、別に気になっているわけではありませんけれど。':ev.type==='reassurance'?'……あなた、最近わたくしのことを嫌になったりしていませんわよね？':ev.type==='neglect'?'……最近、わたくしを放っておきすぎではなくて？':ev.type==='self_food'?'……ねえ、今日は何か食べに行かない？':ev.type==='age_gap'?'……私の方がずっと年上だけど、やっぱり気になったりする？':ev.type==='craving'?'……最近、ちょっとこってりしたものが気になるんだよね。':ev.type==='weight_curiosity'?'……最近の変化、自分でも少し気になってる。あなたはどう見える？':ev.type==='training'?'……最近ちょっと動きの感覚が違うんだよね。どう思う？':ev.type==='body_concern'?'……最近、服の感じが少し違う気がするんだけど、気のせいかな？':'……ちょっと聞いてもいい？';
  const fallback={narration:`${c.name}は少し考えてから、こちらへ話しかけた。`,dialogue:fallbackDialogue,emotion:'normal',choices:baseChoices.map(x=>x.label)};
  if(!gs.apiKey)return fallback;
  const intents=baseChoices.map((x,i)=>`${i+1}. 意図:${x.tone} / 好感度:${(x.affection||0)>=0?'+':''}${x.affection||0} / 機嫌:${(x.mood||0)>=0?'+':''}${x.mood||0}`).join('\n');
  const instructions=`恋愛シミュレーションゲームの「キャラクター発イベント」を生成する。JSONだけを返す。\n形式:{"narration":"情景1〜2文","dialogue":"キャラクターの発言1〜3文","emotion":"normal|happy|embarrassed|angry|troubled|surprised","choices":["主人公の返答1","主人公の返答2","主人公の返答3"]}\n最重要ルール:\n- dialogueとchoicesを必ず会話として噛み合わせる。dialogueで聞いていないことへの返答をchoicesに出さない。\n- choicesはdialogueの最後の問いかけ・発言に直接返せる短い主人公の台詞にする。\n- choicesは3件で、下記3つの選択意図と順番・好感度方向を保つ。ただし文言はその場面に合わせて全面的に言い換えてよい。\n- 3択同士の意味を重複させない。肯定・掘り下げ・否定/距離を置く等、元の意図差を保つ。\n- キャラクターの性格・口調・関係段階を守る。主人公の返答を先に書かない。\n- 相手が結衣の場合、主人公はかなり年下なので、choicesは必ず礼儀正しい敬語にする。告白成立前は「好きです」「惚れています」「結衣さんだから特別です」「付き合いたいです」など明確な恋愛好意をchoicesに出さない。肯定・励まし・気遣い・節度ある褒め言葉は可。明確な恋愛感情は告白イベントで交際成立後のみ。恋人後も敬語ベースを維持する。馴れ馴れしいタメ口・命令口調・呼び捨ては禁止。`;
- const input=`キャラクター:${c.name} / ${c.age}歳\n性格:${c.personality}\n話し方:${c.speech}\n関係:${relationshipLabel()} / 好感度:${Math.round(state.affection)} / 機嫌:${Math.round(state.mood)}\nDAY ${state.day} / ${turns[state.turn].label}\nイベント種別:${ev.type}\n状況:${ev.situation}\n狙い:${ev.goal}\n3択の固定された意味・効果:\n${intents}\n${c.id==='yui'?'結衣は主人公よりかなり年上。年齢差イベント以外では毎回年齢差の話にしない。主人公から結衣への返答は、告白成立前は必ず敬語で礼儀正しくする。ポジティブな声かけは可だが、「好き」「特別」「付き合いたい」など主人公側の明確な恋愛好意は告白成立後まで言わせない。恋人後は明確な好意表現を許可しつつ、敬語ベースを維持する。':''}`;
+ const input=`キャラクター:${c.name} / ${c.age}歳\n性格:${c.personality}\n話し方:${c.speech}\n関係:${relationshipLabel()} / 好感度:${Math.round(state.affection)} / 機嫌:${Math.round(state.mood)}\nDAY ${state.day} / ${turns[state.turn].label}\nイベント種別:${ev.type}\n状況:${ev.situation}\n狙い:${ev.goal}\n3択の固定された意味・効果:\n${intents}\n${c.id==='erika'?'絵里香は20歳の大学生で、主人公とは大学の同級生。高校生・制服・部活中心の生活として描写しない。大学の講義、キャンパス、サークル、アルバイト、私服など大学生らしい生活文脈を優先する。':''}
+${c.id==='yui'?'結衣は主人公よりかなり年上。年齢差イベント以外では毎回年齢差の話にしない。主人公から結衣への返答は、告白成立前は必ず敬語で礼儀正しくする。ポジティブな声かけは可だが、「好き」「特別」「付き合いたい」など主人公側の明確な恋愛好意は告白成立後まで言わせない。恋人後は明確な好意表現を許可しつつ、敬語ベースを維持する。':''}`;
  const model=normalizeModel(gs.model),body={model,instructions,input,max_output_tokens:550};if(/^gpt-5/.test(model))body.reasoning={effort:'minimal'};
  try{
   const res=await fetch('https://api.openai.com/v1/responses',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+gs.apiKey},body:JSON.stringify(body)});
@@ -1224,6 +1352,7 @@ function renderInitiativeChoices(){
 async function resolveInitiativeChoice(i){
  if(state?.pendingWeightEvent||state?.pendingDate){showBlockingNotice();render();return}
  const p=state?.pendingInitiatedChoice;if(!p)return;
+ markErikaAttention('問いかけへの返答');
  const ch=p.choices[i];if(!ch)return;
  const box=$('initiativeChoices');if(box)box.querySelectorAll('button').forEach(b=>b.disabled=true);
  const before=state.affection,wasLover=!!state.isLover;
@@ -1624,6 +1753,8 @@ async function advance(){
  if(state&&state.pendingInitiatedChoice){addBubble('system','相手からの問いかけに先に答えてください。','イベント中');return}
  if(state&&state.pendingWeightEvent){addBubble('system','体重変化イベントの選択肢を先に選んでください。','イベント中');return}
  if(state&&state.pendingDate){addBubble('system','デート中イベントの選択肢を先に選んでください。','デート中');return}
+ const erikaNeglectDelta=applyErikaNeglectTick();
+ if(erikaNeglectDelta<0)addBubble('system',`絵里香はあまり構ってもらえなかったことを気にしている。機嫌 ${erikaNeglectDelta}`,'依存度');
  decay();
  if(state.turn>=2){
    const endedDay=state.day;
@@ -1755,8 +1886,43 @@ function yuiShoppingEvent(){
     note:'体型変化を直接指摘され、結衣は少し恥ずかしそうにした。',shoppingMemory:true}
  ]};
 }
+function erikaShoppingEvent(){
+ const lv=stageNum(),dep=state.growthTraits?.dependence||0;
+ const defs=[
+  {text:'高級ブランド店の試着室。絵里香は当然のようにいつものサイズを選び、鏡の前で仕上がりを確認している。',label:'「よく似合ってる」と伝える',note:'いつものサイズを自信たっぷりに着こなし、主人公の反応を横目で確認した。',mood:4,restraint:0},
+  {text:'試着したスカートのウエストが以前より少しぴったりしている。絵里香は気づいているが、何でもない顔を装っている。',label:'体型には触れず服を褒める',note:'少し窮屈そうでも体型には触れず、服そのものを褒めた。',mood:4,restraint:2},
+  {text:'試着室で鏡を見る絵里香は、スカートの上に少し乗るお腹を気にしている。主人公の視線も妙に気になるようだ。',label:'「気にしなくていいよ」と安心させる',note:'お腹を気にする絵里香を、必要以上に体型へ触れず安心させた。',mood:5,restraint:2},
+  {text:'いつものサイズのスカートを試すが、ホックを留めるのにかなり苦労する。店員に一つ上のサイズを勧められ、絵里香は露骨に不機嫌そうだ。',label:'自然に別サイズも見てみようと提案する',note:'サイズアップを恥ずかしいことのように扱わず、一緒に別サイズを探した。',mood:3,restraint:4},
+  {text:'いくつか試着しただけなのに絵里香は少し息を弾ませ、額に汗を浮かべている。本人はそれを悟られまいと平静を装っている。',label:'休憩しようとさりげなく提案する',note:'疲れを指摘しすぎず、自然に休憩へ誘った。',mood:4,restraint:3},
+  {text:'きれいめのジャケットを試した瞬間、胸元から腹部にかけて生地が強く張る。絵里香はボタンを警戒しながら、主人公の表情を気にしている。',label:'今の体型に合う服を一緒に探す',note:'無理に昔のサイズへ戻そうとせず、今似合う服を一緒に選んだ。',mood:5,restraint:3},
+  {text:'かなり大きいサイズの服を手に取る絵里香は、以前なら選ばなかった数字を見て複雑そうに黙り込む。それでも主人公が隣にいることを何度も確認している。',label:'「一緒に選ぶから大丈夫」と伝える',note:'サイズの数字ではなく、今の絵里香に似合うものを一緒に選ぶ姿勢を示した。',mood:6,restraint:2}
+ ][lv-1];
+ const attentionChoice=dep>=55
+   ?{label:'「俺にどう見えるか気にしてる？」',affection:4,mood:dep>=75?5:3,note:'主人公の評価を気にしていることへ触れ、絵里香の本音を引き出した。',erikaDependency:true}
+   :{label:'別の服も見て回る',affection:3,mood:3,note:'一着だけにこだわらず、絵里香の買い物に付き合った。'};
+ return {text:defs.text,choices:[
+  {label:defs.label,affection:4,mood:defs.mood,restraint:defs.restraint,note:defs.note,erikaDate:true},
+  attentionChoice,
+  {label:lv>=3?'「前よりだいぶサイズ上がったな」と言う':'「少しきつそうだな」と言う',
+   affection:lv>=3?-3:-1,mood:lv>=3?-5:-2,restraint:lv>=3?6:3,
+   note:'体型変化を正面から指摘され、絵里香は強く動揺した。',erikaDate:true}
+ ]};
+}
+function erikaRestaurantEvent(){
+ const dep=state.growthTraits?.dependence||0,lv=stageNum();
+ return {text:lv>=4
+  ?'レストランでメニューを前にした絵里香は、食べたいものと体型への焦りの間で迷っている。主人公が何を勧めるのかも気にしているようだ。'
+  :'レストランでメニューを眺めながら、絵里香は上品に振る舞いつつ主人公が何を選ぶのか気にしている。',
+ choices:[
+  {label:'絵里香が食べたいものを選ばせる',affection:4,mood:4,note:'主人公が押しつけず、絵里香自身に選ばせた。',erikaDate:true},
+  {label:'おすすめを一緒に選ぶ',affection:dep>=55?5:4,mood:dep>=55?5:4,note:'主人公と相談しながら料理を選んだ。依存度が高い絵里香ほど、主人公のおすすめを意識した。',erikaDependency:true},
+  {label:'追加料理とデザートを勧める',cost:4200,food:{name:'追加コース＆デザート',fullness:58,weight:.52,restraintHit:15,tags:['fried','sweet']},affection:3,mood:5,note:'体型を気にしながらも、主人公に勧められて追加料理とデザートまで食べた。',erikaDependency:true}
+ ]};
+}
 function getDateEvent(key){
  if(key==='shopping'&&activeId==='yui')return yuiShoppingEvent();
+ if(activeId==='erika'&&key==='shopping')return erikaShoppingEvent();
+ if(activeId==='erika'&&key==='restaurant')return erikaRestaurantEvent();
  return DATE_EVENTS[key];
 }
 
@@ -1772,7 +1938,8 @@ function mealTierLabel(){const i=mealTier();return ['+0〜3kg未満','+3〜8kg',
 function getMealOffer(category){const cat=MEAL_CATEGORIES[category]||MEAL_CATEGORIES.japanese;const item=cat.tiers[mealTier()];return {...item,id:category,name:item.label,category,isGift:false}}
 function detectFoodOffer(text){let category=null;if(/ラーメン/.test(text))category='ramen';else if(/揚げ|唐揚げ|からあげ|フライ|とんかつ/.test(text))category='fried';else if(/ケーキ|スイーツ|デザート|パフェ|アイス|チョコ/.test(text))category='dessert';else if(/和食|定食|ご飯|ごはん|寿司|魚/.test(text))category='japanese';if(!category||!/食べ|行こ|行か|どう|奢|おご/.test(text))return null;return getMealOffer(category)}
 async function foodEvent(){
- if(blockingEventType()){showBlockingNotice();return}if(state&&state.pendingWeightEvent){addBubble('system','体重変化イベントの選択肢を先に選んでください。','イベント中');return}const offer=getMealOffer($('mealSelect').value);state.money=state.money??2500;if(state.money<offer.price){addBubble('system',`${offer.name}を勧めるには ¥${offer.price.toLocaleString()} 必要です。バイトでお金を稼いでください。`,'所持金不足');return}state.money-=offer.price;const pressure=state.lastFoodWasRefused&&state.lastFoodTurnKey===currentTurnKey();let pressureResult=null;if(pressure){pressureResult=pressurePenalty('いいから食べてよ');addBubble('system',pressureResult.summary,'強引な再提案')}addBubble('user',`${offer.name}食べない？`,`購入 ¥${offer.price.toLocaleString()}`);const result=resolveFoodOffer(offer);addBubble('system',result.summary,'食事判定');log(`${offer.name}を購入 ¥${offer.price}。${result.accepted?'食べた':'断った'}`);try{const aiResult=await askAI(`${offer.name}食べない？`,result,pressureResult);addAIResponse(aiResult,`${turns[state.turn].label} / DAY ${state.day}`)}catch(e){const errMsg=e&&e.message?e.message:String(e);addBubble('system','AI接続エラー：'+errMsg+'\nデモ返答に切り替えました。','API ERROR',false);addAIResponse(demoStructuredReply('',result,pressureResult),`${turns[state.turn].label} / DAY ${state.day}`);log('API接続エラー: '+errMsg)}
+ if(blockingEventType()){showBlockingNotice();return}
+ markErikaAttention('食事の誘い');if(state&&state.pendingWeightEvent){addBubble('system','体重変化イベントの選択肢を先に選んでください。','イベント中');return}const offer=getMealOffer($('mealSelect').value);state.money=state.money??2500;if(state.money<offer.price){addBubble('system',`${offer.name}を勧めるには ¥${offer.price.toLocaleString()} 必要です。バイトでお金を稼いでください。`,'所持金不足');return}state.money-=offer.price;const pressure=state.lastFoodWasRefused&&state.lastFoodTurnKey===currentTurnKey();let pressureResult=null;if(pressure){pressureResult=pressurePenalty('いいから食べてよ');addBubble('system',pressureResult.summary,'強引な再提案')}addBubble('user',`${offer.name}食べない？`,`購入 ¥${offer.price.toLocaleString()}`);const result=resolveFoodOffer(offer);addBubble('system',result.summary,'食事判定');log(`${offer.name}を購入 ¥${offer.price}。${result.accepted?'食べた':'断った'}`);try{const aiResult=await askAI(`${offer.name}食べない？`,result,pressureResult);addAIResponse(aiResult,`${turns[state.turn].label} / DAY ${state.day}`)}catch(e){const errMsg=e&&e.message?e.message:String(e);addBubble('system','AI接続エラー：'+errMsg+'\nデモ返答に切り替えました。','API ERROR',false);addAIResponse(demoStructuredReply('',result,pressureResult),`${turns[state.turn].label} / DAY ${state.day}`);log('API接続エラー: '+errMsg)}
  if(result&&result.accepted)await maybeYuiOvereatHook('食事');
  save();render()}
 function earlyStageGainBoost(){
@@ -1787,14 +1954,14 @@ function foodAcceptanceChance(c,offer){let score=48;score+=(state.affection-50)*
  const learned=foodExperience(foodGrowthKey(offer));
  score+=(learned.liking||0)*.22;
  if(c.id==='yui'&&foodGrowthKey(offer)==='fried')score+=(state.growthTraits?.oilyPreference||0)*.18;
- score+=characterFoodModifier(c,offer).accept;if(c.id==='risa'&&(offer.tags.includes('sweet')||offer.tags.includes('bread')))score+=26;if(c.id==='emi')score-=state.restraint*0.18;if(c.id==='yui'){score+=20;if(offer.isGift)score=96;else score=Math.max(score,70-state.fullness*0.18)}if(c.id==='erika')score-=state.restraint*0.28;if(c.id==='rei')score+=(state.weight-state.startWeight)*2.2;return clamp(score,3,97)}
+ score+=characterFoodModifier(c,offer).accept;if(c.id==='risa'&&(offer.tags.includes('sweet')||offer.tags.includes('bread')))score+=26;if(c.id==='emi')score-=state.restraint*0.18;if(c.id==='yui'){score+=20;if(offer.isGift)score=96;else score=Math.max(score,70-state.fullness*0.18)}if(c.id==='erika'){const dep=state.growthTraits?.dependence||0;score-=state.restraint*0.28;score+=dep*.22;if(dep>=65)score+=6;}if(c.id==='rei')score+=(state.weight-state.startWeight)*2.2;return clamp(score,3,97)}
 function resolveFoodOffer(offer,text){
  const c=CHARACTERS[activeId];if(!offer)return null;
  updateEvolution(c);
  const chance=foodAcceptanceChance(c,offer);let accepted=Math.random()*100<chance;
  if(c.id==='yui'&&offer.isGift)accepted=true;
  if(c.id==='yui'&&!offer.isGift&&state.restraint>=75&&state.fullness<92)accepted=Math.random()<0.82;
- if(c.id==='erika'&&state.restraint>=85&&state.affection<70)accepted=Math.random()<0.08;
+ if(c.id==='erika'&&state.restraint>=85&&state.affection<70&&(state.growthTraits?.dependence||0)<40)accepted=Math.random()<0.08;
  const before={fullness:state.fullness,hunger:state.hunger,restraint:state.restraint,weight:state.weight,weightInterest:state.weightInterest||0};
  let regret=0,weightGain=0,restraintDelta=0,fullnessDelta=0;
  if(accepted){
@@ -1851,12 +2018,13 @@ function applyGuaranteedFoodEffect(food,sourceLabel='食事'){
 function giftPreferenceScore(c,g){const p=GIFT_PREFERENCES[c.id]||{};return (g.tags||[]).reduce((a,t)=>a+(p[t]||0),0)}
 async function giveGift(){
  if(blockingEventType()){showBlockingNotice();return}
+ markErikaAttention('プレゼント');
  if(state&&state.pendingWeightEvent){addBubble('system','体重変化イベントの選択肢を先に選んでください。','イベント中');return}
  const g=GIFTS[$('giftSelect').value],c=CHARACTERS[activeId];state.money=state.money??2500;if(!g)return;
  if(state.money<g.price){addBubble('system',`${g.name}を買うには ¥${g.price.toLocaleString()} 必要です。`,'所持金不足');return}
  const btn=$('giftBtn');if(btn){btn.disabled=true;btn.textContent='反応中…'}
  const pref=giftPreferenceScore(c,g);let chance=clamp(48+(state.affection-30)*.72+(state.mood-50)*.12+pref*8-state.restraint*.06+relationshipMechanicBonus()*.45,8,97);
- if(c.id==='yui')chance=99;if(c.id==='erika'){chance-=Math.max(0,(state.restraint-50)*.35);if(state.affection<30)chance-=15;if(pref>=2)chance+=18}
+ if(c.id==='yui')chance=99;if(c.id==='erika'){const dep=state.growthTraits?.dependence||0;chance-=Math.max(0,(state.restraint-50)*.35);if(state.affection<30)chance-=15;if(pref>=2)chance+=18;chance+=dep*.18;if(dep>=70)chance+=6}
  if(c.id==='emi'&&g.tags.includes('romantic')&&state.affection<55)chance-=18;
  const before={affection:state.affection,mood:state.mood,weight:state.weight,fullness:state.fullness,restraint:state.restraint,money:state.money};
  const accepted=Math.random()*100<chance;state.money-=g.price;let ag=0,mg=0,foodEffect=null;
@@ -1883,7 +2051,9 @@ ${accepted?`好感度:${before.affection}→${state.affection}
 体重:${before.weight.toFixed(1)}kg→${state.weight.toFixed(1)}kg
 抑止力:${before.restraint}→${state.restraint}
 `:''}
-この結果を絶対に変更しないこと。${accepted?'受け取った直後':'断る直前〜直後'}の自然な反応を返すこと。`;
+この結果を絶対に変更しないこと。
+${c.id==='erika'?erikaRequestConflict('プレゼント',accepted):''}
+${accepted?'受け取った直後':'断る直前〜直後'}の自然な反応を返すこと。`;
  const aiOK=await showEventAI(`${g.name}、プレゼント。`,ctx,'プレゼント');
  if(!aiOK){addNarration(accepted?`${c.name}はプレゼントを受け取り、手元で眺めた。`:`${c.name}はプレゼントを見たあと、受け取りを断った。`,'プレゼント')}
 
@@ -1896,9 +2066,10 @@ ${accepted?`好感度:${before.affection}→${state.affection}
  save();render();
  if(btn){btn.disabled=false;btn.textContent='プレゼントする'}
 }
-function dateAcceptance(c,key){const pref=(DATE_PREFERENCES[c.id]||{})[key]||0;let chance=35+state.affection*.62+(state.mood-50)*.16+pref*7+relationshipMechanicBonus();if(c.id==='erika'&&state.affection<35)chance-=18;if(c.id==='yui'&&state.affection<45)chance-=8;if(c.id==='rei'&&state.affection<35)chance-=8;if(c.id==='risa')chance+=5;return {chance:clamp(chance,5,98),pref}}
+function dateAcceptance(c,key){const pref=(DATE_PREFERENCES[c.id]||{})[key]||0;let chance=35+state.affection*.62+(state.mood-50)*.16+pref*7+relationshipMechanicBonus();if(c.id==='erika'){const dep=state.growthTraits?.dependence||0;if(state.affection<35)chance-=18;chance+=dep*.20;if(dep>=70)chance+=5;}if(c.id==='yui'&&state.affection<45)chance-=8;if(c.id==='rei'&&state.affection<35)chance-=8;if(c.id==='risa')chance+=5;return {chance:clamp(chance,5,98),pref}}
 async function doDate(){
  if(blockingEventType()){showBlockingNotice();return}
+ markErikaAttention('デートの誘い');
  if(state&&state.pendingWeightEvent){addBubble('system','体重変化イベントの選択肢を先に選んでください。','イベント中');return}
  const key=$('dateSelect').value,d=DATES[key],c=CHARACTERS[activeId];if(!d)return;state.money=state.money??2500;
  if(state.pendingDate){addBubble('system','現在のデートイベントの選択肢を先に選んでください。','デート中');return}
@@ -1915,6 +2086,7 @@ async function doDate(){
 ゲーム側の確定結果:${c.name}は断った。
 成功率:${Math.round(j.chance)}%
 機嫌が1下がった。
+${c.id==='erika'?erikaRequestConflict('デートの誘い',false):''}
 絶対にデートへ行く展開に変更しないこと。断る直前の仕草と、キャラらしい断り方を返すこと。`;
    const aiOK=await showEventAI(`${d.name}に一緒に行かない？`,ctx,'デート');
    if(!aiOK){addNarration(`${c.name}は少し考えたあと、今回は断る意思を示した。`,'デート');addBubble('assistant','今日はやめておく。','デート')}
@@ -1935,6 +2107,7 @@ async function doDate(){
 好感度:+${ag}
 機嫌:+${mg}
 現在所持金:¥${Math.round(state.money).toLocaleString()}
+${c.id==='erika'?erikaRequestConflict('デートの誘い',true):''}
 このあとデート中イベント「${ev?.text||''}」が発生する。
 まだイベント内の選択肢は主人公が選んでいない。
 誘いを受け入れた直後から、現地でイベント状況に入るまでの自然な反応を返すこと。`;
@@ -1986,6 +2159,7 @@ ${choice.restraint?`抑止力 ${before.restraint}→${state.restraint}\n`:''}${f
 体重:${before.weight.toFixed(1)}kg→${state.weight.toFixed(1)}kg
 食事による抑止力変化:${foodEffect.restraintDelta>=0?'+':''}${foodEffect.restraintDelta}
 `:''}
+${c.id==='erika'&&choice.erikaDependency?`絵里香専用の依存反応: 現在依存度${state.growthTraits?.dependence||0}/100。主人公の反応やおすすめを強く意識している。体型への焦りがあっても「主人公がそう言うなら」と揺れる心理を自然に出す。`:''}
 上記は確定結果。特に食事がある場合、食べた事実を否定したり別の料理に変更しないこと。
 主人公の選択を受けた直後の情景描写とセリフを返すこと。`;
 
@@ -2006,10 +2180,10 @@ ${choice.restraint?`抑止力 ${before.restraint}→${state.restraint}\n`:''}${f
 }
 function populateActionSelects(){const g=$('giftSelect'),d=$('dateSelect');if(g){g.innerHTML='';for(const[k,v]of Object.entries(GIFTS)){const o=document.createElement('option');o.value=k;o.textContent=`${v.name} ¥${v.price.toLocaleString()}`;g.appendChild(o)}}if(d){d.innerHTML='';for(const[k,v]of Object.entries(DATES)){const o=document.createElement('option');o.value=k;o.textContent=`${v.name} ¥${v.price.toLocaleString()}`;d.appendChild(o)}}}
 
-function status(){const c=CHARACTERS[activeId];addBubble('system',`DAY ${state.day} / ${turns[state.turn].label}\n関係 ${relationshipLabel()}｜好感度 ${Math.round(state.affection)}｜機嫌 ${Math.round(state.mood)}｜空腹 ${Math.round(state.hunger)}｜満腹 ${Math.round(state.fullness)}｜抑止力 ${Math.round(state.restraint)}\n${c.height}cm / ${state.weight.toFixed(1)}kg｜体型 ${bodyType()}｜開始時から ${(state.weight-state.startWeight).toFixed(1)}kg\n所持金 ¥${Math.round(state.money??2500).toLocaleString()}｜バイト ${state.workCount||0}回｜次回収入 ¥${workIncome().toLocaleString()}｜食事Lv.${mealTier()+1}（${mealTierLabel()}）\n体重変化: ${evolutionLabel()}${c.id==='rei'?`｜体重増加への興味 ${state.weightInterest||0}/100`:''}`)}
+function status(){const c=CHARACTERS[activeId];addBubble('system',`DAY ${state.day} / ${turns[state.turn].label}\n関係 ${relationshipLabel()}｜好感度 ${Math.round(state.affection)}｜機嫌 ${Math.round(state.mood)}｜空腹 ${Math.round(state.hunger)}｜満腹 ${Math.round(state.fullness)}｜抑止力 ${Math.round(state.restraint)}\n${c.height}cm / ${state.weight.toFixed(1)}kg｜体型 ${bodyType()}｜開始時から ${(state.weight-state.startWeight).toFixed(1)}kg\n所持金 ¥${Math.round(state.money??2500).toLocaleString()}｜バイト ${state.workCount||0}回｜次回収入 ¥${workIncome().toLocaleString()}｜食事Lv.${mealTier()+1}（${mealTierLabel()}）\n体重変化: ${evolutionLabel()}${c.id==='rei'?`｜体重増加への興味 ${state.weightInterest||0}/100`:''}${c.id==='erika'?`｜依存度 ${state.growthTraits?.dependence||0}/100｜体型焦り ${state.growthTraits?.weightAnxiety||0}/100｜放置感 ${state.erikaNeglectTurns||0}`:''}`)}
 function pressurePenalty(text){const c=CHARACTERS[activeId];const forceful=/お願い|頼む|いいから|食べてよ|食べなよ|絶対|もっと|無理やり|断らないで|せっかく/.test(text);let affLoss=forceful?6:3,moodLoss=forceful?5:2;if(c.id==='erika'){affLoss+=2;moodLoss+=1}if(c.id==='yui'&&state.affection<50)affLoss+=1;state.affection=clamp(state.affection-affLoss);state.mood=clamp(state.mood-moodLoss);const result={affectionDelta:-affLoss,moodDelta:-moodLoss,forceful,summary:`一度断った直後にさらに強く勧めたため、${c.name}は圧を感じた。好感度 -${affLoss}、機嫌 -${moodLoss}`,log:`断った直後の強引な再提案。好感度 -${affLoss} / 機嫌 -${moodLoss}`};log(result.log);return result}
 function pressureDemoReply(){const c=CHARACTERS[activeId];if(c.id==='risa')return'もう、さっき断ったでしょ。しつこいのは嫌だよ。';if(c.id==='emi')return'だからいらないって。しつこい。';if(c.id==='yui')return'ごめんね、そんなに押されるとちょっと困っちゃう。';if(c.id==='erika')return'しつこいですわ。不愉快です。';return'……断ったのに。そういうの、少し嫌。'}
-function demoReply(text,foodResult=null){const c=CHARACTERS[activeId];let aff=0,mood=0,reply='……うん。';if(foodResult){if(foodResult.accepted){if(c.id==='risa')reply=foodResult.food==='甘いもの'||foodResult.food==='パン'?'……それなら食べる。ちょっとだけね！':'うーん……まあ、今日はいいか。食べよ。';if(c.id==='emi')reply='……分かった。食べる。でもこれで部活に響いたら最悪だからね。';if(c.id==='yui')reply=foodResult.regret>0?'……また食べちゃった。断ろうとは思ったんだけどな。あとで絶対後悔するやつ……。':'え、いいの？ ……じゃあ、少しだけもらおうかな。';if(c.id==='erika')reply='べ、別にあなたに勧められたからではありませんわ。今回は特別ですの。';if(c.id==='rei')reply='……食べる。こういうのも、悪くないかも。'}else{if(c.id==='risa')reply='今日はやめとく。ちょっと気にしてるし。';if(c.id==='emi')reply='いらない。今は部活優先。';if(c.id==='yui')reply='ごめんね。今日はさすがにやめておく。';if(c.id==='erika')reply='結構ですわ。わたくし、今は要りませんの。';if(c.id==='rei')reply='……今日はいい。お腹、そこまで空いてない。'}return reply}if(c.id==='risa')reply='うんうん、それで？';if(c.id==='emi')reply=/太|体重/.test(text)?'は？ 太ってないし。変なこと言わないでよ。':'で、何？';if(c.id==='yui')reply='ふふ、そうなんだ。';if(c.id==='erika')reply=state.affection<40?'べ、別にあなたと話したいわけではありませんわ。':'……少しくらいなら、お付き合いしてあげてもよろしくてよ。';if(c.id==='rei')reply=state.affection<50?'……そう。あなたって、やっぱり少し変わってるね。':'……あなたと話すの、前より好きかも。';if(/好き|可愛い|かわいい|会いた/.test(text)){aff+=2;mood+=2}state.affection=clamp(state.affection+aff);state.mood=clamp(state.mood+mood);return reply}
+function demoReply(text,foodResult=null){const c=CHARACTERS[activeId];let aff=0,mood=0,reply='……うん。';if(foodResult){if(foodResult.accepted){if(c.id==='risa')reply=foodResult.food==='甘いもの'||foodResult.food==='パン'?'……それなら食べる。ちょっとだけね！':'うーん……まあ、今日はいいか。食べよ。';if(c.id==='emi')reply='……分かった。食べる。でもこれで部活に響いたら最悪だからね。';if(c.id==='yui')reply=foodResult.regret>0?'……また食べちゃった。断ろうとは思ったんだけどな。あとで絶対後悔するやつ……。':'え、いいの？ ……じゃあ、少しだけもらおうかな。';if(c.id==='erika'){const dep=state.growthTraits?.dependence||0;reply=dep>=60?'……本当は控えるつもりでしたのよ？ でも、あなたがそこまで言うなら……今回だけですわ。':'べ、別にあなたに勧められたからではありませんわ。今回は特別ですの。';}if(c.id==='rei')reply='……食べる。こういうのも、悪くないかも。'}else{if(c.id==='risa')reply='今日はやめとく。ちょっと気にしてるし。';if(c.id==='emi')reply='いらない。今は部活優先。';if(c.id==='yui')reply='ごめんね。今日はさすがにやめておく。';if(c.id==='erika')reply='結構ですわ。わたくし、今は要りませんの。';if(c.id==='rei')reply='……今日はいい。お腹、そこまで空いてない。'}return reply}if(c.id==='risa')reply='うんうん、それで？';if(c.id==='emi')reply=/太|体重/.test(text)?'は？ 太ってないし。変なこと言わないでよ。':'で、何？';if(c.id==='yui')reply='ふふ、そうなんだ。';if(c.id==='erika')reply=state.affection<40?'べ、別にあなたと話したいわけではありませんわ。':'……少しくらいなら、お付き合いしてあげてもよろしくてよ。';if(c.id==='rei')reply=state.affection<50?'……そう。あなたって、やっぱり少し変わってるね。':'……あなたと話すの、前より好きかも。';if(/好き|可愛い|かわいい|会いた/.test(text)){aff+=2;mood+=2}state.affection=clamp(state.affection+aff);state.mood=clamp(state.mood+mood);return reply}
 
 function moodBand(){
  const v=Math.round(state.mood);
@@ -2043,7 +2217,10 @@ function psychologicalProfile(c=CHARACTERS[activeId]){
  if(c.id==='yui'){
    extra=state.restraint>=70?'体型への後悔や「明日は控えよう」が強い。':'気にはしているが、食欲や楽しさに流される自分を半ば自覚している。';
  }else if(c.id==='erika'){
-   extra=state.mood<40?'強がりが特に強く、弱みを見せたくない。':'機嫌が良い時ほどツンの裏から本音が漏れやすい。';
+   const dep=state.growthTraits?.dependence||0,anx=state.growthTraits?.weightAnxiety||0,neglect=state.erikaNeglectTurns||0;
+   if(dep>=70)extra=`主人公への依存が非常に強い（${dep}/100）。体型への焦り${anx}/100が高くても主人公のお願いは断りづらい。主人公の予定や動向を気にし、自分が嫌われていないか頻繁に不安になる。構ってもらえない放置感${neglect}があると、寂しさを認めず不機嫌・高圧的に出す。`;
+   else if(dep>=45)extra=`主人公への依存が高まりつつある（${dep}/100）。主人公の動向や反応を気にし、自分が嫌われていないか確かめたくなる。体型への焦り${anx}/100。`;
+   else extra=state.mood<40?'強がりが特に強く、弱みを見せたくない。まだ依存は弱いが、主人公の評価は少し気にしている。':'機嫌が良い時ほどツンの裏から本音が漏れやすい。';
  }else if(c.id==='rei'){
    extra=(state.weightInterest||0)>=50?'体重変化を恐れるより、現象として面白がる傾向が強い。':'まだ体重変化を観察対象として見ている段階。';
  }else if(c.id==='emi'){
@@ -2146,6 +2323,10 @@ DAY ${state.day} / ${turns[state.turn].label}
 満腹度:${Math.round(state.fullness)}
 抑止力:${Math.round(state.restraint)}
 ${c.id==='rei'?`体重増加への興味:${state.weightInterest||0}/100`:''}
+${c.id==='erika'?`主人公への依存度:${state.growthTraits?.dependence||0}/100
+体型への焦り:${state.growthTraits?.weightAnxiety||0}/100
+累積嫉妬反応:${state.erikaJealousyCount||0}回
+構ってもらえていない感覚:${state.erikaNeglectTurns||0}`:''}
 
 【関係性の最重要ルール】
 - 現在の関係段階「${relationshipLabel()}」を厳守する。
@@ -2178,7 +2359,8 @@ async function askAI(text,foodResult=null,pressureResult=null,extraContext=''){
    resolved+=`\n\n【ゲーム側の確定済み食事判定】
 提案:${foodResult.food}
 結果:${foodResult.accepted?'食べた':'断った'}
-この結果は絶対に変更しないこと。`;
+この結果は絶対に変更しないこと。
+${activeId==='erika'?erikaRequestConflict('食事のお願い',foodResult.accepted):''}`;
    if(foodResult.accepted){
      resolved+=`
 満腹度変化:+${foodResult.fullnessDelta}
@@ -2381,7 +2563,7 @@ async function evaluateConversationAffinity(text,reply){
  if(delta){state.affection=clamp(state.affection+delta);log(`会話による好感度 ${delta>0?'+':''}${delta}`)}
  return delta;
 }
-async function send(){if(blockingEventType()){showBlockingNotice();return}const text=$('message').value.trim();if(!text){addBubble('system','メッセージを入力してください。','',false);return}$('message').value='';$('sendBtn').disabled=true;$('sendBtn').textContent='会話中…';addBubble('user',text);const offer=detectFoodOffer(text);let foodResult=null,pressureResult=null;if(offer){state.money=state.money??2500;if(state.money<offer.price){addBubble('system',`${offer.name}を勧めるには ¥${offer.price.toLocaleString()} 必要です。所持金が足りません。`,'所持金不足')}else{state.money-=offer.price;if(state.lastFoodWasRefused&&state.lastFoodTurnKey===currentTurnKey()&&/お願い|頼む|いいから|食べてよ|食べなよ|絶対|もっと|断らないで/.test(text)){pressureResult=pressurePenalty(text);addBubble('system',pressureResult.summary,'強引な再提案')}foodResult=resolveFoodOffer(offer);addBubble('system',foodResult.summary,'判定結果');log(`${offer.name}を購入 ¥${offer.price}。${foodResult.accepted?'食べた':'断った'}`)}}try{const reply=await askAI(text,foodResult,pressureResult);addAIResponse(reply,`${turns[state.turn].label} / DAY ${state.day}`);if(!foodResult&&!pressureResult){
+async function send(){if(blockingEventType()){showBlockingNotice();return}const text=$('message').value.trim();if(!text){addBubble('system','メッセージを入力してください。','',false);return}markErikaAttention('会話');$('message').value='';$('sendBtn').disabled=true;$('sendBtn').textContent='会話中…';addBubble('user',text);const jealousy=evaluateErikaJealousy(text);if(jealousy)addBubble('system',`絵里香は他の女子の話題を気にした。機嫌 -${jealousy.moodLoss}${jealousy.affectionLoss?`｜好感度 -${jealousy.affectionLoss}`:''}`,'嫉妬');const offer=detectFoodOffer(text);let foodResult=null,pressureResult=null;if(offer){state.money=state.money??2500;if(state.money<offer.price){addBubble('system',`${offer.name}を勧めるには ¥${offer.price.toLocaleString()} 必要です。所持金が足りません。`,'所持金不足')}else{state.money-=offer.price;if(state.lastFoodWasRefused&&state.lastFoodTurnKey===currentTurnKey()&&/お願い|頼む|いいから|食べてよ|食べなよ|絶対|もっと|断らないで/.test(text)){pressureResult=pressurePenalty(text);addBubble('system',pressureResult.summary,'強引な再提案')}foodResult=resolveFoodOffer(offer);addBubble('system',foodResult.summary,'判定結果');log(`${offer.name}を購入 ¥${offer.price}。${foodResult.accepted?'食べた':'断った'}`)}}try{const jealousyCtx=jealousy?`絵里香専用の嫉妬反応。主人公が他の女子に関する話題を出した。依存度${jealousy.dep}/100、反応段階:${jealousy.level}。ゲーム側で機嫌-${jealousy.moodLoss}${jealousy.affectionLoss?`、好感度-${jealousy.affectionLoss}`:''}が確定済み。ツンデレらしく、平静を装おうとしつつ依存度に応じて嫉妬や不安を出す。相手の女子を過度に侮辱しない。`:'';const reply=await askAI(text,foodResult,pressureResult,jealousyCtx);addAIResponse(reply,`${turns[state.turn].label} / DAY ${state.day}`);if(!foodResult&&!pressureResult){
  const d=await evaluateConversationAffinity(text,reply);
  const rd=evaluateRestraintConversation(text);
  if(d)addBubble('system',`会話が響いた：好感度 ${d>0?'+':''}${d}`,'会話評価');
