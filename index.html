@@ -146,7 +146,7 @@ details{margin-top:10px}.settingsGrid{display:grid;gap:8px;margin-top:10px}.sett
   <div id="cgViewerTitle" class="cgViewerTitle"></div>
 </div>
 <script>
-const APP_BUILD='20260819-yui-weight-event-restore-v7';
+const APP_BUILD='20260819-yui-preconfession-boundary-v10';
 
 const CHARACTERS={
  risa:{id:'risa',name:'梨沙',age:18,height:153,startWeight:45,personality:'明るい、活発、前向き、しっかり者',speech:'タメ口、普通',relationship:'幼馴染かつクラスメイト',affection:50,mood:50,restraint:50,appetite:'普通',gainTendency:'普通',exercise:'普通',bodyView:'少し痩せたいと思っている。太りたくはない。',favoriteFoods:['甘いもの','パン類'],features:'幼馴染である主人公が少し気になっている。そのため、主人公にどう見られているかを気にする。ちょっと泣き虫。',rules:'基本ポジティブに話す。体重が増えると少しネガティブになる。抑止力が高いと食事は断る。甘いものの場合は抑止力が高くても断らない場合がある。',imageBase:'risa'},
@@ -438,10 +438,33 @@ function yuiSpecialEvent(kind,title,detail){
  remember('cg',`${CHARACTERS[activeId].name}の特殊イベント「${title}」が起きた`,4,['cg','special',kind]);
  return true;
 }
-function maybeYuiOvereatHook(source='食事'){
+async function maybeYuiOvereatHook(source='食事'){
  if(activeId!=='yui'||stageNum()<4||state.fullness<90)return false;
- return yuiSpecialEvent('overeat_hook','食べすぎてホックが弾ける',
+ const fired=yuiSpecialEvent('overeat_hook','食べすぎてホックが弾ける',
    `${source}のあと、結衣は苦しそうにウエストへ手を添えた。次の瞬間、張りつめていたホックが外れ、本人は思わず固まった。`);
+ if(!fired)return false;
+
+ // 特殊CGの直後に、ホックが外れたことそのものへの結衣の反応を出す。
+ const c=CHARACTERS[activeId];
+ const ctx=`結衣専用の食べすぎ特殊イベント直後。
+直前に起きたこと:${source}で食事を終えたあと、満腹で張ったお腹に押されてズボンのホックが外れた。
+現在体型:Lv.${stageNum()} / ${state.weight.toFixed(1)}kg
+満腹度:${Math.round(state.fullness)}
+好感度:${Math.round(state.affection)}
+抑止力:${Math.round(state.restraint)}
+この瞬間、結衣本人はホックが外れた事実をはっきり認識している。
+主人公はその場にいる。
+ホックが外れたことへの恥ずかしさ、驚き、食べすぎへの後悔を中心に、現在の関係性と体型Lvに合った自然な反応を返す。
+体型Lvが高いほど「また太ったかも」「さすがに食べすぎた」などの自覚を少し強めてよい。
+dialogueは1〜2文。narrationは1〜2文。食事前の話には戻らず、必ずホックが外れた直後のコメントにする。`;
+ try{
+   const r=await askAI('（食後、ズボンのホックが外れた）',null,null,ctx);
+   addAIResponse(r,'食べすぎ特殊イベント');
+ }catch(e){
+   addNarration('結衣は外れたホックを見下ろし、慌ててウエストを押さえた。','食べすぎ特殊イベント');
+   addBubble('assistant','……うそ。さすがに食べすぎたかな……ちょっと恥ずかしい。','食べすぎ特殊イベント');
+ }
+ return true;
 }
 function maybeYuiBellyGrab(force=false){
  if(activeId!=='yui'||stageNum()<5)return false;
@@ -686,6 +709,7 @@ async function generateWeightEventOpeningAI(){
  const instructions=`恋愛シミュレーションゲームの体型変化イベント開始文を生成する。JSONのみ返す。
 形式:{"situation":"状況説明1〜3文","dialogue":"キャラクター本人の発言1〜2文","emotion":"normal|happy|embarrassed|angry|troubled|surprised","choices":["主人公の返答1","主人公の返答2","主人公の返答3"]}
 状況説明と発言は明確に分離する。主人公の行動や発言を勝手に確定しない。choicesは必ず3件で、下記の3つの元選択肢と同じ意味・順番を保ちながら、直前のキャラクター発言へ自然に返せる主人公の短い発言にする。体型を侮辱せず、現在Lvとキャラクター設定を守る。
+【結衣への主人公の話し方】相手が結衣の場合、主人公はかなり年下なので、告白成立前は敬語で礼儀正しく返す。ポジティブな声かけ・励まし・気遣い・節度ある褒め言葉は使ってよいが、「好きです」「惚れています」「結衣さんだから特別です」「付き合いたいです」など、主人公から明確な恋愛感情を伝える表現は禁止。恋愛感情を明言してよいのは告白イベントで交際を受け入れた後だけ。恋人後も敬語ベースを維持する。
 【最重要】イベントに「CG対応シーン」が指定されている場合、CGで起きている出来事を変更・追加・省略しない。状況説明とキャラクター発言は必ずそのCGの瞬間から自然につなげる。別の服、別の事故、別の場所へ勝手に置き換えない。`;
  const input=`キャラクター:${c.name} / ${c.age}歳
 体型Lv:${stage+1}/7 / 現在体重:${state.weight.toFixed(1)}kg
@@ -1170,8 +1194,8 @@ async function generateInitiativeOpeningAndChoices(c,ev,baseChoices){
  const fallback={narration:`${c.name}は少し考えてから、こちらへ話しかけた。`,dialogue:fallbackDialogue,emotion:'normal',choices:baseChoices.map(x=>x.label)};
  if(!gs.apiKey)return fallback;
  const intents=baseChoices.map((x,i)=>`${i+1}. 意図:${x.tone} / 好感度:${(x.affection||0)>=0?'+':''}${x.affection||0} / 機嫌:${(x.mood||0)>=0?'+':''}${x.mood||0}`).join('\n');
- const instructions=`恋愛シミュレーションゲームの「キャラクター発イベント」を生成する。JSONだけを返す。\n形式:{"narration":"情景1〜2文","dialogue":"キャラクターの発言1〜3文","emotion":"normal|happy|embarrassed|angry|troubled|surprised","choices":["主人公の返答1","主人公の返答2","主人公の返答3"]}\n最重要ルール:\n- dialogueとchoicesを必ず会話として噛み合わせる。dialogueで聞いていないことへの返答をchoicesに出さない。\n- choicesはdialogueの最後の問いかけ・発言に直接返せる短い主人公の台詞にする。\n- choicesは3件で、下記3つの選択意図と順番・好感度方向を保つ。ただし文言はその場面に合わせて全面的に言い換えてよい。\n- 3択同士の意味を重複させない。肯定・掘り下げ・否定/距離を置く等、元の意図差を保つ。\n- キャラクターの性格・口調・関係段階を守る。主人公の返答を先に書かない。`;
- const input=`キャラクター:${c.name} / ${c.age}歳\n性格:${c.personality}\n話し方:${c.speech}\n関係:${relationshipLabel()} / 好感度:${Math.round(state.affection)} / 機嫌:${Math.round(state.mood)}\nDAY ${state.day} / ${turns[state.turn].label}\nイベント種別:${ev.type}\n状況:${ev.situation}\n狙い:${ev.goal}\n3択の固定された意味・効果:\n${intents}\n${c.id==='yui'?'結衣は主人公よりかなり年上。年齢差イベント以外では毎回年齢差の話にしない。':''}`;
+ const instructions=`恋愛シミュレーションゲームの「キャラクター発イベント」を生成する。JSONだけを返す。\n形式:{"narration":"情景1〜2文","dialogue":"キャラクターの発言1〜3文","emotion":"normal|happy|embarrassed|angry|troubled|surprised","choices":["主人公の返答1","主人公の返答2","主人公の返答3"]}\n最重要ルール:\n- dialogueとchoicesを必ず会話として噛み合わせる。dialogueで聞いていないことへの返答をchoicesに出さない。\n- choicesはdialogueの最後の問いかけ・発言に直接返せる短い主人公の台詞にする。\n- choicesは3件で、下記3つの選択意図と順番・好感度方向を保つ。ただし文言はその場面に合わせて全面的に言い換えてよい。\n- 3択同士の意味を重複させない。肯定・掘り下げ・否定/距離を置く等、元の意図差を保つ。\n- キャラクターの性格・口調・関係段階を守る。主人公の返答を先に書かない。\n- 相手が結衣の場合、主人公はかなり年下なので、choicesは必ず礼儀正しい敬語にする。告白成立前は「好きです」「惚れています」「結衣さんだから特別です」「付き合いたいです」など明確な恋愛好意をchoicesに出さない。肯定・励まし・気遣い・節度ある褒め言葉は可。明確な恋愛感情は告白イベントで交際成立後のみ。恋人後も敬語ベースを維持する。馴れ馴れしいタメ口・命令口調・呼び捨ては禁止。`;
+ const input=`キャラクター:${c.name} / ${c.age}歳\n性格:${c.personality}\n話し方:${c.speech}\n関係:${relationshipLabel()} / 好感度:${Math.round(state.affection)} / 機嫌:${Math.round(state.mood)}\nDAY ${state.day} / ${turns[state.turn].label}\nイベント種別:${ev.type}\n状況:${ev.situation}\n狙い:${ev.goal}\n3択の固定された意味・効果:\n${intents}\n${c.id==='yui'?'結衣は主人公よりかなり年上。年齢差イベント以外では毎回年齢差の話にしない。主人公から結衣への返答は、告白成立前は必ず敬語で礼儀正しくする。ポジティブな声かけは可だが、「好き」「特別」「付き合いたい」など主人公側の明確な恋愛好意は告白成立後まで言わせない。恋人後は明確な好意表現を許可しつつ、敬語ベースを維持する。':''}`;
  const model=normalizeModel(gs.model),body={model,instructions,input,max_output_tokens:550};if(/^gpt-5/.test(model))body.reasoning={effort:'minimal'};
  try{
   const res=await fetch('https://api.openai.com/v1/responses',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+gs.apiKey},body:JSON.stringify(body)});
@@ -1219,11 +1243,14 @@ async function resolveInitiativeChoice(i){
    }
    const meal=mealFor(key);
    selfFoodName=meal.name;selfFoodEffect=applyGuaranteedFoodEffect(meal,'キャラからの食事提案');
-   state.selfFoodCount=(state.selfFoodCount||0)+1;maybeYuiOvereatHook('相手からの食事提案');
+   state.selfFoodCount=(state.selfFoodCount||0)+1;
    unlockCG(`self_food:${activeId}:${key}`,`${CHARACTERS[activeId].name}からの食事のお誘い`,cgPath(CHARACTERS[activeId],`food_${key}`));
  }
  const selectedLabel=(p.aiChoices&&p.aiChoices[i])||ch.label;
- const playerLine=String(selectedLabel||ch.label).replace(/^「|」$/g,'').trim();
+ const playerLine=await generatePlayerChoiceLine(
+   selectedLabel,
+   `直前の${CHARACTERS[activeId].name}の発言:${p.openingDialogue||''} / 選択意図:${ch.tone||ch.label} / イベント:${p.type}`
+ );
  addBubble('user',playerLine,'自発イベント選択');
  const ctx=`キャラクター発イベントへの主人公の返答。
 元イベント:${p.type}${p.type==='confession'?`（正式な告白イベント）`:''}
@@ -1236,6 +1263,10 @@ ${p.type==='confession'?`交際状態:${wasLover?'恋人':'未交際'}→${state
 この結果を覆さず、直前の自分の発言と主人公の実際の返答を受けた直後の反応を返すこと。選ばれていない選択肢の内容には反応しない。`;
  try{const r=await askAI(playerLine,null,null,ctx);addAIResponse(r,'自発イベント')}
  catch(e){addAIResponse({narration:`${CHARACTERS[activeId].name}はその返事を聞き、少しだけ表情を変えた。`,dialogue:'……そう。',emotion:ch.affection>=3?'embarrassed':ch.affection<0?'angry':'normal'},'自発イベント')}
+ if(selfFoodEffect){
+   addBubble('system',`${CHARACTERS[activeId].name}は${selfFoodName}を食べた。満腹度 +${selfFoodEffect.fullnessDelta}｜体重 +${selfFoodEffect.weightGain.toFixed(2)}kg｜抑止力 ${selfFoodEffect.restraintDelta>=0?'+':''}${selfFoodEffect.restraintDelta}`,'食事結果');
+   await maybeYuiOvereatHook('相手からの食事提案');
+ }
  addBubble('system',p.type==='confession'?(state.isLover?`告白成立。${CHARACTERS[activeId].name}と恋人になりました。`:(ch.confession==='wait'?'告白への返事を保留しました。':'告白を断りました。')):`好感度 ${ch.affection>=0?'+':''}${ch.affection}｜機嫌 ${ch.mood>=0?'+':''}${ch.mood}`,p.type==='confession'?'関係変化':'選択結果');
  remember(p.type==='confession'?'confession_result':'initiative_choice',p.type==='confession'?`${CHARACTERS[activeId].name}の告白に「${ch.label}」と返した`:`${CHARACTERS[activeId].name}からの話題に「${selectedLabel||ch.label}」と返した`,p.type==='confession'?5:(ch.affection>=4?4:2),p.type==='confession'?['relationship','confession']:['initiative']);
  state.pendingInitiatedChoice=null;save();render();renderInitiativeChoices();
@@ -1266,14 +1297,21 @@ function confessionEventDefinition(c){
  const r=confessionRule(c);
  return {type:'confession',situation:r.scene,goal:`${c.name}本人から主人公へ正式に恋愛感情を伝える告白シーン。現在体型Lv.${stageNum()}。${confessionBodyGuidance()} ${c.id==='yui'?'年齢差への迷いを告白の中心要素の一つにする。':''}`};
 }
-function confessionChoiceSet(){return [
- {label:'「俺も好き。付き合ってほしい」',affection:5,mood:6,tone:'告白を受け入れ、正式に恋人になる。',confession:'accept'},
- {label:'「嬉しい。でも少し考える時間がほしい」',affection:0,mood:-1,tone:'気持ちは否定しないが、今すぐ交際開始はしない。',confession:'wait'},
- {label:'「ごめん、恋人としては見られない」',affection:-10,mood:-8,tone:'恋愛関係になることを断る。',confession:'decline'}
-]}
+function confessionChoiceSet(c=CHARACTERS[activeId]){
+ if(c&&c.id==='yui')return [
+  {label:'「僕も結衣さんのことが好きです。よければ、僕と付き合ってください」',affection:5,mood:6,tone:'敬意を保ちながら告白を受け入れ、正式に恋人になる。',confession:'accept'},
+  {label:'「すごく嬉しいです。ただ、少しだけ考える時間をいただけますか」',affection:0,mood:-1,tone:'丁寧に気持ちを受け止めつつ、今すぐ交際開始はしない。',confession:'wait'},
+  {label:'「気持ちは本当に嬉しいです。でも、恋人としてはお応えできません」',affection:-10,mood:-8,tone:'礼儀正しく、恋愛関係になることを断る。',confession:'decline'}
+ ];
+ return [
+  {label:'「俺も好き。付き合ってほしい」',affection:5,mood:6,tone:'告白を受け入れ、正式に恋人になる。',confession:'accept'},
+  {label:'「嬉しい。でも少し考える時間がほしい」',affection:0,mood:-1,tone:'気持ちは否定しないが、今すぐ交際開始はしない。',confession:'wait'},
+  {label:'「ごめん、恋人としては見られない」',affection:-10,mood:-8,tone:'恋愛関係になることを断る。',confession:'decline'}
+ ];
+}
 async function startConfessionEvent(){
  if(!confessionEligible())return false;
- const c=CHARACTERS[activeId],ev=confessionEventDefinition(c),choices=confessionChoiceSet();
+ const c=CHARACTERS[activeId],ev=confessionEventDefinition(c),choices=confessionChoiceSet(c);
  state.pendingInitiatedChoice={type:'confession',situation:ev.situation,choices,confession:true,openingDialogue:'',openingNarration:''};state.lastInitiatedTurnKey=currentTurnKey();save();
  const ctx=`正式な告白イベント。主人公はまだ返答していない。
 キャラクター:${c.name}
@@ -1734,7 +1772,9 @@ function mealTierLabel(){const i=mealTier();return ['+0〜3kg未満','+3〜8kg',
 function getMealOffer(category){const cat=MEAL_CATEGORIES[category]||MEAL_CATEGORIES.japanese;const item=cat.tiers[mealTier()];return {...item,id:category,name:item.label,category,isGift:false}}
 function detectFoodOffer(text){let category=null;if(/ラーメン/.test(text))category='ramen';else if(/揚げ|唐揚げ|からあげ|フライ|とんかつ/.test(text))category='fried';else if(/ケーキ|スイーツ|デザート|パフェ|アイス|チョコ/.test(text))category='dessert';else if(/和食|定食|ご飯|ごはん|寿司|魚/.test(text))category='japanese';if(!category||!/食べ|行こ|行か|どう|奢|おご/.test(text))return null;return getMealOffer(category)}
 async function foodEvent(){
- if(blockingEventType()){showBlockingNotice();return}if(state&&state.pendingWeightEvent){addBubble('system','体重変化イベントの選択肢を先に選んでください。','イベント中');return}const offer=getMealOffer($('mealSelect').value);state.money=state.money??2500;if(state.money<offer.price){addBubble('system',`${offer.name}を勧めるには ¥${offer.price.toLocaleString()} 必要です。バイトでお金を稼いでください。`,'所持金不足');return}state.money-=offer.price;const pressure=state.lastFoodWasRefused&&state.lastFoodTurnKey===currentTurnKey();let pressureResult=null;if(pressure){pressureResult=pressurePenalty('いいから食べてよ');addBubble('system',pressureResult.summary,'強引な再提案')}addBubble('user',`${offer.name}食べない？`,`購入 ¥${offer.price.toLocaleString()}`);const result=resolveFoodOffer(offer);if(result&&result.accepted)maybeYuiOvereatHook('食事');addBubble('system',result.summary,'食事判定');log(`${offer.name}を購入 ¥${offer.price}。${result.accepted?'食べた':'断った'}`);try{const aiResult=await askAI(`${offer.name}食べない？`,result,pressureResult);addAIResponse(aiResult,`${turns[state.turn].label} / DAY ${state.day}`)}catch(e){const errMsg=e&&e.message?e.message:String(e);addBubble('system','AI接続エラー：'+errMsg+'\nデモ返答に切り替えました。','API ERROR',false);addAIResponse(demoStructuredReply('',result,pressureResult),`${turns[state.turn].label} / DAY ${state.day}`);log('API接続エラー: '+errMsg)}save();render()}
+ if(blockingEventType()){showBlockingNotice();return}if(state&&state.pendingWeightEvent){addBubble('system','体重変化イベントの選択肢を先に選んでください。','イベント中');return}const offer=getMealOffer($('mealSelect').value);state.money=state.money??2500;if(state.money<offer.price){addBubble('system',`${offer.name}を勧めるには ¥${offer.price.toLocaleString()} 必要です。バイトでお金を稼いでください。`,'所持金不足');return}state.money-=offer.price;const pressure=state.lastFoodWasRefused&&state.lastFoodTurnKey===currentTurnKey();let pressureResult=null;if(pressure){pressureResult=pressurePenalty('いいから食べてよ');addBubble('system',pressureResult.summary,'強引な再提案')}addBubble('user',`${offer.name}食べない？`,`購入 ¥${offer.price.toLocaleString()}`);const result=resolveFoodOffer(offer);addBubble('system',result.summary,'食事判定');log(`${offer.name}を購入 ¥${offer.price}。${result.accepted?'食べた':'断った'}`);try{const aiResult=await askAI(`${offer.name}食べない？`,result,pressureResult);addAIResponse(aiResult,`${turns[state.turn].label} / DAY ${state.day}`)}catch(e){const errMsg=e&&e.message?e.message:String(e);addBubble('system','AI接続エラー：'+errMsg+'\nデモ返答に切り替えました。','API ERROR',false);addAIResponse(demoStructuredReply('',result,pressureResult),`${turns[state.turn].label} / DAY ${state.day}`);log('API接続エラー: '+errMsg)}
+ if(result&&result.accepted)await maybeYuiOvereatHook('食事');
+ save();render()}
 function earlyStageGainBoost(){
  const st=evolutionStage();
  return [1.45,1.30,1.18,1.08,1,1,1][st]||1;
@@ -1849,10 +1889,11 @@ ${accepted?`好感度:${before.affection}→${state.affection}
 
  let txt=accepted?`${c.name}は${g.name}を受け取った。相性 ${pref>=0?'+':''}${pref}｜好感度 +${ag}｜機嫌 +${mg}`:`${c.name}は${g.name}を断った。受取確率 ${Math.round(chance)}%`;
  if(foodEffect)txt+=`\n食べ物なので食べた：満腹度 +${foodEffect.fullnessDelta}｜体重 +${foodEffect.weightGain.toFixed(2)}kg｜抑止力 ${foodEffect.restraintDelta>=0?'+':''}${foodEffect.restraintDelta}`;
- if(foodEffect)maybeYuiOvereatHook('食べ物プレゼント');
  if(accepted)unlockCG(`gift:${activeId}:${g.name}`,`${c.name}へのプレゼント`,cgPath(c,'gift'));
  if(accepted)remember('gift',`${c.name}は主人公から「${g.name}」を受け取った`,3,['gift']);else if(g.baseAffection>=5)remember('gift',`${c.name}は主人公からの「${g.name}」を断った`,2,['gift']);
- addBubble('system',txt,'プレゼント判定');log(`${g.name}を購入。${accepted?'受取':'拒否'}${foodEffect?' / 食事効果':''}`);save();render();
+ addBubble('system',txt,'プレゼント判定');log(`${g.name}を購入。${accepted?'受取':'拒否'}${foodEffect?' / 食事効果':''}`);
+ if(foodEffect)await maybeYuiOvereatHook('食べ物プレゼント');
+ save();render();
  if(btn){btn.disabled=false;btn.textContent='プレゼントする'}
 }
 function dateAcceptance(c,key){const pref=(DATE_PREFERENCES[c.id]||{})[key]||0;let chance=35+state.affection*.62+(state.mood-50)*.16+pref*7+relationshipMechanicBonus();if(c.id==='erika'&&state.affection<35)chance-=18;if(c.id==='yui'&&state.affection<45)chance-=8;if(c.id==='rei'&&state.affection<35)chance-=8;if(c.id==='risa')chance+=5;return {chance:clamp(chance,5,98),pref}}
@@ -1951,6 +1992,7 @@ ${choice.restraint?`抑止力 ${before.restraint}→${state.restraint}\n`:''}${f
  const aiOK=await showEventAI(playerLine,ctx,'デートイベント');
  if(!aiOK){addNarration(`${c.name}はその選択に合わせて行動し、こちらへ反応を返した。`,'デートイベント')}
  addBubble('system',txt,'デートイベント結果');
+ if(foodEffect)await maybeYuiOvereatHook(`${dateName}デート`);
  const dateLv=stageNum(),dateKey=state.pendingDate.key;
  const datePath=memoryCGPath('date',dateKey,dateLv);
  unlockCG(`date:${activeId}:${dateKey}:${dateLv}`,`${c.name}と${dateName} Lv.${dateLv}`,datePath);
@@ -1958,7 +2000,6 @@ ${choice.restraint?`抑止力 ${before.restraint}→${state.restraint}\n`:''}${f
  if(dateKey==='shopping'&&activeId==='yui'){
    addBubble('system',`試着CG Lv.${dateLv} を思い出に登録しました。`,'試着イベント');
  }
- if(foodEffect)maybeYuiOvereatHook(`${dateName}デート`);
  remember('date',`${c.name}と${dateName}へ行き、主人公は「${choice.label}」を選んだ${foodEffect?`。${choice.food.name}も食べた`:''}`,4,['date']);
  log(`${dateName}: ${choice.label}${foodEffect?` / 体重+${foodEffect.weightGain.toFixed(2)}kg`:''}`);
  state.pendingDate=null;save();render();renderDateEvent();advance();
@@ -2241,7 +2282,7 @@ async function generatePlayerChoiceLine(choiceLabel,eventContext=''){
 返答する相手は${c.name}。
 選択肢の意味を絶対に変えず、自然な会話文として1〜2文に言い換える。
 主人公の性格を勝手に極端化しない。説明文、情景描写、括弧、JSON、引用符は不要。
-相手の返答まで書かない。主人公が実際に口にする日本語だけ返す。`;
+相手の返答まで書かない。主人公が実際に口にする日本語だけ返す。\n${c.id==='yui'?'【最重要】結衣は主人公よりかなり年上。主人公は結衣に対して礼儀正しい敬語を使う。告白成立前は「〜です」「〜ます」「〜ですか？」「〜しましょう」を基本とし、タメ口・命令口調・呼び捨ては避ける。また告白成立前は「好きです」「惚れています」「結衣さんだから特別です」「付き合いたいです」「ずっとそばにいたいです」など、主人公から恋愛感情を明確に伝える表現を禁止する。褒める場合は「似合っています」「素敵ですね」「大丈夫ですよ」「一緒にいると楽しいです」など、好意的だが恋愛確定ではない表現に留める。告白イベントで交際が成立した後からは明確な恋愛好意を表現してよい。恋人になった後も急にタメ口へ切り替えず、敬語をベースに親しさが少し増す程度にする。':''}`;
  const input=`選択肢:${choiceLabel}
 選択肢の意図:${eventContext||choiceLabel}
 現在の関係:${relationshipLabel()} / 好感度${Math.round(state.affection)}
