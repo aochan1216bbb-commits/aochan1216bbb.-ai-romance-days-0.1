@@ -146,7 +146,7 @@ details{margin-top:10px}.settingsGrid{display:grid;gap:8px;margin-top:10px}.sett
   <div id="cgViewerTitle" class="cgViewerTitle"></div>
 </div>
 <script>
-const APP_BUILD='20260819-yui-weight-cg-sync-v1';
+const APP_BUILD='20260819-gift-affection-nerf-v6';
 
 const CHARACTERS={
  risa:{id:'risa',name:'梨沙',age:18,height:153,startWeight:45,personality:'明るい、活発、前向き、しっかり者',speech:'タメ口、普通',relationship:'幼馴染かつクラスメイト',affection:50,mood:50,restraint:50,appetite:'普通',gainTendency:'普通',exercise:'普通',bodyView:'少し痩せたいと思っている。太りたくはない。',favoriteFoods:['甘いもの','パン類'],features:'幼馴染である主人公が少し気になっている。そのため、主人公にどう見られているかを気にする。ちょっと泣き虫。',rules:'基本ポジティブに話す。体重が増えると少しネガティブになる。抑止力が高いと食事は断る。甘いものの場合は抑止力が高くても断らない場合がある。',imageBase:'risa'},
@@ -228,9 +228,10 @@ async function testOpenAIConnection(){
  }catch(err){setApiStatus(`API接続失敗：${err.message||err}`,'error')}
  finally{if(btn){btn.disabled=false;btn.textContent='接続テスト'}}
 }
-function defaultState(id){const c=CHARACTERS[id];return {characterId:id,day:1,turn:0,affection:c.affection,mood:c.mood,fullness:20,hunger:40,restraint:c.restraint,weight:c.startWeight,startWeight:c.startWeight,history:[],gameLog:[],favoriteFoods:[...c.favoriteFoods],lastFoodResult:null,foodOfferTurnKey:null,foodPressureCount:0,money:2500,workCount:0,lastFoodTurnKey:null,lastFoodWasRefused:false,weightInterest:0,weightStage:0,pendingDate:null,seenWeightEvents:[],pendingWeightEvent:null,memories:[],foodExperience:{},growthTraits:{},memorySeq:0,lastInitiatedTurnKey:null,initiatedEventCount:0,lastRelationshipStage:null,pendingInitiatedChoice:null,lastEmotion:'normal',conversationRewards:[],cgGallery:[],selfFoodCount:0,yuiSpecialFlags:{},pendingRestraintEvent:null,restraintTalkRewards:[],lastNightEventDay:0,pendingNightChoice:null,nightEventHistory:[],dailyFoodLoad:0,dailyFoodCount:0,dailyFoodNames:[],todayDateKey:null,todayDateName:null,isLover:false,confessionCompleted:false,confessionDeferredUntilDay:0,ageGapTalkCount:0}}
+function defaultState(id){const c=CHARACTERS[id];return {characterId:id,day:1,turn:0,affection:c.affection,mood:c.mood,fullness:20,hunger:40,restraint:c.restraint,weight:c.startWeight,startWeight:c.startWeight,history:[],gameLog:[],favoriteFoods:[...c.favoriteFoods],lastFoodResult:null,foodOfferTurnKey:null,foodPressureCount:0,money:2500,workCount:0,lastFoodTurnKey:null,lastFoodWasRefused:false,weightInterest:0,weightStage:0,pendingDate:null,seenWeightEvents:[],pendingWeightEvent:null,memories:[],foodExperience:{},growthTraits:{},memorySeq:0,lastInitiatedTurnKey:null,initiatedEventCount:0,lastRelationshipStage:null,pendingInitiatedChoice:null,lastEmotion:'normal',conversationRewards:[],cgGallery:[],selfFoodCount:0,yuiSpecialFlags:{},pendingRestraintEvent:null,restraintTalkRewards:[],lastNightEventDay:0,pendingNightChoice:null,nightEventHistory:[],seenNightEventIds:[],seenNightEventStage:1,dailyFoodLoad:0,dailyFoodCount:0,dailyFoodNames:[],todayDateKey:null,todayDateName:null,isLover:false,confessionCompleted:false,confessionDeferredUntilDay:0,ageGapTalkCount:0,lastYuiInitiatedDay:0}}
 function stateKey(id){return 'aiRomanceState_v3_'+id} function loadState(id){const base=defaultState(id),saved=safeGet(stateKey(id),{});const merged={...base,...saved};if(!Array.isArray(merged.history))merged.history=[];if(!Array.isArray(merged.gameLog))merged.gameLog=[];if(!Array.isArray(merged.favoriteFoods))merged.favoriteFoods=[...CHARACTERS[id].favoriteFoods];if(!Array.isArray(merged.seenWeightEvents))merged.seenWeightEvents=[];if(!('pendingWeightEvent' in merged))merged.pendingWeightEvent=null;if(!Array.isArray(merged.memories))merged.memories=[];if(!merged.foodExperience||typeof merged.foodExperience!=='object')merged.foodExperience={};if(!merged.growthTraits||typeof merged.growthTraits!=='object')merged.growthTraits={};merged.memorySeq=merged.memorySeq||0;if(!('lastInitiatedTurnKey' in merged))merged.lastInitiatedTurnKey=null;merged.initiatedEventCount=merged.initiatedEventCount||0;if(!('lastRelationshipStage' in merged))merged.lastRelationshipStage=null;
 if(!('pendingInitiatedChoice' in merged))merged.pendingInitiatedChoice=null;
+if(!('lastYuiInitiatedDay' in merged))merged.lastYuiInitiatedDay=0;
 if(!('lastEmotion' in merged))merged.lastEmotion='normal';
 if(!Array.isArray(merged.conversationRewards))merged.conversationRewards=[];
 if(!Array.isArray(merged.cgGallery))merged.cgGallery=[];
@@ -240,6 +241,16 @@ if(!Array.isArray(merged.restraintTalkRewards))merged.restraintTalkRewards=[];
 merged.lastNightEventDay=merged.lastNightEventDay||0;
 if(!('pendingNightChoice' in merged))merged.pendingNightChoice=null;
 if(!Array.isArray(merged.nightEventHistory))merged.nightEventHistory=[];
+if(!Array.isArray(merged.seenNightEventIds))merged.seenNightEventIds=[];
+{
+ const gain=Math.max(0,Number(merged.weight||0)-Number(merged.startWeight||0));
+ const currentNightStage=gain<3?1:gain<8?2:gain<15?3:gain<25?4:gain<40?5:gain<60?6:7;
+ if(!Number.isFinite(Number(merged.seenNightEventStage)))merged.seenNightEventStage=currentNightStage;
+ if(Number(merged.seenNightEventStage)!==currentNightStage){
+   merged.seenNightEventIds=[];
+   merged.seenNightEventStage=currentNightStage;
+ }
+}
 merged.dailyFoodLoad=Number(merged.dailyFoodLoad||0);
 merged.dailyFoodCount=Number(merged.dailyFoodCount||0);
 if(!Array.isArray(merged.dailyFoodNames))merged.dailyFoodNames=[];
@@ -753,7 +764,12 @@ ${c.id==='yui'?'CGで起きた出来事をなかったことにしたり別シ�
  queueWeightEventIfNeeded(c,stage);
 }
 function updateEvolution(c){
- const d=weightGainAmount(),stage=evolutionStage(); state.weightStage=stage;
+ const d=weightGainAmount(),stage=evolutionStage();
+ if(c.id==='yui'&&Number(state.seenNightEventStage)!==stage+1){
+   state.seenNightEventIds=[];
+   state.seenNightEventStage=stage+1;
+ }
+ state.weightStage=stage;
  if(c.id==='rei'){
    // 怜は増加を重ねるほど「増えること」への興味が育つ。興味50以上で食後の抑止力上昇を停止。
    const target=Math.min(100,Math.round(d*2.2 + stage*7));
@@ -896,11 +912,14 @@ function initiatedEventChance(){
  const base=[12,16,21,27,34,40,45][relationshipIndex()]||15;
  let bonus=0;
  const c=CHARACTERS[activeId],g=state.growthTraits||{};
- if(c.id==='yui'&&(g.oilyPreference||0)>=45)bonus+=8;
+ if(c.id==='yui'&&(g.oilyPreference||0)>=45)bonus+=4;
  if(c.id==='rei'&&(state.weightInterest||0)>=35)bonus+=8;
  if(c.id==='erika'&&relationshipIndex()>=3)bonus+=6;
  if((c.id==='risa'&&(g.bodyConcern||0)>=35)||(c.id==='emi'&&(g.weightAlarm||0)>=35))bonus+=5;
- return clamp(base+bonus,8,55);
+ let chance=base+bonus;
+ // 結衣は年齢差・食嗜好など専用イベント候補が多いため、他キャラより発生頻度を抑える。
+ if(c.id==='yui')chance*=0.62;
+ return clamp(chance,c.id==='yui'?7:8,c.id==='yui'?32:55);
 }
 function chooseInitiatedEvent(){
  const c=CHARACTERS[activeId],g=state.growthTraits||{},stage=relationshipStage(),fav=(state.favoriteFoods||[])[0]||'好きなもの';
@@ -927,8 +946,7 @@ function chooseInitiatedEvent(){
     situation:`${c.name}は主人公よりかなり年上であることを改めて意識している。好感度が高いほど惹かれている一方、「自分が相手でいいのか」「若い主人公の将来を邪魔しないか」という迷いも強い。`,
     goal:'年齢差そのものを自然に話題にし、主人公の気持ちを確かめるような問いかけをする。説教調にせず、結衣らしい柔らかさと少しの自虐を残す。'
    };
-   candidates.push(ageGapEvent,ageGapEvent);
-   if(relationshipIndex()>=3)candidates.push(ageGapEvent);
+   candidates.push(ageGapEvent);
  }
  if(c.id==='yui'&&(g.oilyPreference||0)>=35)candidates.push({
    type:'craving',
@@ -1079,44 +1097,79 @@ function evaluateRestraintConversation(text){
 function initiativeChoiceSet(ev){
  const c=CHARACTERS[activeId],ri=relationshipIndex();
  if(ev.type==='self_food')return [
-  {label:'「いいね、行こう」',affection:4,mood:4,tone:'相手からの食事提案を喜んで受け入れた。',selfFood:'accept'},
-  {label:'「何が食べたい？」',affection:3,mood:3,tone:'食べること自体を否定せず、相手の希望を聞いた。',selfFood:'ask'},
-  {label:'「今日はやめておこう」',affection:-1,mood:-2,tone:'相手からの食事提案を断った。',selfFood:'decline'}
- ];
- const generic=[
-  {label:'相手の話をちゃんと聞く',affection:3,mood:2,tone:'主人公は話を遮らず、興味を持って続きを聞いた。'},
-  {label:'少し踏み込んで聞いてみる',affection:ri>=2?4:1,mood:ri>=2?2:0,tone:'主人公は相手自身に興味を示し、一歩踏み込んだ。'},
-  {label:'軽く受け流す',affection:-1,mood:-1,tone:'主人公は深く取り合わず、軽く受け流した。'}
- ];
- if(c.id==='erika'){
-   if(ri<=1)return [
-    {label:'「絵里香はどうなの？」',affection:4,mood:3,tone:'ツンを茶化さず、自然に絵里香自身へ興味を返した。'},
-    {label:'「別に予定ないよ」',affection:2,mood:1,tone:'余計に距離を詰めず、普通に答えた。'},
-    {label:'「俺のこと気になるの？」',affection:-2,mood:-2,tone:'関係が浅いのにツンを直接指摘して距離を詰めた。'}
-   ];
-   return [
-    {label:'「絵里香と一緒なら空けるよ」',affection:5,mood:3,tone:'好意を隠さず、ただし決定権は絵里香に残した。'},
-    {label:'「絵里香は何したい？」',affection:4,mood:3,tone:'絵里香の希望を優先して聞いた。'},
-    {label:'「なんでそんなこと聞くの？」',affection:0,mood:-1,tone:'絵里香の強がりを真正面から問い詰めた。'}
-   ];
- }
- if(c.id==='rei'&&ev.type==='weight_curiosity')return [
-  {label:'「どんな変化が面白い？」',affection:4,mood:2,tone:'怜の興味そのものを否定せず、理由を聞いた。'},
-  {label:'「気になるなら一緒に考えよう」',affection:3,mood:2,tone:'怜の関心に付き合う姿勢を見せた。'},
-  {label:'「変なこと気にするね」',affection:-2,mood:-2,tone:'怜の関心を軽く否定した。'}
+  {label:'「いいね、行こう」',affection:4,mood:4,tone:'相手自身が食べたいと提案した内容を肯定し、一緒に食べに行く。',selfFood:'accept'},
+  {label:'「どんなのが食べたい？」',affection:3,mood:3,tone:'提案を否定せず、相手が今食べたいものや希望をもう少し聞く。',selfFood:'ask'},
+  {label:'「今日はやめておこう」',affection:-1,mood:-2,tone:'相手の食事提案を今回は断り、食べに行かない。',selfFood:'decline'}
  ];
  if(c.id==='yui'&&ev.type==='age_gap')return [
-  {label:'「年齢差は気にしてないよ」',affection:4,mood:3,tone:'年齢差そのものを否定せず、結衣本人を見ていると伝える。',ageGap:true},
-  {label:'「結衣さんはどう思ってる？」',affection:3,mood:2,tone:'結衣の不安や本音を急かさず聞く。',ageGap:true},
-  {label:'「確かに結構離れてるね」',affection:-1,mood:-2,tone:'年齢差を事実として強く意識させ、結衣の不安を少し刺激する。',ageGap:true}
+  {label:'「年齢差は気にしてないよ」',affection:4,mood:3,tone:'年齢差ではなく結衣本人を見ていると安心させる。',ageGap:true},
+  {label:'「結衣さんはどう思ってる？」',affection:3,mood:2,tone:'結衣自身が年齢差をどう感じているのか、本音を急かさず聞く。',ageGap:true},
+  {label:'「確かに結構離れてるね」',affection:-1,mood:-2,tone:'年齢差が大きいことを率直に認め、結衣の不安を少し刺激する。',ageGap:true}
  ];
  if(c.id==='yui'&&ev.type==='craving')return [
-  {label:'「食べたいものある？」',affection:4,mood:3,tone:'結衣の気持ちを責めず、希望を聞いた。'},
-  {label:'「最近そういうの好きだね」',affection:2,mood:0,tone:'最近の嗜好変化に気づいたことを伝えた。'},
-  {label:'「また太るよ？」',affection:-3,mood:-4,tone:'体型への不安を直接刺激した。'}
+  {label:'「何が食べたくなったの？」',affection:4,mood:3,tone:'結衣の食欲や嗜好を責めず、具体的に何が気になっているのか聞く。'},
+  {label:'「最近そういうの好きになったね」',affection:2,mood:0,tone:'最近の嗜好変化に気づいていることを、責めずに伝える。'},
+  {label:'「ちょっと控えた方がいいんじゃない？」',affection:-2,mood:-3,tone:'最近の食生活を心配し、やや抑える方向へ話を向ける。'}
  ];
- return generic;
+ if(c.id==='rei'&&ev.type==='weight_curiosity')return [
+  {label:'「どんな変化が面白い？」',affection:4,mood:2,tone:'怜の体型変化への興味を否定せず、何を面白いと感じているのか聞く。'},
+  {label:'「自分ではどう感じてる？」',affection:3,mood:2,tone:'主人公の評価を押しつけず、怜自身の感覚を聞く。'},
+  {label:'「あまり気にしない方がいいんじゃない？」',affection:-1,mood:-1,tone:'怜の関心に深入りせず、変化を気にしすぎないよう促す。'}
+ ];
+ if(c.id==='risa'&&ev.type==='body_concern')return [
+  {label:'「どの辺が気になる？」',affection:4,mood:2,tone:'梨沙の不安を茶化さず、具体的に気になっている点を聞く。'},
+  {label:'「無理に気にしなくてもいいと思うよ」',affection:3,mood:2,tone:'体型を評価せず、梨沙が必要以上に気にしないよう安心させる。'},
+  {label:'「食べすぎたんじゃない？」',affection:-2,mood:-3,tone:'最近の食生活が原因ではないかと率直に指摘する。'}
+ ];
+ if(c.id==='emi'&&ev.type==='training')return [
+  {label:'「動きにくいところある？」',affection:4,mood:2,tone:'絵美の運動時の違和感を真面目に聞き、具体的な影響を確かめる。'},
+  {label:'「少し休んだ方がいいんじゃない？」',affection:2,mood:1,tone:'部活を否定せず、身体を気遣って休息を提案する。'},
+  {label:'「練習不足なんじゃない？」',affection:-2,mood:-3,tone:'体型より努力不足の可能性をぶっきらぼうに指摘する。'}
+ ];
+ if(c.id==='erika'&&ev.type==='attention'){
+   if(ri<=1)return [
+    {label:'「絵里香はどうしたいの？」',affection:4,mood:3,tone:'強がりを茶化さず、絵里香自身の希望を自然に聞く。'},
+    {label:'「別に予定は決めてないよ」',affection:2,mood:1,tone:'距離を詰めすぎず、聞かれたことへ普通に答える。'},
+    {label:'「俺のこと気になるの？」',affection:-2,mood:-2,tone:'関係が浅い段階で、絵里香の好意を直接指摘して踏み込む。'}
+   ];
+   return [
+    {label:'「絵里香と一緒なら空けるよ」',affection:5,mood:3,tone:'好意を隠さず、絵里香と過ごす意思を示す。'},
+    {label:'「絵里香は何したい？」',affection:4,mood:3,tone:'絵里香の希望を優先して聞く。'},
+    {label:'「なんでそんなこと聞くの？」',affection:0,mood:-1,tone:'絵里香の問いかけの意図を正面から尋ねる。'}
+   ];
+ }
+ if(ev.type==='favorite')return [
+  {label:'「それ、そんなに好きなんだね」',affection:3,mood:2,tone:'相手の好物への気持ちを肯定的に受け止める。'},
+  {label:'「どこが一番好き？」',affection:4,mood:2,tone:'好物について相手自身の好みや理由をもう少し聞く。'},
+  {label:'「またその話？」',affection:-1,mood:-2,tone:'好物の話題にあまり興味を示さず、少し素っ気なく返す。'}
+ ];
+ return [
+  {label:'相手の話に自然に返す',affection:3,mood:2,tone:'直前の相手の発言内容を受け止め、その内容に直接返答する。'},
+  {label:'相手の本音をもう少し聞く',affection:ri>=2?4:2,mood:ri>=2?2:1,tone:'直前の発言に沿って、相手の考えや気持ちを一段だけ掘り下げる。'},
+  {label:'話題を軽く流す',affection:-1,mood:-1,tone:'直前の話題には深く踏み込まず、短く返して流す。'}
+ ];
 }
+
+async function generateInitiativeOpeningAndChoices(c,ev,baseChoices){
+ const gs=globalSettings();
+ const fallbackDialogue=ev.type==='self_food'?'……ねえ、今日は何か食べに行かない？':ev.type==='age_gap'?'……私の方がずっと年上だけど、やっぱり気になったりする？':ev.type==='craving'?'……最近、ちょっとこってりしたものが気になるんだよね。':ev.type==='weight_curiosity'?'……最近の変化、自分でも少し気になってる。あなたはどう見える？':ev.type==='training'?'……最近ちょっと動きの感覚が違うんだよね。どう思う？':ev.type==='body_concern'?'……最近、服の感じが少し違う気がするんだけど、気のせいかな？':'……ちょっと聞いてもいい？';
+ const fallback={narration:`${c.name}は少し考えてから、こちらへ話しかけた。`,dialogue:fallbackDialogue,emotion:'normal',choices:baseChoices.map(x=>x.label)};
+ if(!gs.apiKey)return fallback;
+ const intents=baseChoices.map((x,i)=>`${i+1}. 意図:${x.tone} / 好感度:${(x.affection||0)>=0?'+':''}${x.affection||0} / 機嫌:${(x.mood||0)>=0?'+':''}${x.mood||0}`).join('\n');
+ const instructions=`恋愛シミュレーションゲームの「キャラクター発イベント」を生成する。JSONだけを返す。\n形式:{"narration":"情景1〜2文","dialogue":"キャラクターの発言1〜3文","emotion":"normal|happy|embarrassed|angry|troubled|surprised","choices":["主人公の返答1","主人公の返答2","主人公の返答3"]}\n最重要ルール:\n- dialogueとchoicesを必ず会話として噛み合わせる。dialogueで聞いていないことへの返答をchoicesに出さない。\n- choicesはdialogueの最後の問いかけ・発言に直接返せる短い主人公の台詞にする。\n- choicesは3件で、下記3つの選択意図と順番・好感度方向を保つ。ただし文言はその場面に合わせて全面的に言い換えてよい。\n- 3択同士の意味を重複させない。肯定・掘り下げ・否定/距離を置く等、元の意図差を保つ。\n- キャラクターの性格・口調・関係段階を守る。主人公の返答を先に書かない。`;
+ const input=`キャラクター:${c.name} / ${c.age}歳\n性格:${c.personality}\n話し方:${c.speech}\n関係:${relationshipLabel()} / 好感度:${Math.round(state.affection)} / 機嫌:${Math.round(state.mood)}\nDAY ${state.day} / ${turns[state.turn].label}\nイベント種別:${ev.type}\n状況:${ev.situation}\n狙い:${ev.goal}\n3択の固定された意味・効果:\n${intents}\n${c.id==='yui'?'結衣は主人公よりかなり年上。年齢差イベント以外では毎回年齢差の話にしない。':''}`;
+ const model=normalizeModel(gs.model),body={model,instructions,input,max_output_tokens:550};if(/^gpt-5/.test(model))body.reasoning={effort:'minimal'};
+ try{
+  const res=await fetch('https://api.openai.com/v1/responses',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+gs.apiKey},body:JSON.stringify(body)});
+  if(!res.ok)throw new Error('HTTP '+res.status);
+  const data=await res.json(),raw=extractResponseText(data);if(!raw)throw new Error('empty');
+  const txt=String(raw).trim().replace(/^```(?:json)?\s*/i,'').replace(/```$/,'').trim(),obj=JSON.parse(txt);
+  const choices=Array.isArray(obj.choices)?obj.choices.map(x=>String(x||'').trim()).filter(Boolean).slice(0,3):[];
+  if(choices.length!==3)throw new Error('choices');
+  return {narration:String(obj.narration||fallback.narration),dialogue:String(obj.dialogue||fallback.dialogue),emotion:normalizeEmotion(obj.emotion),choices};
+ }catch(e){return fallback}
+}
+
 function renderInitiativeChoices(){
  const panel=$('initiativeChoicePanel'),box=$('initiativeChoices');
  if(!panel||!box)return;
@@ -1126,7 +1179,7 @@ function renderInitiativeChoices(){
  $('initiativeChoiceText').textContent=p.type==='confession'?`${CHARACTERS[activeId].name}から告白された。どう返す？`:`${CHARACTERS[activeId].name}から話しかけてきた。どう返す？`;
  box.innerHTML='';
  p.choices.forEach((ch,i)=>{
-   const b=document.createElement('button');b.type='button';b.className='btn';b.textContent=ch.label;
+   const b=document.createElement('button');b.type='button';b.className='btn';b.textContent=(p.aiChoices&&p.aiChoices[i])||ch.label;
    b.addEventListener('click',()=>resolveInitiativeChoice(i));box.appendChild(b);
  });
 }
@@ -1155,19 +1208,22 @@ async function resolveInitiativeChoice(i){
    state.selfFoodCount=(state.selfFoodCount||0)+1;maybeYuiOvereatHook('相手からの食事提案');
    unlockCG(`self_food:${activeId}:${key}`,`${CHARACTERS[activeId].name}からの食事のお誘い`,cgPath(CHARACTERS[activeId],`food_${key}`));
  }
- const playerLine=await generatePlayerChoiceLine(ch.label,ch.tone);
+ const selectedLabel=(p.aiChoices&&p.aiChoices[i])||ch.label;
+ const playerLine=String(selectedLabel||ch.label).replace(/^「|」$/g,'').trim();
  addBubble('user',playerLine,'自発イベント選択');
  const ctx=`キャラクター発イベントへの主人公の返答。
 元イベント:${p.type}${p.type==='confession'?`（正式な告白イベント）`:''}
+イベント状況:${p.situation||''}
+直前の${CHARACTERS[activeId].name}の発言:${p.openingDialogue||''}
 主人公の選択方針:${ch.label}\n主人公の実際の発言:${playerLine}\n選択の意味:${ch.tone}
 ゲーム側確定結果: 好感度 ${before}→${state.affection} (${ch.affection>=0?'+':''}${ch.affection}) / 機嫌 ${ch.mood>=0?'+':''}${ch.mood}
 ${selfFoodEffect?`相手自身の提案で実際に${selfFoodName}を食べた。体重+${selfFoodEffect.weightGain.toFixed(2)}kg / 満腹度+${selfFoodEffect.fullnessDelta} / 抑止力${selfFoodEffect.restraintDelta>=0?'+':''}${selfFoodEffect.restraintDelta}。この事実を変更しないこと。`:''}
 ${p.type==='confession'?`交際状態:${wasLover?'恋人':'未交際'}→${state.isLover?'恋人':'未交際'}。${ch.confession==='accept'?'告白を受け入れたので、ここから正式に恋人として反応する。':'告白への返答を尊重し、まだ恋人扱いしない。'}`:''}
-この結果を覆さず、選択を受けた直後の反応を返すこと。`;
+この結果を覆さず、直前の自分の発言と主人公の実際の返答を受けた直後の反応を返すこと。選ばれていない選択肢の内容には反応しない。`;
  try{const r=await askAI(playerLine,null,null,ctx);addAIResponse(r,'自発イベント')}
  catch(e){addAIResponse({narration:`${CHARACTERS[activeId].name}はその返事を聞き、少しだけ表情を変えた。`,dialogue:'……そう。',emotion:ch.affection>=3?'embarrassed':ch.affection<0?'angry':'normal'},'自発イベント')}
  addBubble('system',p.type==='confession'?(state.isLover?`告白成立。${CHARACTERS[activeId].name}と恋人になりました。`:(ch.confession==='wait'?'告白への返事を保留しました。':'告白を断りました。')):`好感度 ${ch.affection>=0?'+':''}${ch.affection}｜機嫌 ${ch.mood>=0?'+':''}${ch.mood}`,p.type==='confession'?'関係変化':'選択結果');
- remember(p.type==='confession'?'confession_result':'initiative_choice',p.type==='confession'?`${CHARACTERS[activeId].name}の告白に「${ch.label}」と返した`:`${CHARACTERS[activeId].name}からの話題に「${ch.label}」と返した`,p.type==='confession'?5:(ch.affection>=4?4:2),p.type==='confession'?['relationship','confession']:['initiative']);
+ remember(p.type==='confession'?'confession_result':'initiative_choice',p.type==='confession'?`${CHARACTERS[activeId].name}の告白に「${ch.label}」と返した`:`${CHARACTERS[activeId].name}からの話題に「${selectedLabel||ch.label}」と返した`,p.type==='confession'?5:(ch.affection>=4?4:2),p.type==='confession'?['relationship','confession']:['initiative']);
  state.pendingInitiatedChoice=null;save();render();renderInitiativeChoices();
 }
 const CONFESSION_RULES={
@@ -1204,7 +1260,7 @@ function confessionChoiceSet(){return [
 async function startConfessionEvent(){
  if(!confessionEligible())return false;
  const c=CHARACTERS[activeId],ev=confessionEventDefinition(c),choices=confessionChoiceSet();
- state.pendingInitiatedChoice={type:'confession',situation:ev.situation,choices,confession:true};state.lastInitiatedTurnKey=currentTurnKey();save();
+ state.pendingInitiatedChoice={type:'confession',situation:ev.situation,choices,confession:true,openingDialogue:'',openingNarration:''};state.lastInitiatedTurnKey=currentTurnKey();save();
  const ctx=`正式な告白イベント。主人公はまだ返答していない。
 キャラクター:${c.name}
 現在の関係:${relationshipLabel()} / 好感度:${Math.round(state.affection)}
@@ -1221,22 +1277,22 @@ async function maybeCharacterInitiatedEvent(force=false){
  if(confessionEligible())return startConfessionEvent();
  if(!state||!activeId||state.pendingWeightEvent||state.pendingDate||state.pendingInitiatedChoice)return false;
  const key=currentTurnKey();if(state.lastInitiatedTurnKey===key)return false;
+ const c=CHARACTERS[activeId];
+ // 結衣は専用イベント候補が多いため、通常のキャラ発イベントは1日最大1回に制限。
+ if(!force&&c.id==='yui'&&(state.lastYuiInitiatedDay||0)===state.day)return false;
  const chance=initiatedEventChance();if(!force&&Math.random()*100>=chance)return false;
  state.lastInitiatedTurnKey=key;state.initiatedEventCount=(state.initiatedEventCount||0)+1;
- const c=CHARACTERS[activeId],ev=chooseInitiatedEvent();
+ if(c.id==='yui')state.lastYuiInitiatedDay=state.day;
+ const ev=chooseInitiatedEvent();
  const choices=initiativeChoiceSet(ev);
- state.pendingInitiatedChoice={type:ev.type,situation:ev.situation,choices};save();
- const ctx=`キャラクター発の自発イベント。
-主人公はまだ何も発言していない。
-キャラクター:${c.name}
-現在の関係段階:${relationshipLabel()}
-現在時刻:DAY ${state.day} / ${turns[state.turn].label}
-イベントの状況:${ev.situation}
-今回の狙い:${ev.goal}
-このあと主人公には3つの返答選択肢が表示される。
-主人公の返答を勝手に書かず、返答しやすい問いかけで終えること。`;
- try{const result=await askAI('（相手から自分に話しかけてくる。主人公はまだ何も言っていない）',null,null,ctx);addAIResponse(result,'キャラ発イベント')}
- catch(e){addAIResponse({narration:`${c.name}はふと思い出したようにこちらへ視線を向けた。`,dialogue:'……ちょっと聞いていい？',emotion:'normal'},'キャラ発イベント')}
+ state.pendingInitiatedChoice={type:ev.type,situation:ev.situation,goal:ev.goal,foodKey:ev.foodKey||null,choices,aiChoices:null,openingDialogue:'',openingNarration:''};save();
+ const generated=await generateInitiativeOpeningAndChoices(c,ev,choices);
+ if(!state.pendingInitiatedChoice)return false;
+ state.pendingInitiatedChoice.aiChoices=generated.choices;
+ state.pendingInitiatedChoice.openingDialogue=generated.dialogue;
+ state.pendingInitiatedChoice.openingNarration=generated.narration;
+ save();
+ addAIResponse(generated,'キャラ発イベント');
  remember('initiative',`${c.name}が自分から「${ev.type}」の話題を振った`,2,['initiative',ev.type]);
  log(`キャラ発イベント発生: ${ev.type}（発生率${Math.round(chance)}%）`);
  save();render();renderInitiativeChoices();return true;
@@ -1323,6 +1379,8 @@ function nightEventCGPath(ev,lv){
 }
 function yuiNightEligible(ev){
  const lv=stageNum();
+ // 夜イベントは同じ体型Lvの間だけイベントID単位で一度きり。Lvが変わると既出判定をリセットする。
+ if((state.seenNightEventIds||[]).includes(ev.id))return false;
  if(lv<ev.minLv||lv>ev.maxLv)return false;
  if(ev.id==='overeaten'&&(state.dailyFoodLoad||0)<78)return false;
  if(ev.id==='whatever'&&state.restraint>30)return false;
@@ -1340,11 +1398,6 @@ function yuiNightWeight(ev){
  if(ev.id==='one_more_bite')w+=Math.max(0,40-state.restraint)*.35;
  if(ev.id==='what_did_he_think'||ev.id==='date_photo')w+=Math.max(0,state.affection-50)*.08;
  if(ev.id==='child_tease')w+=lv>=6?3:0;
- const hist=(state.nightEventHistory||[]);
- const last=hist[hist.length-1];
- if(last&&last.id===ev.id)return 0; // consecutive repeat forbidden
- const recent=hist.filter(x=>state.day-x.day<=3&&x.id===ev.id);
- if(recent.length)w*=.20; // recent 3 days heavily suppressed
  return Math.max(0,w);
 }
 function chooseYuiNightEvent(){
@@ -1356,8 +1409,14 @@ function chooseYuiNightEvent(){
 }
 function rememberNightEvent(ev,endedDay){
  state.nightEventHistory=state.nightEventHistory||[];
- state.nightEventHistory.push({id:ev.id,day:endedDay,lv:stageNum()});
- state.nightEventHistory=state.nightEventHistory.slice(-12);
+ state.seenNightEventIds=state.seenNightEventIds||[];
+ state.seenNightEventStage=stageNum();
+ // 同じLvの間では一度だけ。別Lvに進んだら同じイベントも再度発生できる。
+ if(!state.seenNightEventIds.includes(ev.id))state.seenNightEventIds.push(ev.id);
+ const lv=stageNum();
+ if(!state.nightEventHistory.some(x=>x&&x.id===ev.id&&Number(x.lv)===lv)){
+   state.nightEventHistory.push({id:ev.id,day:endedDay,lv});
+ }
 }
 function randomInt(min,max){return min+Math.floor(Math.random()*(max-min+1))}
 function applySimpleNightEffect(ev){
@@ -1652,7 +1711,9 @@ function getDateEvent(key){
 function mealFor(key){
  const map={japanese:'japanese',ramen:'ramen',fried:'fried',dessert:'dessert'};
  const k=map[key]||'dessert';
- return mealData(k);
+ // 自発的な食事提案でも通常の食事定義と同じ現在Lv向けデータを使う。
+ // 以前は未定義の mealData() を呼んでいたため、選択時に ReferenceError で停止していた。
+ return getMealOffer(k);
 }
 function mealTier(){const d=state.weight-state.startWeight;if(d<3)return 0;if(d<8)return 1;if(d<15)return 2;if(d<25)return 3;if(d<40)return 4;if(d<60)return 5;return 6}
 function mealTierLabel(){const i=mealTier();return ['+0〜3kg未満','+3〜8kg','+8〜15kg','+15〜25kg','+25〜40kg','+40〜60kg','+60kg以上'][i]}
@@ -1745,7 +1806,15 @@ async function giveGift(){
  if(c.id==='emi'&&g.tags.includes('romantic')&&state.affection<55)chance-=18;
  const before={affection:state.affection,mood:state.mood,weight:state.weight,fullness:state.fullness,restraint:state.restraint,money:state.money};
  const accepted=Math.random()*100<chance;state.money-=g.price;let ag=0,mg=0,foodEffect=null;
- if(accepted){ag=Math.max(1,Math.round(g.baseAffection*(1+pref*.22)));mg=Math.max(1,Math.round(g.mood*(1+Math.max(0,pref)*.12)));state.affection=clamp(state.affection+ag);state.mood=clamp(state.mood+mg);if(g.food)foodEffect=applyGuaranteedFoodEffect(g.food,'食べ物プレゼント')}
+ if(accepted){
+  // プレゼントによる好感度上昇は、デートや会話より伸びすぎないよう抑制。
+  // 好みに合うほど少し上乗せされるが、最大でも +8 に制限する。
+  ag=Math.min(8,Math.max(1,Math.round(g.baseAffection*.5*(1+pref*.10))));
+  mg=Math.max(1,Math.round(g.mood*(1+Math.max(0,pref)*.12)));
+  state.affection=clamp(state.affection+ag);
+  state.mood=clamp(state.mood+mg);
+  if(g.food)foodEffect=applyGuaranteedFoodEffect(g.food,'食べ物プレゼント')
+}
  addBubble('user',`${g.name}、プレゼント。`,`購入 ¥${g.price.toLocaleString()}`);
 
  const ctx=`プレゼントイベント。
