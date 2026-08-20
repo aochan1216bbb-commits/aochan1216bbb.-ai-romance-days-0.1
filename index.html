@@ -57,11 +57,11 @@ details{margin-top:10px}.settingsGrid{display:grid;gap:8px;margin-top:10px}.sett
 <body>
 <noscript><div style="max-width:640px;margin:12px auto;padding:12px;background:#ffe4e6;color:#9f1239;border-radius:12px;font-family:sans-serif">JavaScriptが無効です。Safari/Chromeなどで開いてください。</div></noscript>
 <div id="runtimeStatus" style="max-width:640px;margin:8px auto 0;padding:8px 12px;border-radius:10px;background:#fff3cd;color:#664d03;font:12px -apple-system,BlinkMacSystemFont,sans-serif">JavaScript確認中…</div>
-<div id="buildVersion" style="max-width:640px;margin:2px auto 6px;text-align:right;color:#8a7b82;font:10px -apple-system,BlinkMacSystemFont,sans-serif">BUILD 20260820-emi-date-events-v30</div>
+<div id="buildVersion" style="max-width:640px;margin:2px auto 6px;text-align:right;color:#8a7b82;font:10px -apple-system,BlinkMacSystemFont,sans-serif">BUILD 20260820-emi-lv1-baseline-v31</div>
 <div style="max-width:640px;margin:0 auto 8px;text-align:right;font:12px -apple-system,BlinkMacSystemFont,sans-serif"><a id="downloadPageLink" href="index.html" download style="color:#8a4c68;text-decoration:none;background:#fff;padding:6px 10px;border-radius:999px;box-shadow:0 2px 10px rgba(0,0,0,.06)">index.html をダウンロード</a></div>
 <script>
 (function(){
-  var BUILD='20260820-emi-date-events-v30';
+  var BUILD='20260820-emi-lv1-baseline-v31';
   try {
     var u=new URL(window.location.href);
     if(u.protocol==='http:'||u.protocol==='https:') {
@@ -76,7 +76,7 @@ details{margin-top:10px}.settingsGrid{display:grid;gap:8px;margin-top:10px}.sett
 })();
 </script>
 <script>
-(function(){var d=document.getElementById('downloadPageLink');if(d){d.href='index.html?v='+encodeURIComponent('20260820-emi-date-events-v30');}})();
+(function(){var d=document.getElementById('downloadPageLink');if(d){d.href='index.html?v='+encodeURIComponent('20260820-emi-lv1-baseline-v31');}})();
 (function(){
   var e=document.getElementById('runtimeStatus');
   if(e){
@@ -157,7 +157,7 @@ details{margin-top:10px}.settingsGrid{display:grid;gap:8px;margin-top:10px}.sett
   <div id="cgViewerTitle" class="cgViewerTitle"></div>
 </div>
 <script>
-const APP_BUILD='20260820-emi-date-events-v30';
+const APP_BUILD='20260820-emi-lv1-baseline-v31';
 const MISAKI={id:'misaki',name:'美咲',age:20,relationship:'絵美のライバル',personality:'自信家、負けず嫌い、口が悪い',speech:'強気、煽り気味、タメ口',startWeight:51,startCondition:88,baseRivalry:78,features:'絵美の大学陸上関連ストーリーに登場するライバル。序盤は絵美を容赦なく煽るが、後半は自分自身の体型変化にも直面する。'};
 
 const CHARACTERS={
@@ -480,23 +480,23 @@ function showEmiMemoryCG(kind,lv,title,meta='絵美イベントCG'){
  return path;
 }
 const EMI_ROUTINE_EVENT_DEFS={
- morning_run:{title:'早朝ランニング',min:1,max:5,text:lv=>lv<=2?'早朝、絵美は大学周辺を走る。まだフォームは軽快だが、タイムを意識する回数が増えている。':lv===3?'早朝ランニング中、絵美は以前より身体が重い感覚に眉を寄せる。':lv===4?'早朝ランニングの途中、絵美は息が上がってペースを落とした。':'予定していた距離を走り切れず、絵美は悔しそうに立ち止まった。'},
- morning_change:{title:'朝の着替え',min:1,max:7,text:lv=>lv<=2?'自室で着替える絵美は、服のフィット感にわずかな違和感を覚えた。':`自室で着替えながら、絵美はウエストや腹部、太腿まわりの窮屈さを確かめている。`},
+ morning_run:{title:'早朝ランニング',min:1,max:5,text:lv=>lv===1?'早朝、絵美は大学周辺を軽快に走る。フォームも呼吸も安定しており、大学陸上部のエースらしく完全に本調子だ。':lv===2?'早朝、絵美はいつも通り軽快に走っている。まだ余裕は十分で、本人は体型や走力の変化をまったく気にしていない。':lv===3?'早朝ランニング中、絵美は以前より身体が重い感覚に眉を寄せる。':lv===4?'早朝ランニングの途中、絵美は息が上がってペースを落とした。':'予定していた距離を走り切れず、絵美は悔しそうに立ち止まった。'},
+ morning_change:{title:'朝の着替え',min:1,max:7,text:lv=>lv===1?'自室でいつもの服へ手早く着替える絵美。サイズ感にも動きにも何の違和感もなく、鏡を軽く確認してそのまま出かける準備を進めている。':lv===2?'自室で着替える絵美。まだ本人は何も気にしておらず、いつも通り自然に服を整えている。':`自室で着替えながら、絵美はウエストや腹部、太腿まわりの窮屈さを確かめている。`},
  morning_scale:{title:'朝の体重測定',min:2,max:7,text:lv=>lv===2?'体重計の数字を見ても、絵美はまだ「誤差でしょ」と気にしないふりをする。':'体重計の数字を見た絵美は、以前との差を無視できず表情を曇らせた。'},
  morning_mirror:{title:'朝の鏡チェック',min:3,max:7,text:lv=>'鏡の前で、絵美は腹部や腰、脚のラインを確認し、以前との違いを気にしている。'},
  morning_breakfast_conflict:{title:'朝食との葛藤',min:3,max:7,text:lv=>'朝食を前に、絵美は空腹とダイエット意識の間で迷っている。'},
  morning_oversleep:{title:'二度寝',min:6,max:7,text:lv=>'退部後の朝。以前なら走っていた時間に、絵美はもう一度布団へ潜り込んだ。'},
- day_lecture:{title:'大学の講義',min:1,max:7,text:lv=>'大学の講義中、絵美はその日の疲れや空腹、身体の重さを意識しながら席に座っている。'},
- day_practice:{title:'陸上部の練習',min:1,max:5,text:lv=>lv<=2?'トラックでの練習。絵美はまだエースらしい走りを見せている。':lv===3?'練習中、絵美は自分の走りが鈍くなった感覚をはっきり意識する。':lv===4?'練習中、息切れが増え、絵美は焦りを隠せない。':'練習についていけず、絵美は後輩より先に休憩へ入った。'},
- day_junior_talk:{title:'後輩との会話',min:1,max:5,text:lv=>lv<=2?'後輩はエースの絵美を頼るように話しかけてくる。':lv===3?'後輩から「最近疲れてませんか」と心配され、絵美は強がって返す。':lv===4?'後輩の成長を感じながら、絵美は自分の余裕が減っていることを意識する。':'後輩から本気で体調を心配され、絵美は笑って誤魔化した。'},
+ day_lecture:{title:'大学の講義',min:1,max:7,text:lv=>lv===1?'大学の講義中。朝の練習を終えた絵美は姿勢よく席に座り、いつも通り集中して講義を受けている。':lv===2?'大学の講義中。絵美は普段通りに過ごしており、体型や身体の重さを気にする様子はない。':'大学の講義中、絵美はその日の疲れや空腹、身体の重さを意識しながら席に座っている。'},
+ day_practice:{title:'陸上部の練習',min:1,max:5,text:lv=>lv===1?'トラックでの練習。絵美はエースらしい鋭いスタートと安定したフォームでメニューをこなし、余裕を残して後輩を引っ張っている。':lv===2?'トラックでの練習。絵美はまだ普段通りの走りを見せており、本人はコンディションに違和感を持っていない。':lv===3?'練習中、絵美は自分の走りが鈍くなった感覚をはっきり意識する。':lv===4?'練習中、息切れが増え、絵美は焦りを隠せない。':'練習についていけず、絵美は後輩より先に休憩へ入った。'},
+ day_junior_talk:{title:'後輩との会話',min:1,max:5,text:lv=>lv===1?'練習後、後輩たちはエースの絵美へフォームや練習について相談している。絵美も余裕のある様子で先輩らしく応じている。':lv===2?'後輩はいつも通り絵美を頼って話しかけてくる。絵美自身もまだ自分の変化を意識していない。':lv===3?'後輩から「最近疲れてませんか」と心配され、絵美は強がって返す。':lv===4?'後輩の成長を感じながら、絵美は自分の余裕が減っていることを意識する。':'後輩から本気で体調を心配され、絵美は笑って誤魔化した。'},
  day_record_check:{title:'記録確認',min:2,max:5,text:lv=>'ストップウォッチや記録表を確認した絵美は、以前より落ちている数字を睨むように見つめた。'},
- day_cafeteria:{title:'大学の学食',min:1,max:7,text:lv=>lv<3?'大学の学食。絵美は競技者らしく食事を選んでいる。':lv<6?'大学の学食で、絵美は食欲と体型への焦りの間でメニューを迷っている。':'退部後の学食。練習を理由に食事量を抑える必要がなくなり、絵美の選択も少し変わってきた。'},
+ day_cafeteria:{title:'大学の学食',min:1,max:7,text:lv=>lv===1?'大学の学食。絵美は競技者として必要な栄養を意識しつつ、迷いなくいつもの食事を選んでいる。':lv===2?'大学の学食。少し食欲はあるものの、本人は体型を気にせず普通に食事を楽しんでいる。':lv<6?'大学の学食で、絵美は食欲と体型への焦りの間でメニューを迷っている。':'退部後の学食。練習を理由に食事量を抑える必要がなくなり、絵美の選択も少し変わってきた。'},
  day_stairs:{title:'階段で息切れ',min:4,max:7,text:lv=>'大学構内の階段を上った絵美は、以前より早く息が上がり、踊り場で一度足を止めた。'},
  day_trainingwear_rip:{title:'練習着が裂ける',min:4,max:5,text:lv=>lv===4?'練習中の動作で、絵美の練習着の縫い目が小さく裂けた。':'深くしゃがんだ瞬間、練習着がはっきり裂け、絵美は慌ててジャージで隠した。'},
  day_former_junior:{title:'元後輩と遭遇',min:6,max:7,text:lv=>'キャンパスで元後輩と偶然会い、絵美は平気そうに振る舞いながらも気まずさを隠せない。'},
  day_see_track:{title:'遠くから陸上部を見る',min:6,max:7,text:lv=>'フェンス越しに元チームの練習を眺め、絵美はしばらくその場を離れられなかった。'},
- night_stretch:{title:'夜のストレッチ',min:1,max:7,text:lv=>lv<=2?'自室でのストレッチ。絵美は慣れた動きで身体をほぐしている。':'自室でストレッチするが、以前より姿勢を取りづらく、絵美は苛立っている。'},
- night_snack:{title:'夜食',min:1,max:7,text:lv=>lv<=2?'夜、絵美は軽い夜食を少しだけ口にする。':'夜、控えようと思いながらも絵美は食べ物に手を伸ばした。'},
+ night_stretch:{title:'夜のストレッチ',min:1,max:7,text:lv=>lv===1?'自室でのストレッチ。絵美は競技者らしい柔らかさと安定した姿勢で、いつものメニューを余裕を持ってこなしている。':lv===2?'自室でのストレッチ。絵美はまだ普段通りの動きで身体をほぐしており、特に違和感はない。':'自室でストレッチするが、以前より姿勢を取りづらく、絵美は苛立っている。'},
+ night_snack:{title:'夜食',min:1,max:7,text:lv=>lv===1?'夜、練習と大学生活を終えた絵美は、回復のための軽い夜食を少しだけ口にする。食べることへの罪悪感や体型への不安はない。':lv===2?'夜、絵美は軽い夜食を少しだけ口にする。まだ本人は体型変化を意識していない。':'夜、控えようと思いながらも絵美は食べ物に手を伸ばした。'},
  night_convenience:{title:'バイト後のコンビニ',min:3,max:7,text:lv=>'夜のコンビニ。疲れと空腹で、絵美の目は甘い物や揚げ物へ向かう。'},
  night_bath_mirror:{title:'入浴後の鏡',min:3,max:7,text:lv=>'風呂上がり、鏡の前で絵美は腹部や腰回りを見つめ、以前との違いを確認している。'},
  night_old_record:{title:'昔の記録を見る',min:4,max:7,text:lv=>'夜、絵美は昔の自己ベストや記録を見返し、現在との差に複雑な表情を浮かべる。'},
@@ -530,7 +530,7 @@ function maybeEmiDaypartEvent(force=false){
  else if(kind==='day_trainingwear_rip')dialogue='……嘘でしょ。最悪。誰も見てないよね？';
  else if(kind==='night_snack')dialogue=state.emiDietMode?'……食べないって決めたのに。少しくらいなら……。':'……今日疲れたし、これくらいならいいか。';
  else if(kind==='night_spikes'||kind==='night_track_video'||kind==='day_see_track')dialogue='……前は、あそこにいたんだよね。';
- else dialogue='……なんか最近、前と違うんだよね。';
+ else dialogue=lv===1?'うん、今日もいい感じ。これくらいがいつもの調子かな。':lv===2?'別に変わった感じはしないけど。今日も普通だよ。':'……なんか最近、前と違うんだよね。';
  addBubble('assistant',dialogue,d.title);
  log(`絵美の日常イベント: ${d.title}`);
  save();
@@ -652,7 +652,8 @@ function maybeEmiRivalEncounter(force=false){
  const title=`絵美 Lv.${lv}：ライバル・美咲イベント`;
  showEmiMemoryCG('rival_event',lv,title,'ライバルイベントCG');
  let misakiLine='',emiLine='',intro='';
- if(mlv<=2&&lv<=2){misakiLine='あれ、絵美。最近ちょっと丸くなってない？ まあ、その程度ならまだ走れるんじゃない。';emiLine='もう、うるさい。気のせいに決まってるでしょ。';intro='練習前、ライバルの美咲が絵美の様子を見て薄く笑った。';}
+ if(lv===1&&mlv<=2){misakiLine='今日も調子良さそうじゃん。けど、次は絶対あたしが勝つから。';emiLine='はいはい。言うだけなら簡単でしょ。次も負けないから。';intro='練習前、ライバルの美咲が絵美へいつものように挑発的な笑みを向けた。今は純粋に競技で張り合うライバル同士だ。';}
+ else if(mlv<=2&&lv===2){misakiLine='あれ、絵美。ちょっと丸くなった？ まあ、気のせいかもね。';emiLine='もう、適当なこと言わないでよ。いつもと変わんないって。';intro='練習前、美咲が冗談めかして絵美をからかった。絵美本人はまだ体型変化をまったく自覚していない。';}
  else if(mlv<=3&&lv<=4){misakiLine='最近タイム落ちてるって聞いたけど、その身体じゃ仕方ないか。エースも大変だね。';emiLine='……言いたいことあるならハッキリ言えば。';intro='競技場の脇で、美咲は記録表を見ながらわざとらしく肩をすくめた。';}
  else if(mlv>=4&&lv>=4){misakiLine='……何その目。別にあたしは太ってないし。ちょっとコンディションが悪いだけだから。';emiLine='へえ。前にあたしに言ってたこと、そのまま返すけど。';intro='久々に顔を合わせた美咲は、以前よりウェアの余裕がなくなっている。';}
  else {misakiLine='その顔、余裕ないね。大会で泣かないでよ？';emiLine='そっちこそ、最近ちょっと余裕なくない？';intro='美咲は軽口を叩くが、どこか自分自身にも焦りを抱えているようだ。';}
@@ -1404,7 +1405,8 @@ function characterEvolutionText(c){
  const common=`開始時から+${d.toFixed(1)}kg。体重変化段階${st+1}/7（${evolutionLabel()}）。`;
  if(c.id==='risa')return common+(st>=2?'以前より体型への意識が強く、食べた後は罪悪感から自制しようとする。':'まだ大きな変化ではないが、食べ過ぎには気をつけようとしている。');
  if(c.id==='emi'){
-   if(st<=1)return common+'まだ競技を優先しつつも、違和感を「一時的なもの」と片付けようとしている。';
+   if(st===0)return common+'完全に本調子。体型・服・走力・体力に違和感はなく、自分が太ることも特に意識していない。陸上部のエースとして自信と余裕がある。';
+   if(st===1)return common+'ごく小さな変化は始まっているが、本人はまだ太ったとは認識しておらず、体型や走力を気にする発言は基本的にしない。';
    if(st<=3)return common+'体型と競技パフォーマンスの両方が気になり始め、食後は危機感から自制しようとする。';
    if(st===4)return common+'チーム練習についていけない場面が増え、体型変化と走力低下への焦りがかなり強い。';
    return common+'大会での大敗をきっかけに大学陸上部を退部した。運動量が落ち、元選手だった自分との落差にも苦しんでいる。';
@@ -3344,7 +3346,10 @@ ${c.id==='emi'?`【絵美の年齢・生活設定】
 絵美は20歳の大学生で、主人公とは大学の同級生。
 大学陸上部のエースとして競技を続けている。
 高校生、制服、高校のクラス、高校部活として描写しない。
-日常は大学キャンパス、講義、空きコマ、大学陸上部の練習、競技場、アルバイト、私服などを基本にする。`:''}
+日常は大学キャンパス、講義、空きコマ、大学陸上部の練習、競技場、アルバイト、私服などを基本にする。
+体型Lv1では完全に本調子。体型・服・体重・走力・息切れ・身体の重さへの違和感や不安を一切出さない。陸上部のエースとして余裕と自信を持って振る舞う。
+体型Lv2でも本人はまだ太ったことを自覚していない。明確な体型不安、ダイエット発言、走力低下の自覚は出さない。
+体型変化や競技力低下を本人が明確に意識し始めるのはLv3以降。`:''}
 ${c.id==='erika'?`【絵里香の抑止力ルール】
 体型Lv1〜2では、絵里香本人は自分が太ったとは認めていない。そのため「太ったから食事を控えよう」という心理は原則発生せず、体型や食事への焦りを理由に抑止力が上がる描写は禁止。
 体型Lv3で初めて体重増加を認め、それ以降は服・鏡・食後の罪悪感などで抑止力が強く上昇することがある。
