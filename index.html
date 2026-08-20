@@ -50,15 +50,18 @@ details{margin-top:10px}.settingsGrid{display:grid;gap:8px;margin-top:10px}.sett
 .cgViewerClose{position:absolute;right:14px;top:14px;border:0;border-radius:999px;width:42px;height:42px;background:#fff;font-size:22px}
 .blockingNotice{margin:8px 0;padding:9px 11px;border-radius:12px;background:#fff2cc;color:#684f00;font-size:12px;font-weight:700}
 @media(min-width:600px){.albumGrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.misaki{background:#ece4ff;color:#433168;border-bottom-left-radius:5px}.misaki .meta{color:#6c5b93}
+.systemNote{font-size:11px;color:#7a6b73;margin-top:6px;line-height:1.4}
 </style>
 </head>
 <body>
 <noscript><div style="max-width:640px;margin:12px auto;padding:12px;background:#ffe4e6;color:#9f1239;border-radius:12px;font-family:sans-serif">JavaScriptが無効です。Safari/Chromeなどで開いてください。</div></noscript>
 <div id="runtimeStatus" style="max-width:640px;margin:8px auto 0;padding:8px 12px;border-radius:10px;background:#fff3cd;color:#664d03;font:12px -apple-system,BlinkMacSystemFont,sans-serif">JavaScript確認中…</div>
-<div id="buildVersion" style="max-width:640px;margin:2px auto 6px;text-align:right;color:#8a7b82;font:10px -apple-system,BlinkMacSystemFont,sans-serif">BUILD 20260820-erika-routine-coverage-v19</div>
+<div id="buildVersion" style="max-width:640px;margin:2px auto 6px;text-align:right;color:#8a7b82;font:10px -apple-system,BlinkMacSystemFont,sans-serif">BUILD 20260820-emi-rival-systems-v24</div>
+<div style="max-width:640px;margin:0 auto 8px;text-align:right;font:12px -apple-system,BlinkMacSystemFont,sans-serif"><a id="downloadPageLink" href="index.html" download style="color:#8a4c68;text-decoration:none;background:#fff;padding:6px 10px;border-radius:999px;box-shadow:0 2px 10px rgba(0,0,0,.06)">index.html をダウンロード</a></div>
 <script>
 (function(){
-  var BUILD='20260820-erika-routine-coverage-v19';
+  var BUILD='20260820-emi-rival-systems-v24';
   try {
     var u=new URL(window.location.href);
     if(u.protocol==='http:'||u.protocol==='https:') {
@@ -73,6 +76,7 @@ details{margin-top:10px}.settingsGrid{display:grid;gap:8px;margin-top:10px}.sett
 })();
 </script>
 <script>
+(function(){var d=document.getElementById('downloadPageLink');if(d){d.href='index.html?v='+encodeURIComponent('20260820-emi-rival-systems-v24');}})();
 (function(){
   var e=document.getElementById('runtimeStatus');
   if(e){
@@ -153,13 +157,14 @@ details{margin-top:10px}.settingsGrid{display:grid;gap:8px;margin-top:10px}.sett
   <div id="cgViewerTitle" class="cgViewerTitle"></div>
 </div>
 <script>
-const APP_BUILD='20260820-erika-routine-coverage-v19';
+const APP_BUILD='20260820-emi-rival-systems-v24';
+const MISAKI={id:'misaki',name:'美咲',age:20,relationship:'絵美のライバル',personality:'自信家、負けず嫌い、口が悪い',speech:'強気、煽り気味、タメ口',startWeight:51,startCondition:88,baseRivalry:78,features:'絵美の大学陸上関連ストーリーに登場するライバル。序盤は絵美を容赦なく煽るが、後半は自分自身の体型変化にも直面する。'};
 
 const CHARACTERS={
  risa:{id:'risa',name:'梨沙',age:18,height:153,startWeight:45,personality:'明るい、活発、前向き、しっかり者',speech:'タメ口、普通',relationship:'幼馴染かつクラスメイト',affection:50,mood:50,restraint:50,appetite:'普通',gainTendency:'普通',exercise:'普通',bodyView:'少し痩せたいと思っている。太りたくはない。',favoriteFoods:['甘いもの','パン類'],features:'幼馴染である主人公が少し気になっている。そのため、主人公にどう見られているかを気にする。ちょっと泣き虫。',rules:'基本ポジティブに話す。体重が増えると少しネガティブになる。抑止力が高いと食事は断る。甘いものの場合は抑止力が高くても断らない場合がある。',imageBase:'risa'},
- emi:{id:'emi',name:'絵美',age:17,height:170,startWeight:52,personality:'男勝り、活発、衝動型、少し怒りっぽい',speech:'ちょっと暴力的、キツめ、タメ口',relationship:'クラスメイト',affection:30,mood:40,restraint:90,appetite:'よく食べる',gainTendency:'かなり太りにくい',exercise:'頻繁',bodyView:'今がベスト。部活もあるので、このままキープしたい。',favoriteFoods:['揚げ物','ご飯類'],features:'陸上部のエース。部活に命をかけている。タイムが伸びなくなることに強い危機感を覚える。',rules:'基本勝気な話し方。太ったことを指摘されると認めずに怒る。太ると過度な食事制限をして抑止力を下げがち。',imageBase:'emi'},
+ emi:{id:'emi',name:'絵美',age:20,height:170,startWeight:52,personality:'男勝り、活発、衝動型、少し怒りっぽい',speech:'ちょっと暴力的、キツめ、タメ口',relationship:'大学の同級生',affection:30,mood:40,restraint:90,appetite:'よく食べる',gainTendency:'かなり太りにくい',exercise:'頻繁',bodyView:'今がベスト。大学の陸上部もあるので、このままキープしたい。',favoriteFoods:['揚げ物','ご飯類'],features:'20歳の大学生。大学陸上部のエースで、競技にかなり本気。タイムが伸びなくなることに強い危機感を覚える。主人公とは大学の同級生。',rules:'基本勝気な話し方。太ったことを指摘されると認めずに怒る。太ると過度な食事制限をして抑止力を下げがち。高校生・制服・高校の教室中心の生活として描写せず、大学の講義、キャンパス、大学陸上部、アルバイト、私服など大学生らしい生活文脈を優先する。',imageBase:'emi'},
  yui:{id:'yui',name:'結衣',age:30,height:158,startWeight:50,personality:'おっとり、少し自虐的、母性あり',speech:'柔らかい、タメ口',relationship:'お隣さん',affection:30,mood:70,restraint:30,appetite:'普通',gainTendency:'太りやすい',exercise:'基本なし',bodyView:'最近太り始めて気にしている。痩せたい。',favoriteFoods:['甘いもの','ご飯類','麺類'],features:'シングルマザー。昔はかなりモテていた。最近は子育てなどもあり、あまりチヤホヤされていない。また、最近太りやすくなったのでかなり気にしているが、食欲を抑えられない。',rules:'主人公との年齢差に躊躇いがちだが、かっこいいとは思っている。体型を気にした発言が多い。好感度が低いうちは誘いにも慎重。プレゼントは基本断れない。抑止力が高いほど躊躇はするものの結局食べてしまう。抑止力が高い状態で食べると強く後悔する。体重が増えると油物を好むようになる。',imageBase:'yui'},
- erika:{id:'erika',name:'絵里香',age:20,height:160,startWeight:48,personality:'わがまま、高圧的、高飛車',speech:'お嬢様口調、生意気',relationship:'大学の同級生',affection:10,mood:10,restraint:80,appetite:'少食',gainTendency:'太りにくい',exercise:'あまりしない',bodyView:'ずっとこのままの体型だったので、そもそも太るとは思っていない。太ったら焦る。',favoriteFoods:[],features:'20歳の大学生。主人公とは大学の同級生で、主人公に悪い印象あり。ただ、チョロい。性格のせいで友達が少ない。相手に依存する癖あり。',rules:'序盤はずっとツンデレ。好感度が上がるとデレ要素が高くなり、依存度も上がる。太ったことがないので太るとかなり焦る。抑止力は上がりやすく下がりやすい。抑止力が高いと食事やプレゼントも断る。主人公の誘いによって好きな食べ物が増える。',imageBase:'erika'},
+ erika:{id:'erika',name:'絵里香',age:20,height:160,startWeight:48,personality:'わがまま、高圧的、高飛車',speech:'お嬢様口調、生意気',relationship:'大学の同級生',affection:10,mood:10,restraint:35,appetite:'少食',gainTendency:'太りにくい',exercise:'あまりしない',bodyView:'ずっとこのままの体型だったので、そもそも自分が太るとは思っていない。体型Lv1〜2では体重増加そのものを認めず、食事を控えようという発想もほぼない。Lv3で初めて「本当に太った」と認め始め、それ以降は強く焦る。',favoriteFoods:[],features:'20歳の大学生。主人公とは大学の同級生で、主人公に悪い印象あり。ただ、チョロい。性格のせいで友達が少ない。相手に依存する癖あり。',rules:'序盤はずっとツンデレ。好感度が上がるとデレ要素が高くなり、依存度も上がる。体型Lv1〜2では太ったことを認めていないため、体型や食事を理由に抑止力が上昇しない。Lv3以降は体型変化を認めて焦るため抑止力が上がるようになるが、非常に不安定で、空腹・誘惑・主人公の一言・時間経過など些細なきっかけですぐ大きく下がる。高Lvほど上下動を激しくする。抑止力が高い時は食事やプレゼントを断ることがある。主人公の誘いによって好きな食べ物が増える。',imageBase:'erika'},
  rei:{id:'rei',name:'怜',age:18,height:155,startWeight:42,personality:'不思議ちゃん、独特、他人の目を気にしない',speech:'小声でボソボソ、タメ口',relationship:'クラスメイト',affection:20,mood:50,restraint:60,appetite:'少食',gainTendency:'普通',exercise:'あまりしない',bodyView:'興味なし。太り始めると、太ることに快感を覚え始める。',favoriteFoods:[],features:'他人の目を気にしない。独特。基本他人と分かり合えないと思っている。',rules:'基本淡々と話す。主人公には人として興味はあるが恋愛感情はない。好感度が上がると心を開き、最終的には好きになる。体重が増えるたびに、体重が増えることに快感を覚え始める。主人公の誘いによって好きな食べ物が増える。',imageBase:'rei'}
 };
 const turns=[{label:'☀ 朝',key:'morning'},{label:'☁ 昼',key:'noon'},{label:'🌙 夜',key:'night'}];
@@ -235,7 +240,7 @@ async function testOpenAIConnection(){
  }catch(err){setApiStatus(`API接続失敗：${err.message||err}`,'error')}
  finally{if(btn){btn.disabled=false;btn.textContent='接続テスト'}}
 }
-function defaultState(id){const c=CHARACTERS[id];return {characterId:id,day:1,turn:0,affection:c.affection,mood:c.mood,fullness:20,hunger:40,restraint:c.restraint,weight:c.startWeight,startWeight:c.startWeight,history:[],gameLog:[],favoriteFoods:[...c.favoriteFoods],lastFoodResult:null,foodOfferTurnKey:null,foodPressureCount:0,money:2500,workCount:0,lastFoodTurnKey:null,lastFoodWasRefused:false,weightInterest:0,weightStage:0,pendingDate:null,seenWeightEvents:[],pendingWeightEvent:null,memories:[],foodExperience:{},growthTraits:{},memorySeq:0,lastInitiatedTurnKey:null,initiatedEventCount:0,lastRelationshipStage:null,pendingInitiatedChoice:null,lastEmotion:'normal',conversationRewards:[],cgGallery:[],selfFoodCount:0,yuiSpecialFlags:{},pendingRestraintEvent:null,restraintTalkRewards:[],lastNightEventDay:0,pendingNightChoice:null,nightEventHistory:[],seenNightEventIds:[],seenNightEventStage:1,dailyFoodLoad:0,dailyFoodCount:0,dailyFoodNames:[],todayDateKey:null,todayDateName:null,isLover:false,confessionCompleted:false,confessionDeferredUntilDay:0,ageGapTalkCount:0,lastYuiInitiatedDay:0,yuiWeightEventSchemaVersion:2,forceYuiWeightEventMigration:false,lastErikaAttentionTurnKey:null,lastErikaAttentionDay:0,erikaNeglectTurns:0,erikaJealousyCount:0,lastErikaJealousyDay:0,pendingErikaRoutine:null,erikaRoutineHistory:[],lastErikaRoutineKey:null,erikaDayHungerStrain:false,erikaFoodGuiltToday:0,erikaRoutineCoverage:{morning:{},night:{}}}}
+function defaultState(id){const c=CHARACTERS[id];return {characterId:id,day:1,turn:0,affection:c.affection,mood:c.mood,fullness:20,hunger:40,restraint:c.restraint,weight:c.startWeight,startWeight:c.startWeight,history:[],gameLog:[],favoriteFoods:[...c.favoriteFoods],lastFoodResult:null,foodOfferTurnKey:null,foodPressureCount:0,money:2500,workCount:0,lastFoodTurnKey:null,lastFoodWasRefused:false,weightInterest:0,weightStage:0,pendingDate:null,seenWeightEvents:[],pendingWeightEvent:null,memories:[],foodExperience:{},growthTraits:{},memorySeq:0,lastInitiatedTurnKey:null,initiatedEventCount:0,lastRelationshipStage:null,pendingInitiatedChoice:null,lastEmotion:'normal',conversationRewards:[],cgGallery:[],selfFoodCount:0,yuiSpecialFlags:{},pendingRestraintEvent:null,restraintTalkRewards:[],lastNightEventDay:0,pendingNightChoice:null,nightEventHistory:[],seenNightEventIds:[],seenNightEventStage:1,dailyFoodLoad:0,dailyFoodCount:0,dailyFoodNames:[],todayDateKey:null,todayDateName:null,isLover:false,confessionCompleted:false,confessionDeferredUntilDay:0,ageGapTalkCount:0,lastYuiInitiatedDay:0,yuiWeightEventSchemaVersion:2,forceYuiWeightEventMigration:false,lastErikaAttentionTurnKey:null,lastErikaAttentionDay:0,erikaNeglectTurns:0,erikaJealousyCount:0,lastErikaJealousyDay:0,pendingErikaRoutine:null,erikaRoutineHistory:[],lastErikaRoutineKey:null,erikaDayHungerStrain:false,erikaFoodGuiltToday:0,erikaRoutineCoverage:{morning:{},night:{}},erikaRestraintModelVersion:2,emiMessDependence:5,emiCondition:88,emiJuniorBond:62,emiTrackActive:true,emiDietMode:false,emiDietDaysLeft:0,emiDietStartWeight:0,emiDietStartDay:0,emiDietLastResult:null,emiInjuryDaysLeft:0,emiLastTournamentDay:0,emiLastRivalDay:0,emiLastSystemTurnKey:null,misakiWeight:51,misakiStartWeight:51,misakiCondition:88,misakiRivalry:78,misakiLastSceneDay:0}}
 function stateKey(id){return 'aiRomanceState_v3_'+id} function loadState(id){const base=defaultState(id),saved=safeGet(stateKey(id),{});const merged={...base,...saved};if(!Array.isArray(merged.history))merged.history=[];if(!Array.isArray(merged.gameLog))merged.gameLog=[];if(!Array.isArray(merged.favoriteFoods))merged.favoriteFoods=[...CHARACTERS[id].favoriteFoods];if(!Array.isArray(merged.seenWeightEvents))merged.seenWeightEvents=[];
 if(!Number.isFinite(Number(merged.yuiWeightEventSchemaVersion)))merged.yuiWeightEventSchemaVersion=0;
 if(id==='yui'&&Number(merged.yuiWeightEventSchemaVersion)<2){
@@ -283,11 +288,41 @@ if(!Array.isArray(merged.erikaRoutineHistory))merged.erikaRoutineHistory=[];
 if(!('lastErikaRoutineKey' in merged))merged.lastErikaRoutineKey=null;
 merged.erikaDayHungerStrain=!!merged.erikaDayHungerStrain;
 merged.erikaFoodGuiltToday=Math.max(0,Number(merged.erikaFoodGuiltToday||0));
+if(!('erikaRestraintModelVersion' in merged))merged.erikaRestraintModelVersion=0;
+if(id==='erika'&&merged.erikaRestraintModelVersion<2){
+ const gain=Math.max(0,Number(merged.weight||c.startWeight)-c.startWeight);
+ const lv=gain<3?1:gain<8?2:gain<15?3:gain<25?4:gain<40?5:gain<60?6:7;
+ if(lv<3)merged.restraint=Math.min(Number(merged.restraint||35),35);
+ merged.erikaRestraintModelVersion=2;
+}
 if(!merged.erikaRoutineCoverage||typeof merged.erikaRoutineCoverage!=='object')merged.erikaRoutineCoverage={morning:{},night:{}};
 if(!merged.erikaRoutineCoverage.morning||typeof merged.erikaRoutineCoverage.morning!=='object')merged.erikaRoutineCoverage.morning={};
 if(!merged.erikaRoutineCoverage.night||typeof merged.erikaRoutineCoverage.night!=='object')merged.erikaRoutineCoverage.night={};
 merged.erikaJealousyCount=Math.max(0,Number(merged.erikaJealousyCount||0));
 merged.lastErikaJealousyDay=Math.max(0,Number(merged.lastErikaJealousyDay||0));
+
+if(id==='emi'){
+ merged.emiMessDependence=Math.max(0,Number(merged.emiMessDependence||5));
+ merged.emiCondition=Math.max(0,Number(merged.emiCondition||88));
+ merged.emiJuniorBond=Math.max(0,Number(merged.emiJuniorBond||62));
+ if(!('emiTrackActive' in merged))merged.emiTrackActive=true;
+ merged.emiDietMode=!!merged.emiDietMode;
+ merged.emiDietDaysLeft=Math.max(0,Number(merged.emiDietDaysLeft||0));
+ merged.emiDietStartWeight=Number(merged.emiDietStartWeight||merged.weight||CHARACTERS[id].startWeight);
+ merged.emiDietStartDay=Math.max(0,Number(merged.emiDietStartDay||0));
+ if(!('emiDietLastResult' in merged))merged.emiDietLastResult=null;
+ merged.emiInjuryDaysLeft=Math.max(0,Number(merged.emiInjuryDaysLeft||0));
+ merged.emiLastTournamentDay=Math.max(0,Number(merged.emiLastTournamentDay||0));
+ merged.emiLastRivalDay=Math.max(0,Number(merged.emiLastRivalDay||0));
+ if(!('emiLastSystemTurnKey' in merged))merged.emiLastSystemTurnKey=null;
+ merged.misakiStartWeight=Number(merged.misakiStartWeight||MISAKI.startWeight);
+ merged.misakiWeight=Number(merged.misakiWeight||merged.misakiStartWeight||MISAKI.startWeight);
+ merged.misakiCondition=Math.max(0,Number(merged.misakiCondition||MISAKI.startCondition));
+ merged.misakiRivalry=Math.max(0,Number(merged.misakiRivalry||MISAKI.baseRivalry));
+ merged.misakiLastSceneDay=Math.max(0,Number(merged.misakiLastSceneDay||0));
+ if(merged.growthTraits?.emiQuitTrack)merged.emiTrackActive=false;
+}
+
 return merged} function save(){if(activeId&&state)safeSet(stateKey(activeId),state)}
 
 
@@ -411,7 +446,7 @@ function updateGrowthTraits(c){
    g.weightCuriosity=clamp(state.weightInterest||0);
  }
  if(c.id==='risa')g.bodyConcern=clamp(Math.round(st*11+Math.max(0,gain)*1.2));
- if(c.id==='emi')g.weightAlarm=clamp(Math.round(st*16+Math.max(0,gain)*1.5));
+ if(c.id==='emi'){g.weightAlarm=clamp(Math.round(st*16+Math.max(0,gain)*1.5));g.makanaiDependence=clamp(Math.round(state.emiMessDependence||0));g.competitionCondition=clamp(Math.round(state.emiCondition||0));g.juniorBond=clamp(Math.round(state.emiJuniorBond||0));g.misakiBodyLv=misakiBodyLv();}
 }
 function growthText(c){
  updateGrowthTraits(c);
@@ -424,10 +459,180 @@ function growthText(c){
  if(c.id==='erika')lines.push(`主人公への依存傾向:${g.dependence||0}/100 / 体重増加への焦り:${g.weightAnxiety||0}/100`);
  if(c.id==='rei')lines.push(`体重増加への好奇心:${g.weightCuriosity||0}/100`);
  if(c.id==='risa')lines.push(`体型への意識:${g.bodyConcern||0}/100`);
- if(c.id==='emi')lines.push(`体重増加への危機感:${g.weightAlarm||0}/100`);
+ if(c.id==='emi')lines.push(`体重増加への危機感:${g.weightAlarm||0}/100｜まかない依存度:${g.makanaiDependence||0}/100｜競技コンディション:${g.competitionCondition||0}/100｜後輩との関係:${g.juniorBond||0}/100｜美咲体型Lv:${g.misakiBodyLv||1}`);
  return lines.length?lines.join('\n'):'まだ大きな嗜好変化はない。';
 }
 function bodyType(){const c=CHARACTERS[activeId],bmi=state.weight/((c.height/100)**2);if(bmi<18.5)return'Slim';if(bmi<23)return'Average';if(bmi<27)return'Curvy';if(bmi<32)return'Chubby';return'Very Chubby'}
+
+function misakiWeightGain(){return Math.max(0,(state?.misakiWeight||MISAKI.startWeight)-(state?.misakiStartWeight||MISAKI.startWeight))}
+function misakiBodyLv(){const d=misakiWeightGain();if(d<3)return 1;if(d<8)return 2;if(d<15)return 3;if(d<25)return 4;if(d<40)return 5;if(d<60)return 6;return 7}
+function emiStoryCG(kind,lv=stageNum()){const s=String(Math.max(1,Math.min(7,lv))).padStart(2,'0');return `assets/emi/memories/${kind}_${s}.webp?v=${APP_BUILD}`}
+function refreshEmiCondition(){
+ if(activeId!=='emi'||!state)return 0;
+ const lv=stageNum();
+ let cond=92;
+ cond-=[0,2,8,15,24,35,48][lv-1]||0;
+ cond-=Math.max(0,Math.round((state.fullness-45)*0.35));
+ cond-=Math.max(0,Math.round(((state.emiMessDependence||0)-35)*0.18));
+ if(state.emiDietMode)cond+=4;
+ if(state.emiInjuryDaysLeft>0)cond-=24;
+ if(state.growthTraits?.emiQuitTrack||state.emiTrackActive===false)cond-=12;
+ cond+=Math.max(-6,Math.min(6,Math.round((state.mood-50)*0.08)));
+ state.emiCondition=clamp(Math.round(cond));
+ return state.emiCondition;
+}
+function updateMisakiProgress(){
+ if(activeId!=='emi'||!state)return;
+ const emiLv=stageNum();
+ const chance=Math.min(.52,.08+Math.max(0,emiLv-2)*.07+(state.day>=8?.05:0));
+ if(Math.random()<chance){state.misakiWeight=Math.round((state.misakiWeight+(0.15+Math.random()*.45))*10)/10;}
+ const lv=misakiBodyLv();
+ let cond=90-([0,1,4,9,17,27,38][lv-1]||0)-Math.max(0,Math.round((state.misakiWeight-(state.misakiStartWeight||MISAKI.startWeight))*0.7));
+ state.misakiCondition=clamp(Math.round(cond));
+ state.misakiRivalry=clamp(Math.round(78+Math.max(0,emiLv-2)*3-Math.max(0,lv-3)*4));
+}
+function emiJuniorBondDelta(base=0,reason=''){
+ if(activeId!=='emi'||!state)return;
+ if(!Number.isFinite(Number(base))||!base)return;
+ state.emiJuniorBond=clamp(Math.round((state.emiJuniorBond||0)+base));
+ if(reason)log(`絵美の後輩との関係 ${base>=0?'+':''}${base}（${reason}）`);
+}
+function maybeStartEmiDiet(reason='体重増加を気にした'){
+ if(activeId!=='emi'||!state)return false;
+ if(stageNum()<3||state.emiDietMode||state.emiInjuryDaysLeft>0||state.emiTrackActive===false)return false;
+ state.emiDietMode=true;
+ state.emiDietDaysLeft=3;
+ state.emiDietStartWeight=state.weight;
+ state.emiDietStartDay=state.day;
+ state.emiDietLastResult=null;
+ addBubble('system',`絵美は${reason}ため、短期ダイエットモードに入った。3日間は食事をかなり気にする。`,'ダイエットモード');
+ log('絵美がダイエットモードに入った');
+ return true;
+}
+function resolveEmiDietCycle(){
+ if(activeId!=='emi'||!state||!state.emiDietMode)return;
+ state.restraint=clamp(state.restraint+8);
+ state.mood=clamp(state.mood-1);
+ state.emiDietDaysLeft=Math.max(0,(state.emiDietDaysLeft||0)-1);
+ if(state.emiDietDaysLeft>0)return;
+ const lost=Number(((state.emiDietStartWeight||state.weight)-state.weight).toFixed(1));
+ const success=lost>=1.2;
+ state.emiDietLastResult=success?'success':'failure';
+ state.emiDietMode=false;
+ if(success){
+   state.mood=clamp(state.mood+7); state.restraint=clamp(state.restraint+5); emiJuniorBondDelta(4,'ダイエット成功');
+   const title=`絵美 Lv.${stageNum()}：ダイエット成功`;
+   addCGMessage(title,emiStoryCG('diet_success'),'ダイエット結果CG');
+   addNarration(`数日間の調整の結果、絵美は${lost.toFixed(1)}kg落とし、少しだけ動きやすさを取り戻した。`,`DAY ${state.day} ダイエット結果`);
+   addBubble('assistant','……ちょっとは戻せた。まだ全然足りないけど、この感じならやれるかも。','ダイエット成功');
+   log(`絵美のダイエット成功（-${lost.toFixed(1)}kg）`);
+ }else{
+   state.mood=clamp(state.mood-8); state.restraint=clamp(state.restraint-10); emiJuniorBondDelta(-3,'ダイエット失敗');
+   const title=`絵美 Lv.${stageNum()}：ダイエット失敗`;
+   addCGMessage(title,emiStoryCG('diet_failure'),'ダイエット結果CG');
+   addNarration(`数日間かなり気をつけたつもりだったが、絵美は思うように体重を落とせなかった。`,`DAY ${state.day} ダイエット結果`);
+   addBubble('assistant','……全然減ってない。頑張ったつもりだったのに、なんで……。','ダイエット失敗');
+   log(`絵美のダイエット失敗（変化 ${lost.toFixed(1)}kg）`);
+ }
+}
+function maybeTriggerEmiInjury(){
+ if(activeId!=='emi'||!state||state.emiTrackActive===false||state.emiInjuryDaysLeft>0)return false;
+ const lv=stageNum(); if(lv<4)return false;
+ const cond=refreshEmiCondition();
+ const chance=Math.min(.38,.04+Math.max(0,lv-3)*.05+Math.max(0,(60-cond))*0.004);
+ if(Math.random()>=chance)return false;
+ state.emiInjuryDaysLeft=2+Math.floor(Math.random()*2);
+ state.mood=clamp(state.mood-7);
+ emiJuniorBondDelta(-2,'怪我で練習を休む');
+ const title=`絵美 Lv.${lv}：怪我で走れない`;
+ addCGMessage(title,emiStoryCG('injury'),'怪我イベントCG');
+ addNarration('練習中、絵美は脚を痛めてしまった。すぐに大きな怪我ではないが、しばらくは全力で走れない。','怪我イベント');
+ addBubble('assistant','……っ、やった。最悪。これじゃしばらく走れないじゃん……。','怪我イベント');
+ log(`絵美が怪我。回復まで${state.emiInjuryDaysLeft}日`);
+ return true;
+}
+function tickEmiInjuryRecovery(){
+ if(activeId!=='emi'||!state||state.emiInjuryDaysLeft<=0)return;
+ state.emiInjuryDaysLeft=Math.max(0,state.emiInjuryDaysLeft-1);
+ if(state.emiInjuryDaysLeft===0){
+   addNarration('絵美の怪我はようやく回復した。軽く身体を動かした瞬間、以前ほど走れない感覚と増えた体重を改めて意識してしまう。','怪我回復');
+   addBubble('assistant',stageNum()>=4?'……あれ。こんなに走れなかったっけ。やっぱ、太ったせいもあるのかな……。':'……やっと走れる。でも、ちょっと感覚鈍ってる。','怪我回復');
+   log('絵美の怪我が回復した');
+ }
+}
+function maybeEmiRivalEncounter(force=false){
+ if(activeId!=='emi'||!state||blockingEventType())return false;
+ if(!force&&state.emiLastRivalDay===state.day)return false;
+ const lv=stageNum(),mlv=misakiBodyLv();
+ const chance=force?1:Math.min(.48,.14+Math.max(0,lv-1)*.05+(mlv>=4?.06:0));
+ if(Math.random()>=chance)return false;
+ state.emiLastRivalDay=state.day; state.misakiLastSceneDay=state.day;
+ const title=`絵美 Lv.${lv}：ライバル・美咲イベント`;
+ addCGMessage(title,emiStoryCG('rival_event'),'ライバルイベントCG');
+ let misakiLine='',emiLine='',intro='';
+ if(mlv<=2&&lv<=2){misakiLine='あれ、絵美。最近ちょっと丸くなってない？ まあ、その程度ならまだ走れるんじゃない。';emiLine='うっさい。気のせいに決まってるでしょ。';intro='練習前、ライバルの美咲が絵美の様子を見て薄く笑った。';}
+ else if(mlv<=3&&lv<=4){misakiLine='最近タイム落ちてるって聞いたけど、その身体じゃ仕方ないか。エースも大変だね。';emiLine='……言いたいことあるならハッキリ言えば。';intro='競技場の脇で、美咲は記録表を見ながらわざとらしく肩をすくめた。';}
+ else if(mlv>=4&&lv>=4){misakiLine='……何その目。別にあたしは太ってないし。ちょっとコンディションが悪いだけだから。';emiLine='へえ。前にあたしに言ってたこと、そのまま返すけど。';intro='久々に顔を合わせた美咲は、以前よりウェアの余裕がなくなっている。';}
+ else {misakiLine='その顔、余裕ないね。大会で泣かないでよ？';emiLine='そっちこそ、最近ちょっと余裕なくない？';intro='美咲は軽口を叩くが、どこか自分自身にも焦りを抱えているようだ。';}
+ addNarration(intro,'ライバルイベント');
+ addBubble('misaki',misakiLine,'美咲');
+ addBubble('assistant',emiLine,'絵美');
+ openRoutineFollowup({charId:'emi',kind:'emi_rival_followup',title:`美咲とのやり取りのあと`,intro:'ライバルに煽られて少し苛立っている絵美へ、どう声をかける？',hint:'返答次第で絵美の機嫌や後輩との関係も少し動く。',openingDialogue:emiLine,situation:intro+' 美咲の発言: '+misakiLine,choices:[{label:'「気にしすぎなくていい。まず自分のペースを戻そう」',affection:4,mood:3,restraintDelta:2,tone:'ライバルの挑発を受け流し、立て直しを促す。'}, {label:'「悔しいなら結果で黙らせよう」',affection:3,mood:1,restraintDelta:1,tone:'闘争心を刺激し、競技で見返す方向へ気持ちを向ける。'}, {label:'「美咲も余裕なさそうだった」',affection:2,mood:2,tone:'相手も完璧ではないと伝え、少し安心させる。'}]});
+ log('絵美のライバルイベントが発生');
+ return true;
+}
+function runEmiTournament(){
+ if(activeId!=='emi'||!state||state.emiTrackActive===false||blockingEventType())return false;
+ if(state.emiLastTournamentDay===state.day)return false;
+ state.emiLastTournamentDay=state.day;
+ refreshEmiCondition(); updateMisakiProgress();
+ const lv=stageNum(),mlv=misakiBodyLv();
+ const emiScore=(state.emiCondition||0)+(state.emiJuniorBond||0)*0.10+(Math.random()*16-8)-(state.emiInjuryDaysLeft>0?18:0);
+ const misakiScore=(state.misakiCondition||0)+(Math.random()*16-8);
+ let result='';
+ if(emiScore>=misakiScore+10)result='勝利';
+ else if(emiScore>=misakiScore-4)result='接戦';
+ else if(emiScore>=misakiScore-16)result='苦戦';
+ else result='惨敗';
+ const title=`絵美 Lv.${lv}：大会結果`;
+ addCGMessage(title,emiStoryCG('tournament_result'),'大会結果CG');
+ addNarration(`大学の記録会。現在のコンディションで走った絵美は「${result}」という結果に終わった。美咲は体型Lv.${mlv}相当。`,`DAY ${state.day} 大会結果`);
+ if(result==='勝利'){state.mood=clamp(state.mood+8); state.affection=clamp(state.affection+3); state.restraint=clamp(state.restraint+5); emiJuniorBondDelta(5,'大会で良い結果'); addBubble('assistant','……よし。まだ終わってないって、少しは証明できたかも。','大会結果'); addBubble('misaki','ちっ……今回はあんたの勝ち。でも次は絶対負けない。','美咲');}
+ else if(result==='接戦'){state.mood=clamp(state.mood+1); state.restraint=clamp(state.restraint+2); emiJuniorBondDelta(2,'大会で善戦'); addBubble('assistant','悪くはない。でも、前の自分ならもっといけた。','大会結果'); addBubble('misaki','ふーん、今日はちょっとだけやるじゃん。','美咲');}
+ else if(result==='苦戦'){state.mood=clamp(state.mood-6); state.restraint=clamp(state.restraint+4); emiJuniorBondDelta(-3,'大会で苦戦'); addBubble('assistant','……全然ダメ。こんなんで納得できるわけない。','大会結果'); addBubble('misaki','その程度？ らしくないね。','美咲'); maybeStartEmiDiet('大会結果に焦った');}
+ else {state.mood=clamp(state.mood-12); state.restraint=clamp(state.restraint+6); emiJuniorBondDelta(-6,'大会で惨敗'); addBubble('assistant','……ひどすぎ。これじゃ後輩に示しつかない。','大会結果'); addBubble('misaki','本気でそのまま続けるつもり？ 見てるこっちがつらいんだけど。','美咲'); maybeStartEmiDiet('大敗して危機感が強まった');}
+ log(`絵美の大会結果: ${result} / 美咲Lv.${mlv}`);
+ return true;
+}
+function maybeEmiSystemTurnEvent(){
+ if(activeId!=='emi'||!state||blockingEventType())return false;
+ ensureEmiTrackFlag();
+ const key=currentTurnKey(); if(state.emiLastSystemTurnKey===key)return false;
+ state.emiLastSystemTurnKey=key;
+ refreshEmiCondition();
+ if(state.turn===0 && state.day>1){
+   if(state.day%5===0 && state.emiTrackActive!==false){ if(runEmiTournament()) return true; }
+   if(state.emiInjuryDaysLeft>0){ addBubble('system',`絵美は怪我のため、あと${state.emiInjuryDaysLeft}日ほど全力では走れない。`,'怪我状態'); return true; }
+ }
+ if(state.turn===1){ if(maybeEmiRivalEncounter(false)) return true; }
+ return false;
+}
+function ensureEmiTrackFlag(){ if(activeId!=='emi'||!state)return; if(state.growthTraits?.emiQuitTrack||stageNum()>=6)state.emiTrackActive=false; }
+function applyEmiDailySystems(){
+ if(activeId!=='emi'||!state)return;
+ ensureEmiTrackFlag();
+ updateMisakiProgress();
+ refreshEmiCondition();
+ if(state.emiTrackActive!==false){
+   if(stageNum()<=2 && state.emiCondition>=80) emiJuniorBondDelta(1,'安定したコンディション');
+   if(stageNum()>=4) emiJuniorBondDelta(-1,'練習で余裕を失う');
+ }
+ if(stageNum()>=3 && !state.emiDietMode && Math.random()<.42) maybeStartEmiDiet('体型やタイムの低下を気にした');
+ resolveEmiDietCycle();
+ tickEmiInjuryRecovery();
+ maybeTriggerEmiInjury();
+}
+
 
 
 function stageNum(){return evolutionStage()+1}
@@ -735,10 +940,35 @@ const WEIGHT_STAGE_EVENTS={
     ]}
   },
   emi:{
-    1:{title:'練習着の違和感',text:'絵美は部活前、いつもの練習着が少しきつく感じることに気づいた。',image:'assets/emi/event_stage_02.webp',choices:[
-      {label:'体調を気遣う',affection:2,mood:1,restraint:4,reply:'「別に平気。……でも、ちょっと気になるかも。」'},
-      {label:'運動量の話をする',affection:1,mood:-1,restraint:6,reply:'「言われなくても走るっての。」'},
-      {label:'見た目を直接指摘する',affection:-4,mood:-5,restraint:9,reply:'「は！？ 太ってないし！」'}
+    1:{title:'練習着の違和感',text:'絵美は大学陸上部の練習前、いつもの練習着のウエストと太腿まわりが少しきついことに気づく。まだ大きな異変とは思いたくないが、身体に残る窮屈さに小さく眉をひそめている。',image:'assets/emi/event_stage_02.webp',fallbackDialogue:'……あれ。なんか今日、練習着きつくない？ いや、気のせいだと思うけど。',choices:[
+      {label:'体調を気遣って声をかける',affection:3,mood:2,restraint:2,reply:'「体調は悪くない。……でも、ちょっとだけ引っかかるんだよね。」'},
+      {label:'練習の負荷が高かったのか聞く',affection:2,mood:0,restraint:4,reply:'「最近走り込んでるし、そのせいかも。……たぶん。」'},
+      {label:'サイズが変わったのかもと率直に言う',affection:-4,mood:-5,restraint:7,reply:'「は？ そこまで言う？ ……まだそんな段階じゃないし。」'}
+    ]},
+    2:{title:'タイムが落ちる',text:'絵美はいつもの短距離メニューをこなしたあと、自己基準より明らかに遅いタイムに言葉を失う。何本か走り直しても感覚が戻らず、苛立ちと焦りを隠せずにいる。',image:'assets/emi/event_stage_03.webp',fallbackDialogue:'……嘘でしょ。このタイム、全然よくない。今日の調子だけってことにしたいんだけど。',choices:[
+      {label:'無理をせず一度落ち着こうと勧める',affection:4,mood:2,restraint:3,reply:'「……そうだね。今イラついても余計ダメか。」'},
+      {label:'最近どこが重いのか具体的に聞く',affection:4,mood:1,restraint:5,reply:'「スタートも中盤も鈍い感じ。前みたいに身体が前へ出ない。」'},
+      {label:'体型の影響かもしれないと指摘する',affection:-3,mood:-5,restraint:8,reply:'「分かってるよ、そんなの……でも、まだ認めたくない。」'}
+    ]},
+    3:{title:'スタートで身体が重い',text:'スターティングブロックを蹴り出した瞬間、絵美は以前より身体が前に出ない重さをはっきり感じる。練習後にはユニフォームのウエストを引っ張って確かめ、自分の腹部や腰まわりを気にしている。',image:'assets/emi/event_stage_04.webp',fallbackDialogue:'……出遅れたっていうか、身体が重い。なんかもう、ごまかしにくくなってきた。',choices:[
+      {label:'責めずに気持ちへ寄り添う',affection:5,mood:3,restraint:3,reply:'「ありがと。今はそういう言い方の方が助かる。」'},
+      {label:'何が一番つらいのか静かに聞く',affection:4,mood:1,restraint:5,reply:'「走れないこともだけど、自分の身体が思い通りじゃないのが一番きつい。」'},
+      {label:'はっきり変化を認めるよう促す',affection:-3,mood:-5,restraint:9,reply:'「……簡単に言うなって。分かってるけど、そう割り切れない。」'}
+    ]},
+    4:{title:'練習についていけない',text:'チーム練習の途中、絵美は後半のメニューについていけず、膝に手をついて大きく息を整える。後輩から心配されるほど消耗しており、エースだった自分との差を痛感している。',image:'assets/emi/event_stage_05.webp',fallbackDialogue:'……最悪。後輩に心配されるとか、ほんと笑えないんだけど。',choices:[
+      {label:'頑張ってきた分だけ今は休もうと伝える',affection:5,mood:3,restraint:3,reply:'「……そうだね。意地だけじゃどうにもならないか。」'},
+      {label:'一人で抱え込んでいないか尋ねる',affection:5,mood:2,restraint:4,reply:'「抱え込んでるつもりはないけど……ちょっと、きつい。」'},
+      {label:'このままでは厳しいと現実を突きつける',affection:-4,mood:-6,restraint:10,reply:'「分かってるよ！ だから余計に腹立つんじゃん……。」'}
+    ]},
+    5:{title:'大会で大敗し、退部を決意',text:'公式レースで振るわなかった絵美は、ゴール後もしばらく息が整わず、その場に座り込む。記録を見つめたあと、人の少ない場所で大会の結果と今の自分の身体を受け止めきれず、ついに大学陸上部を辞める決意を固める。',image:'assets/emi/event_stage_06.webp',fallbackDialogue:'……もう無理かも。今のあたしで続けても、みっともないだけだよね。部、やめる。',choices:[
+      {label:'決断を否定せず、気持ちを支える',affection:7,mood:4,restraint:2,reply:'「……否定しないでくれて助かる。今はそれだけで十分。」'},
+      {label:'本心なのか、少しだけ確認する',affection:5,mood:1,restraint:5,reply:'「悔しいよ。悔しいけど……今のまま続ける方が、もっとつらい。」'},
+      {label:'まだ辞めない方がいいと強く引き止める',affection:-3,mood:-6,restraint:8,reply:'「そんな簡単に言わないで。決めるまで、どれだけしんどかったと思ってるの。」'}
+    ]},
+    6:{title:'スパイクを前に、元陸上部の自分を見つめる',text:'退部後の夜、絵美は部屋で使い込んだスパイクや昔の記録を前に座り込み、競技をしていた頃の自分と今の自分を静かに見比べる。もう元の生活には戻れていない現実が、表情にも滲んでいる。',image:'assets/emi/event_stage_07.webp',fallbackDialogue:'……ほんと、別人みたい。前のあたしなら、こんなん絶対許せなかったのに。',choices:[
+      {label:'昔の頑張りも今の絵美も否定しない',affection:6,mood:3,restraint:2,reply:'「……そう言われると、ちょっと救われる。」'},
+      {label:'今いちばんつらいことを聞く',affection:5,mood:1,restraint:4,reply:'「走れないこともだけど、もう前の自分じゃないって認めるのがきつい。」'},
+      {label:'切り替えて前を向こうと急かす',affection:-3,mood:-4,restraint:6,reply:'「そんなすぐ切り替えられたら苦労しないっての……。」'}
     ]}
   },
   yui:{},
@@ -891,7 +1121,11 @@ async function resolveWeightEventChoice(index){
  const before={affection:state.affection,mood:state.mood,restraint:state.restraint,weight:state.weight};
  state.affection=clamp(state.affection+(choice.affection||0));
  state.mood=clamp(state.mood+(choice.mood||0));
- state.restraint=clamp(state.restraint+(choice.restraint||0));
+ {
+   let rd=choice.restraint||0;
+   if(c.id==='erika'&&rd>0)rd=erikaRestraintDelta(rd,'体型変化イベント');
+   state.restraint=clamp(state.restraint+rd);
+ }
  if(!Array.isArray(state.seenWeightEvents))state.seenWeightEvents=[];
  state.seenWeightEvents.push(state.pendingWeightEvent.key);
 
@@ -917,6 +1151,10 @@ ${c.id==='yui'?'CGで起きた出来事をなかったことにしたり別シ�
    addNarration(`${c.name}はその言葉を受け、服や身体の変化を確かめるように視線を落とした。`,'体重変化イベント');
    addBubble('assistant',choice.reply||'……。','体重変化イベント');
  }
+ if(c.id==='emi'&&stage>=5){
+   state.growthTraits=state.growthTraits||{};
+   state.growthTraits.emiQuitTrack=true;
+ }
  remember('weight',`${c.name}の「${ev.title}」で主人公は「${generatedLabel}」と対応した`,5,['weight','event']);
  log(`体重変化Lv.${stage+1}イベント完了：${generatedLabel}`);
  state.pendingWeightEvent=null;save();render();renderWeightEvent();
@@ -938,6 +1176,26 @@ function updateEvolution(c){
  if(c.id==='yui'&&d>=8&&!state.favoriteFoods.includes('揚げ物'))state.favoriteFoods.push('揚げ物');
 }
 
+function erikaRestraintDelta(delta,reason=''){
+ if(activeId!=='erika' || !state)return delta;
+ const lv=stageNum();
+ // Lv1〜2: 本人が「太った」と認めていないため、体型・食事由来の自制心は増えない。
+ if(delta>0 && lv<3){
+   if(reason)log(`絵里香はまだ太ったと認めていないため抑止力上昇なし（${reason}）`);
+   return 0;
+ }
+ return delta;
+}
+function erikaVolatileDrop(base=1,reason=''){
+ if(activeId!=='erika'||!state||stageNum()<3)return 0;
+ const lv=stageNum();
+ // Lv3以降は些細な刺激でも崩れやすい。高Lvほど落ち幅が増える。
+ const bonus=[0,0,1,2,4,6,8][lv-1];
+ const drop=Math.max(1,Math.round(base+bonus));
+ state.restraint=clamp(state.restraint-drop);
+ if(reason)log(`絵里香の抑止力が揺らぐ：-${drop}（${reason} / Lv.${lv}）`);
+ return drop;
+}
 function characterFoodModifier(c,offer){
  const key=foodGrowthKey(offer),g=state.growthTraits||{},st=evolutionStage();
  let accept=0,restraintMult=1,weightMult=1,fullnessMult=1;
@@ -978,16 +1236,17 @@ function erikaFoodGuilt(food,before){
  const moodLoss=Math.max(0,Math.min(9,Math.round(guilt/10)));
  // 罪悪感そのものは体型Lvとともに強くなるが、
  // 体型Lvが上がるほど「後悔しても次の自制に結びつきにくい」。
- const conversion=[1,.90,.75,.60,.45,.30,.20][Math.max(0,Math.min(6,lv-1))];
- const restraintBonus=Math.max(0,Math.min(5,Math.round((guilt/14)*conversion)));
+ const conversion=[0,0,1.00,.90,.80,.70,.60][Math.max(0,Math.min(6,lv-1))];
+ const restraintBonus=lv<3?0:Math.max(1,Math.min(7,Math.round((guilt/12)*conversion)));
  return {guilt,moodLoss,restraintBonus};
 }
 function restraintGainAfterEating(c,offer,before){
- let base={risa:5,emi:10,yui:7,erika:8,rei:5}[c.id]||6;
+ if(c.id==='erika'&&stageNum()<3)return 0;
+ let base={risa:5,emi:10,yui:7,erika:10,rei:5}[c.id]||6;
  base+=Math.round(offer.restraintHit*.45);
  base+=Math.floor(evolutionStage()/2);
- // 絵里香は食後に後悔はするが、高Lvほどそれが強い自制へ直結しない。
- if(c.id==='erika')base+=Math.round(Math.random()*3);
+ // Lv3以降の絵里香は食後に一気に焦って自制心が上がる。ただし長続きはしない。
+ if(c.id==='erika')base+=2+Math.round(Math.random()*5);
  // 結衣は高い抑止力で食べた時ほど後悔が強く、抑止力も戻りやすい。
  if(c.id==='yui'&&before.restraint>=65)base+=5;
  // 怜は体重増加への興味が育つほど罪悪感が弱くなる。興味50以上なら上昇しない。
@@ -1002,9 +1261,18 @@ function characterEvolutionText(c){
  const d=weightGainAmount(),st=evolutionStage(),interest=state.weightInterest||0;
  const common=`開始時から+${d.toFixed(1)}kg。体重変化段階${st+1}/7（${evolutionLabel()}）。`;
  if(c.id==='risa')return common+(st>=2?'以前より体型への意識が強く、食べた後は罪悪感から自制しようとする。':'まだ大きな変化ではないが、食べ過ぎには気をつけようとしている。');
- if(c.id==='emi')return common+(st>=1?'体重増加への危機感が強く、食べた後ほど強く自制しようとする。':'活発さを保ちたい意識が強い。');
+ if(c.id==='emi'){
+   if(st<=1)return common+'まだ競技を優先しつつも、違和感を「一時的なもの」と片付けようとしている。';
+   if(st<=3)return common+'体型と競技パフォーマンスの両方が気になり始め、食後は危機感から自制しようとする。';
+   if(st===4)return common+'チーム練習についていけない場面が増え、体型変化と走力低下への焦りがかなり強い。';
+   return common+'大会での大敗をきっかけに大学陸上部を退部した。運動量が落ち、元選手だった自分との落差にも苦しんでいる。';
+ }
  if(c.id==='yui')return common+`油物嗜好${state.growthTraits?.oilyPreference||0}/100。`+(st>=2?'体型を気にする発言が増え、体重増加と経験に伴って油物を好みやすくなっている。':'体型を気にしつつも、勧められると断り切れないことがある。');
- if(c.id==='erika')return common+(st>=1?`太った経験がなかったため食後の罪悪感は強い。一方、体型Lv.${st+1}まで進んだことで食欲・我慢疲れも強くなり、罪悪感があっても抑止力は以前ほど戻りにくく、時間経過でも下がりやすい。好感度が高いほど主人公へのデレ・依存も増える。`:'まだ自分が太るとはほとんど考えていない。');
+ if(c.id==='erika'){
+   const lv=st+1;
+   if(lv<3)return common+'本人はまだ「太った」と認めておらず、体型や食事を理由に抑止力が上がらない。食事制限を始める段階ではない。';
+   return common+`Lv.${lv}で初めて体重増加を認めて焦っている。食後・鏡・服のきつさなどで抑止力は一気に上がるが、非常に不安定で、空腹・誘惑・主人公の一言・時間経過など些細なきっかけですぐ下がる。高Lvほど上下動が激しい。好感度が高いほど主人公へのデレ・依存も増える。`;
+ }
  return common+`体重増加への興味 ${interest}/100。`+(interest>=50?'増えること自体に明確な興味・快感を覚え始めており、食後も罪悪感による抑止力上昇が起こらない。':interest>=25?'体重が増える現象そのものを面白いと感じ始めている。':'まだ体重増加を特別に好んではいない。');
 }
 function placeholder(el,name){if(el.dataset.fallback==='1')return;el.dataset.fallback='1';const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000"><rect width="100%" height="100%" fill="#f1e2e8"/><text x="50%" y="48%" text-anchor="middle" font-family="sans-serif" font-size="72" fill="#7d5365">${name}</text><text x="50%" y="56%" text-anchor="middle" font-family="sans-serif" font-size="28" fill="#9f7b8a">立ち絵を assets に追加</text></svg>`;el.src='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg)}
@@ -1012,6 +1280,7 @@ function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':
 function renderSelect(){const g=$('characterGrid');if(!g)return;g.innerHTML='';Object.values(CHARACTERS).forEach(c=>{const saved=safeGet(stateKey(c.id),null);const card=document.createElement('button');card.type='button';card.className='charCard';card.dataset.characterId=c.id;card.setAttribute('aria-label',c.name+'を選択');card.innerHTML=`<img class="charThumb" src="assets/${c.id}/standing_01.webp?v=${APP_BUILD}" alt="${c.name}"><div class="charInfo"><strong>${c.name}</strong> <span class="small">${c.age}歳</span><div class="rel">${c.relationship}</div><div class="desc">${c.personality}<br>${c.height}cm / ${c.startWeight}kg</div>${saved?`<span class="continueMark">DAY ${saved.day||1} から続き</span>`:''}</div>`;const im=card.querySelector('img');if(im)im.addEventListener('error',e=>placeholder(e.currentTarget,c.name));card.onclick=function(e){e.preventDefault();startCharacter(c.id)};g.appendChild(card)});const gs=globalSettings();if($('globalApiKey'))$('globalApiKey').value=gs.apiKey||'';if($('globalModel'))$('globalModel').value=normalizeModel(gs.model);setApiStatus(gs.apiKey?`API設定あり：${normalizeModel(gs.model)}（接続未確認）`:'API接続：未確認','neutral')}
 function startCharacter(id){try{if(!CHARACTERS[id])throw new Error('character not found: '+id);activeId=id;state=loadState(id);if(!state.history.length){const c=CHARACTERS[id];state.history.push({role:'narration',content:firstScene(c),meta:'☀ 朝 / DAY 1'});state.history.push({role:'assistant',content:firstGreeting(c),meta:'☀ 朝 / DAY 1'});save()}$('selectScreen').classList.add('hidden');$('gameScreen').classList.remove('hidden');render();
  if(id==='erika'&&!blockingEventType())setTimeout(()=>maybeErikaDaypartEvent(),0);
+ if(id==='emi'&&!blockingEventType())setTimeout(()=>{addBubble('system','絵美には専用システムがあります：まかない依存度・競技コンディション・後輩との関係・大会結果・ライバル美咲。ステータス表示から確認できます。','絵美専用システム');maybeEmiSystemTurnEvent();},0);
 if(id==='yui'&&state.forceYuiWeightEventMigration){
   state.forceYuiWeightEventMigration=false;
   const st=evolutionStage();
@@ -1020,13 +1289,27 @@ if(id==='yui'&&state.forceYuiWeightEventMigration){
 }}catch(err){console.error(err);const st=$('runtimeStatus');if(st){st.textContent='キャラ選択エラー: '+err.message;st.style.background='#f8d7da';st.style.color='#842029'}alert('キャラクターを開始できませんでした: '+err.message)}}
 function firstScene(c){
  if(c.id==='risa')return'朝の教室。梨沙は茶色のポニーテールを揺らしながら、いつものように明るい表情でこちらへ近づいてきた。';
- if(c.id==='emi')return'朝の教室。絵美は部活の準備をしながら、少し忙しそうにこちらを見る。';
+ if(c.id==='emi')return'朝の大学キャンパス。講義前、絵美は大学陸上部の練習道具を肩にかけながら、少し忙しそうにこちらを見る。';
  if(c.id==='yui')return'朝の静かな時間。結衣は柔らかい表情でこちらに気づき、軽く会釈した。';
  if(c.id==='erika')return'朝の大学キャンパス。講義前の教室で、絵里香は姿勢よく座ったまま、こちらの気配に気づいてわずかに視線だけを向けた。';
  return'朝の教室。怜は窓際で静かに過ごしていたが、こちらに気づくとじっと観察するように目を向けた。';
 }
-function firstGreeting(c){if(c.id==='risa')return'おはよ。今日も一緒だね。なんか話す？';if(c.id==='emi')return'おはよ。朝から何？ 私、部活あるんだけど。';if(c.id==='yui')return'おはよう。こんな時間から会うと、ちょっと不思議な感じだね。';if(c.id==='erika')return'……朝から何ですの？ 用があるなら手短にしてくださいませ。';return'……おはよう。今日は、何の話する？'}
-function render(){if(!activeId||!state)return;trackRelationshipStage();const c=CHARACTERS[activeId];$('day').textContent=state.day;$('turnLabel').textContent=turns[state.turn].label;$('affection').textContent=Math.round(state.affection);$('mood').textContent=Math.round(state.mood);$('fullness').textContent=Math.round(state.fullness);$('restraint').textContent=Math.round(state.restraint);$('weight').textContent=state.weight.toFixed(1);$('money').textContent=Math.round(state.money??2500).toLocaleString();$('weightBadge').textContent=state.weight.toFixed(1);$('height').textContent=c.height;$('charName').textContent=c.name;$('headerRelationship').textContent=`${c.relationship} / ${relationshipLabel()}`;const bt=bodyType();$('bodyType').textContent=bt;$('bodyTypeTop').textContent=bt;$('profileMini').textContent=`${c.age}歳｜関係:${relationshipLabel()}｜${c.speech}｜バイト${state.workCount||0}回`;const eb=$('emotionBadge');if(eb)eb.textContent=emotionLabel(state.lastEmotion||'normal');const img=$('characterImage');img.dataset.fallback='';img.dataset.stageFallback='0';img.onload=()=>{img.style.visibility='visible'};img.onerror=()=>{if(img.dataset.stageFallback==='0'){img.dataset.stageFallback='1';img.src=`assets/${c.id}/standing_01.webp?v=${APP_BUILD}`}else{placeholder(img,c.name)}};img.style.visibility='visible';img.src=imagePath(c);const chat=$('chat');chat.innerHTML='';state.history.forEach(m=>{if(m.role==='narration')addNarration(m.content,m.meta,false);else if(m.role==='cg')addCGMessage(m.title,m.path,m.meta,false);else addBubble(m.role,m.content,m.meta,false)});chat.scrollTop=chat.scrollHeight;$('gameLog').innerHTML=state.gameLog.slice().reverse().map(x=>`<div>• ${escapeHtml(x)}</div>`).join('')||'<div>まだログはありません。</div>';$('profileDetail').innerHTML=`<b>性格</b><br>${escapeHtml(c.personality)}<br><br><b>食欲 / 太りやすさ / 運動</b><br>${escapeHtml(c.appetite)} / ${escapeHtml(c.gainTendency)} / ${escapeHtml(c.exercise)}<br><br><b>体型・体重への考え</b><br>${escapeHtml(c.bodyView)}<br><br><b>好きな食べ物</b><br>${escapeHtml(state.favoriteFoods.length?state.favoriteFoods.join('、'):'特になし')}<br><br><b>その他</b><br>${escapeHtml(c.features)}`;renderDateEvent();renderWeightEvent();renderInitiativeChoices();renderRestraintEvent();renderRoutineChoices();renderNightChoice();renderCGGallery();renderHookDebugPanel();syncEventLockUI();}
+function firstGreeting(c){if(c.id==='risa')return'おはよ。今日も一緒だね。なんか話す？';if(c.id==='emi')return'おはよ。朝から何？ このあと講義も練習もあるんだけど。';if(c.id==='yui')return'おはよう。こんな時間から会うと、ちょっと不思議な感じだね。';if(c.id==='erika')return'……朝から何ですの？ 用があるなら手短にしてくださいませ。';return'……おはよう。今日は、何の話する？'}
+function currentExerciseText(c){
+ if(c.id==='emi'&&evolutionStage()>=5)return '以前は頻繁 / 現在はかなり少ない';
+ return c.exercise;
+}
+function currentBodyViewText(c){
+ if(c.id==='emi'&&evolutionStage()>=5)return '大学陸上部を退部し、走れていた頃の自分と今の自分の差を強く意識している。';
+ if(c.id==='emi'&&evolutionStage()>=3)return 'タイムや動きの変化から、体型増加が競技に影響しているのではと焦り始めている。';
+ return c.bodyView;
+}
+function currentFeaturesText(c){
+ if(c.id==='emi'&&evolutionStage()>=5)return '20歳の大学生。主人公とは大学の同級生。かつては大学陸上部のエースだったが、大会での挫折をきっかけに退部。走れていた頃の自分との落差を抱えている。';
+ if(c.id==='emi')return c.features+' ライバルの美咲、まかない依存度、競技コンディション、後輩との関係、大会結果システムが進行に応じて変動する。';
+ return c.features;
+}
+function render(){if(!activeId||!state)return;trackRelationshipStage();const c=CHARACTERS[activeId];$('day').textContent=state.day;$('turnLabel').textContent=turns[state.turn].label;$('affection').textContent=Math.round(state.affection);$('mood').textContent=Math.round(state.mood);$('fullness').textContent=Math.round(state.fullness);$('restraint').textContent=Math.round(state.restraint);$('weight').textContent=state.weight.toFixed(1);$('money').textContent=Math.round(state.money??2500).toLocaleString();$('weightBadge').textContent=state.weight.toFixed(1);$('height').textContent=c.height;$('charName').textContent=c.name;$('headerRelationship').textContent=`${c.relationship} / ${relationshipLabel()}`;const bt=bodyType();$('bodyType').textContent=bt;$('bodyTypeTop').textContent=bt;$('profileMini').textContent=`${c.age}歳｜関係:${relationshipLabel()}｜${c.speech}｜バイト${state.workCount||0}回${c.id==='emi'?`｜まかない依存${Math.round(state.emiMessDependence||0)}/100｜競技コンディション${Math.round(refreshEmiCondition()||0)}/100`:''}`;const eb=$('emotionBadge');if(eb)eb.textContent=emotionLabel(state.lastEmotion||'normal');const img=$('characterImage');img.dataset.fallback='';img.dataset.stageFallback='0';img.onload=()=>{img.style.visibility='visible'};img.onerror=()=>{if(img.dataset.stageFallback==='0'){img.dataset.stageFallback='1';img.src=`assets/${c.id}/standing_01.webp?v=${APP_BUILD}`}else{placeholder(img,c.name)}};img.style.visibility='visible';img.src=imagePath(c);const chat=$('chat');chat.innerHTML='';state.history.forEach(m=>{if(m.role==='narration')addNarration(m.content,m.meta,false);else if(m.role==='cg')addCGMessage(m.title,m.path,m.meta,false);else addBubble(m.role,m.content,m.meta,false)});chat.scrollTop=chat.scrollHeight;$('gameLog').innerHTML=state.gameLog.slice().reverse().map(x=>`<div>• ${escapeHtml(x)}</div>`).join('')||'<div>まだログはありません。</div>';$('profileDetail').innerHTML=`<b>性格</b><br>${escapeHtml(c.personality)}<br><br><b>食欲 / 太りやすさ / 運動</b><br>${escapeHtml(c.appetite)} / ${escapeHtml(c.gainTendency)} / ${escapeHtml(currentExerciseText(c))}<br><br><b>体型・体重への考え</b><br>${escapeHtml(currentBodyViewText(c))}<br><br><b>好きな食べ物</b><br>${escapeHtml(state.favoriteFoods.length?state.favoriteFoods.join('、'):'特になし')}<br><br><b>その他</b><br>${escapeHtml(currentFeaturesText(c))}${c.id==='emi'?`<br><br><b>絵美専用システム</b><br>まかない依存度 ${Math.round(state.emiMessDependence||0)}/100<br>競技コンディション ${Math.round(refreshEmiCondition()||0)}/100<br>後輩との関係 ${Math.round(state.emiJuniorBond||0)}/100<br>陸上継続 ${state.emiTrackActive!==false?'継続中':'退部済み'}<br>ダイエット ${state.emiDietMode?`進行中（残り${state.emiDietDaysLeft}日）`:(state.emiDietLastResult==='success'?'直近成功':state.emiDietLastResult==='failure'?'直近失敗':'未実施 / 終了')}<br>怪我 ${state.emiInjuryDaysLeft>0?`回復まで${state.emiInjuryDaysLeft}日`:'なし'}<br>ライバル美咲 ${state.misakiWeight.toFixed(1)}kg / 体型Lv.${misakiBodyLv()} / コンディション ${Math.round(state.misakiCondition||0)}/100`:''}`;renderDateEvent();renderWeightEvent();renderInitiativeChoices();renderRestraintEvent();renderRoutineChoices();renderNightChoice();renderCGGallery();renderHookDebugPanel();syncEventLockUI();}
 
 function normalizeEmotion(v){
  const x=String(v||'normal').toLowerCase();
@@ -1087,7 +1370,7 @@ function addAIResponse(result,meta=''){
  addBubble('assistant',r.dialogue,meta);
  applyEmotion(r.emotion);
 }
-function addBubble(role,content,meta='',persist=true){if(content&&typeof content==='object'){const safe=normalizeAIResult(content);content=safe.dialogue||JSON.stringify(content)}const div=document.createElement('div');div.className='msg '+(role==='assistant'?'ai':role==='user'?'you':'system');div.textContent=String(content??'');if(meta){const m=document.createElement('div');m.className='meta';m.textContent=meta;div.appendChild(m)}$('chat').appendChild(div);$('chat').scrollTop=$('chat').scrollHeight;if(persist){state.history.push({role,content,meta});if(state.history.length>60)state.history=state.history.slice(-60);save()}}
+function addBubble(role,content,meta='',persist=true){if(content&&typeof content==='object'){const safe=normalizeAIResult(content);content=safe.dialogue||JSON.stringify(content)}const div=document.createElement('div');const cls=role==='assistant'?'ai':role==='user'?'you':role==='misaki'?'misaki':'system';div.className='msg '+cls;div.textContent=String(content??'');if(meta){const m=document.createElement('div');m.className='meta';m.textContent=meta;div.appendChild(m)}$('chat').appendChild(div);$('chat').scrollTop=$('chat').scrollHeight;if(persist){state.history.push({role,content,meta});if(state.history.length>80)state.history=state.history.slice(-80);save()}}
 function log(text){state.gameLog.push(`DAY ${state.day} ${turns[state.turn].label}: ${text}`);if(state.gameLog.length>120)state.gameLog=state.gameLog.slice(-120);save()}
 function cnameSafe(){return activeId&&CHARACTERS[activeId]?CHARACTERS[activeId].name:'相手'}
 function currentTurnKey(){return `${state.day}:${state.turn}`}
@@ -1221,7 +1504,7 @@ function chooseInitiatedEvent(){
  if(c.id==='emi'&&(g.weightAlarm||0)>=30)candidates.push({
    type:'training',
    situation:`${c.name}は最近の体重変化や運動への影響を気にしている。`,
-   goal:'部活・運動・身体の動きについて自分から話題を出す。ぶっきらぼうさを維持する。'
+   goal:'大学陸上部の練習・競技・身体の動きについて自分から話題を出す。ぶっきらぼうさを維持する。'
  });
  if((state.favoriteFoods||[]).length)candidates.push({
    type:'favorite',
@@ -1231,8 +1514,8 @@ function chooseInitiatedEvent(){
  const period=turns[state.turn].label;
  candidates.push({
    type:'daily',
-   situation:`DAY ${state.day}の${period}。${c.name}から主人公へ自然に話しかけるタイミング。現在の関係段階は「${stage.label}」。`,
-   goal:period.includes('朝')?'今日の予定、昨日のこと、最近気になっていることのどれかを自然に話題にする。':period.includes('昼')?'昼の出来事や食事、学校・仕事・活動について自然に話題にする。':'今日あったことや主人公との最近の出来事を自然に話題にする。'
+   situation:`DAY ${state.day}の${period}。${c.name}から主人公へ自然に話しかけるタイミング。現在の関係段階は「${stage.label}」。${c.id==='emi'?'絵美は20歳の大学生で、大学陸上部所属。':''}`,
+   goal:period.includes('朝')?'今日の予定、昨日のこと、最近気になっていることのどれかを自然に話題にする。':period.includes('昼')?(c.id==='emi'?'昼の出来事や食事、大学の講義・空きコマ・大学陸上部・アルバイトについて自然に話題にする。':'昼の出来事や食事、学校・仕事・活動について自然に話題にする。'):'今日あったことや主人公との最近の出来事を自然に話題にする。'
  });
  return candidates[Math.floor(Math.random()*candidates.length)];
 }
@@ -1310,6 +1593,10 @@ async function resolveRestraintChoice(i){
    const failRise=5+Math.floor(Math.random()*6);
    delta=activeId==='erika'?Math.max(2,failRise-Math.floor((erikaLv-1)/2)):failRise;outcome='失敗';
  }
+ if(activeId==='erika'){
+   if(delta>0)delta=erikaRestraintDelta(delta,'抑止力イベント');
+   else if(delta<0&&stageNum()>=3)delta-=Math.max(1,stageNum()-2);
+ }
  state.restraint=clamp(state.restraint+delta);
  if(outcome==='失敗')state.mood=clamp(state.mood-1);
  else state.mood=clamp(state.mood+1);
@@ -1348,6 +1635,10 @@ function evaluateRestraintConversation(text){
  }else if(pressure){
    delta=2+Math.floor(Math.random()*3);
  }
+ if(activeId==='erika'){
+   if(delta>0)delta=erikaRestraintDelta(delta,'会話');
+   else if(delta<0&&stageNum()>=3)delta-=Math.max(1,stageNum()-2);
+ }
  state.restraint=clamp(state.restraint+delta);
  state.restraintTalkRewards.push({day:state.day,key,delta});
  state.restraintTalkRewards=state.restraintTalkRewards.slice(-20);
@@ -1383,7 +1674,7 @@ function initiativeChoiceSet(ev){
  ];
  if(c.id==='emi'&&ev.type==='training')return [
   {label:'「動きにくいところある？」',affection:4,mood:2,tone:'絵美の運動時の違和感を真面目に聞き、具体的な影響を確かめる。'},
-  {label:'「少し休んだ方がいいんじゃない？」',affection:2,mood:1,tone:'部活を否定せず、身体を気遣って休息を提案する。'},
+  {label:'「少し休んだ方がいいんじゃない？」',affection:2,mood:1,tone:'大学陸上部の競技生活を否定せず、身体を気遣って休息を提案する。'},
   {label:'「練習不足なんじゃない？」',affection:-2,mood:-3,tone:'体型より努力不足の可能性をぶっきらぼうに指摘する。'}
  ];
  if(c.id==='erika'&&ev.type==='whereabouts')return [
@@ -1448,6 +1739,7 @@ async function generateInitiativeOpeningAndChoices(c,ev,baseChoices){
  const intents=baseChoices.map((x,i)=>`${i+1}. 意図:${x.tone} / 好感度:${(x.affection||0)>=0?'+':''}${x.affection||0} / 機嫌:${(x.mood||0)>=0?'+':''}${x.mood||0}`).join('\n');
  const instructions=`恋愛シミュレーションゲームの「キャラクター発イベント」を生成する。JSONだけを返す。\n形式:{"narration":"情景1〜2文","dialogue":"キャラクターの発言1〜3文","emotion":"normal|happy|embarrassed|angry|troubled|surprised","choices":["主人公の返答1","主人公の返答2","主人公の返答3"]}\n最重要ルール:\n- dialogueとchoicesを必ず会話として噛み合わせる。dialogueで聞いていないことへの返答をchoicesに出さない。\n- choicesはdialogueの最後の問いかけ・発言に直接返せる短い主人公の台詞にする。\n- choicesは3件で、下記3つの選択意図と順番・好感度方向を保つ。ただし文言はその場面に合わせて全面的に言い換えてよい。\n- 3択同士の意味を重複させない。肯定・掘り下げ・否定/距離を置く等、元の意図差を保つ。\n- キャラクターの性格・口調・関係段階を守る。主人公の返答を先に書かない。\n- 相手が結衣の場合、主人公はかなり年下なので、choicesは必ず礼儀正しい敬語にする。告白成立前は「好きです」「惚れています」「結衣さんだから特別です」「付き合いたいです」など明確な恋愛好意をchoicesに出さない。肯定・励まし・気遣い・節度ある褒め言葉は可。明確な恋愛感情は告白イベントで交際成立後のみ。恋人後も敬語ベースを維持する。馴れ馴れしいタメ口・命令口調・呼び捨ては禁止。`;
  const input=`キャラクター:${c.name} / ${c.age}歳\n性格:${c.personality}\n話し方:${c.speech}\n関係:${relationshipLabel()} / 好感度:${Math.round(state.affection)} / 機嫌:${Math.round(state.mood)}\nDAY ${state.day} / ${turns[state.turn].label}\nイベント種別:${ev.type}\n状況:${ev.situation}\n狙い:${ev.goal}\n3択の固定された意味・効果:\n${intents}\n${c.id==='erika'?'絵里香は20歳の大学生で、主人公とは大学の同級生。高校生・制服・部活中心の生活として描写しない。大学の講義、キャンパス、サークル、アルバイト、私服など大学生らしい生活文脈を優先する。':''}
+${c.id==='emi'?'絵美は20歳の大学生で、主人公とは大学の同級生。大学陸上部のエース。高校生・制服・高校の教室として描写しない。大学の講義、キャンパス、大学陸上部、競技場、アルバイト、私服など大学生らしい生活文脈を優先する。':''}
 ${c.id==='yui'?'結衣は主人公よりかなり年上。年齢差イベント以外では毎回年齢差の話にしない。主人公から結衣への返答は、告白成立前は必ず敬語で礼儀正しくする。ポジティブな声かけは可だが、「好き」「特別」「付き合いたい」など主人公側の明確な恋愛好意は告白成立後まで言わせない。恋人後は明確な好意表現を許可しつつ、敬語ベースを維持する。':''}`;
  const model=normalizeModel(gs.model),body={model,instructions,input,max_output_tokens:550};if(/^gpt-5/.test(model))body.reasoning={effort:'minimal'};
  try{
@@ -1784,7 +2076,7 @@ function erikaClothesScene(lv){
 }
 function erikaYogaScene(lv){
  const scenes=[
-  '朝のヨガ。絵里香は背筋を伸ばし、片足立ちのポーズを美しく安定してキープしている。呼吸にも余裕がある。',
+  '朝、自室のヨガマットで。絵里香は背筋を伸ばし、片足立ちのポーズを美しく安定してキープしている。呼吸にも余裕がある。',
   'ヨガの片足立ちで一瞬だけバランスを崩す。すぐ立て直すが、本人は納得していない。',
   '前屈すると以前より腹部が圧迫され、絵里香はわずかに顔をしかめる。それでも意地でポーズを続ける。',
   '片足立ちのキープ時間が明らかに短くなり、何度も足をついてしまう。絵里香は「集中力の問題ですわ」と言い訳する。',
@@ -1796,7 +2088,7 @@ function erikaYogaScene(lv){
 }
 function erikaScaleScene(lv){
  const scenes=[
-  '絵里香は体重計を一瞥するだけで、特に気にせず身支度へ戻った。',
+  '朝、自室で一人。絵里香は体重計を一瞥するだけで、特に気にせず身支度へ戻った。',
   '体重計の数字を見た絵里香は眉を寄せ、「誤差ですわ」と小さく呟く。',
   '表示された数字を疑い、絵里香は一度降りてからもう一度体重計へ乗り直す。',
   '絵里香は服の重さのせいだと考え、上着を脱いでもう一度測る。それでも数字はほとんど変わらない。',
@@ -1847,6 +2139,7 @@ async function runErikaRoutineNarrative(kind,detail,effects=[],cg=false){
  addBubble('system',`${turns[state.turn].label}｜${detail}`,'絵里香の日常イベント');
  if(effects.length)addBubble('system',effects.join('｜'),'日常イベント効果');
  rememberErikaRoutine(kind,detail,lv);
+ const privateMonologue=kind.startsWith('morning_')||kind.startsWith('night_');
  const ctx=`絵里香専用の日常イベント。
 時間帯:${turns[state.turn].label}
 イベント:${detail}
@@ -1854,10 +2147,16 @@ async function runErikaRoutineNarrative(kind,detail,effects=[],cg=false){
 満腹度:${Math.round(state.fullness)} / 空腹度:${Math.round(state.hunger)} / 抑止力:${Math.round(state.restraint)} / 機嫌:${Math.round(state.mood)}
 依存度:${state.growthTraits?.dependence||0}/100 / 体型焦り:${state.growthTraits?.weightAnxiety||0}/100
 確定ステータス変化:${effects.join(' / ')||'なし'}
-主人公がその場にいない私生活イベントの場合は主人公へ直接話しかけない。
+${privateMonologue?`【最重要：一人きりの独り言イベント】
+この朝/夜イベントでは主人公はその場に存在しない。
+絵里香は自室などで一人きり。主人公の視線・返事・行動・台詞を絶対に描写しない。
+主人公について頭の中で考えたり、スマホの履歴を見たりするのはよいが、主人公へ直接話しかけている会話形式にはしない。
+dialogueは絵里香自身の小声の独り言・心の声として書く。narrationは絵里香一人の動作だけを書く。
+「あなた」「ねえ」など、その場に主人公がいるように呼びかける表現は禁止。`:`主人公がその場にいない私生活イベントの場合は主人公へ直接話しかけない。`}
 絵里香は太ること自体を喜ばない。食欲が増えていても、体型変化への焦り・悔しさ・罪悪感は残す。
+${lv<3?'体型Lv1〜2なので、本人はまだ自分が太ったとは認めていない。体型変化を理由に「食事を控えなければ」と決意させない。':'体型Lv3以降なので、太ったことは認識している。ただし自制は不安定で長続きしない。'}
 大学生らしい生活文脈と、お嬢様口調・高いプライドを保つ。`;
- try{const r=await askAI(`（${detail}）`,null,null,ctx);addAIResponse(r,'絵里香の日常')}
+ try{const r=await askAI(`（${privateMonologue?'主人公不在。絵里香一人の独り言として描写する。':''}${detail}）`,null,null,ctx);addAIResponse(r,privateMonologue?'絵里香の独り言':'絵里香の日常')}
  catch(e){addNarration(detail,'絵里香の日常')}
  log(`絵里香日常: ${kind}${effects.length?' / '+effects.join(' / '):''}`);
  save();render();
@@ -1913,18 +2212,20 @@ async function maybeErikaMorningEvent(){
  const chosen=chooseErikaRoutineWithCoverage('morning',outcomes,eligible);
  if(chosen==='morning_clothes'){
   const effects=[];
-  if(lv>=3){const d=Math.min(6,lv-1);state.restraint=clamp(state.restraint+d);effects.push(`抑止力 +${d}`)}
+  if(lv>=3){const d=Math.min(9,lv+1);state.restraint=clamp(state.restraint+d);effects.push(`抑止力 +${d}`)}
   if(lv>=5){state.mood=clamp(state.mood-2);effects.push('機嫌 -2')}
   await runErikaRoutineNarrative('morning_clothes',erikaClothesScene(lv),effects,lv>=2);return true;
  }
  if(chosen==='morning_yoga'){
   const effects=[];
-  if(lv>=3){const d=Math.min(7,lv);state.restraint=clamp(state.restraint+d);effects.push(`抑止力 +${d}`)}
+  if(lv>=3){const d=Math.min(10,lv+2);state.restraint=clamp(state.restraint+d);effects.push(`抑止力 +${d}`)}
   if(lv>=5){state.mood=clamp(state.mood-2);effects.push('機嫌 -2')}
   await runErikaRoutineNarrative('morning_yoga',erikaYogaScene(lv),effects,true);return true;
  }
  if(chosen==='morning_scale'&&lv>=2){
-  const effects=[];const d=Math.min(7,lv);state.restraint=clamp(state.restraint+d);effects.push(`抑止力 +${d}`);
+  const effects=[];let d=erikaRestraintDelta(Math.min(7,lv),'朝の体重計');
+  if(d){state.restraint=clamp(state.restraint+d);effects.push(`抑止力 +${d}`)}
+  else effects.push('抑止力変化なし');
   if(lv>=5){state.mood=clamp(state.mood-2);effects.push('機嫌 -2')}
   await runErikaRoutineNarrative('morning_scale',erikaScaleScene(lv),effects,true);return true;
  }
@@ -1942,8 +2243,9 @@ async function maybeErikaNoonEvent(){
   const moodLoss=Math.min(8,lv+1);
   const restraintGain=Math.min(9,lv+(state.fullness>=90?2:1));
   state.mood=clamp(state.mood-moodLoss);
-  state.restraint=clamp(state.restraint+restraintGain);
-  await runErikaRoutineNarrative('noon_hook',erikaHookScene(lv),[`機嫌 -${moodLoss}`,`抑止力 +${restraintGain}`],true);
+  const hookRestraint=erikaRestraintDelta(restraintGain,'ホック事故');
+  state.restraint=clamp(state.restraint+hookRestraint);
+  await runErikaRoutineNarrative('noon_hook',erikaHookScene(lv),[`機嫌 -${moodLoss}`,`抑止力 +${hookRestraint}`],true);
   openErikaHookFollowup(lv);
   return true;
  }
@@ -1975,7 +2277,11 @@ async function maybeErikaNoonEvent(){
    const food={name,fullness:amount,weight:amount>=60?.55:amount>=35?.32:.12,restraintHit:amount>=60?18:amount>=35?13:7,tags:['sweet','fried']};
    const ef=applyGuaranteedFoodEffect(food,'昼のコンビニ');
    effects.push(`満腹度 +${ef.fullnessDelta}`,`体重 +${ef.weightGain.toFixed(2)}kg`,`罪悪感 ${ef.regret||0}`);
-  }else{state.restraint=clamp(state.restraint+3);effects.push('抑止力 +3')}
+  }else{
+    const d=erikaRestraintDelta(3,'コンビニで我慢');
+    if(d){state.restraint=clamp(state.restraint+d);effects.push(`抑止力 +${d}`)}
+    else effects.push('抑止力変化なし');
+  }
   await runErikaRoutineNarrative('noon_convenience',detail,effects,true);return true;
  }
  return false;
@@ -2020,19 +2326,21 @@ async function maybeErikaNightEvent(){
   await runErikaRoutineNarrative('night_binge',detail,[`満腹度 +${ef.fullnessDelta}`,`体重 +${ef.weightGain.toFixed(2)}kg`,`罪悪感 ${ef.regret||0}`],true);return true;
  }
  if(chosen==='night_bodycheck'&&bodyEligible){
-  const d=Math.min(9,1+lv);state.restraint=clamp(state.restraint+d);state.mood=clamp(state.mood-(lv>=5?3:1));
+  const d=erikaRestraintDelta(Math.min(9,1+lv),'夜の体型確認');
+  if(d)state.restraint=clamp(state.restraint+d);
+  state.mood=clamp(state.mood-(lv>=5?3:1));
   let detail=erikaBodyCheckScene(lv);
   if(dep>=60)detail+=' そして最後に、「今の自分を主人公がどう見ているのか」が頭をよぎる。';
-  await runErikaRoutineNarrative('night_bodycheck',detail,[`抑止力 +${d}`,`機嫌 -${lv>=5?3:1}`],true);return true;
+  await runErikaRoutineNarrative('night_bodycheck',detail,[d?`抑止力 +${d}`:'抑止力変化なし',`機嫌 -${lv>=5?3:1}`],true);return true;
  }
  if(chosen==='night_message'&&messageEligible){
   const gotAttention=state.lastErikaAttentionDay===state.day;
   let detail,effects=[];
   if(gotAttention){
-   detail='夜、スマホを手にした絵里香は主人公との今日のやり取りを何度も見返している。返信があったことに安心しながらも、その事実を自分では認めたくない。';
+   detail='夜、自室で一人きりの絵里香はスマホを手にし、主人公との今日のやり取りを何度も見返している。返信があったことに安心しながらも、その事実を自分では認めたくない。';
    state.mood=clamp(state.mood+3);effects.push('機嫌 +3');
   }else{
-   detail='夜、絵里香はスマホの通知欄を何度も確認するが、主人公から新しい反応はない。「別に待ってなどいませんわ」と言いながら、明らかに落ち着かない。';
+   detail='夜、自室で一人きりの絵里香はスマホの通知欄を何度も確認するが、主人公から新しい反応はない。「別に待ってなどいませんわ」と言いながら、明らかに落ち着かない。';
    const loss=dep>=75?4:2;state.mood=clamp(state.mood-loss);effects.push(`機嫌 -${loss}`);
   }
   await runErikaRoutineNarrative('night_message',detail,effects,true);return true;
@@ -2165,11 +2473,12 @@ async function finishEndOfDayTransition(endedDay){
  const prevStage=evolutionStage();
  state.weight=Math.max(30,state.weight+(state.fullness>70?.08:state.fullness<20?-.03:0));
  updateEvolution(CHARACTERS[activeId]);queueWeightEventIfNeeded(CHARACTERS[activeId],prevStage);
+ if(activeId==='emi')applyEmiDailySystems();
  resetDailyNightTrackers();
  state.lastFoodWasRefused=false;state.lastFoodTurnKey=null;
  log('翌日に進みました');addBubble('system',`${turns[state.turn].label}になりました。`);
  save();render();
- if(!state.pendingWeightEvent&&!state.pendingDate){maybeYuiBellyGrab(false);if(activeId==='erika')await maybeErikaDaypartEvent();if(!blockingEventType())await maybeCharacterInitiatedEvent(false)}
+ if(!state.pendingWeightEvent&&!state.pendingDate){maybeYuiBellyGrab(false);if(activeId==='erika')await maybeErikaDaypartEvent();if(!blockingEventType())await maybeCharacterInitiatedEvent(false);if(activeId==='emi'&&!blockingEventType())maybeEmiSystemTurnEvent()}
 }
 
 function decay(){
@@ -2178,11 +2487,12 @@ function decay(){
  state.mood=clamp(state.mood+(Math.random()*4-2));
  if(activeId==='erika'){
    const lv=stageNum();
-   // 体型が大きくなるほど、食欲・食習慣・我慢疲れで自制が自然に摩耗する。
-   const erosion=[0,1,2,3,5,7,9][lv-1];
+   // Lv1〜2はそもそも体型を気にして自制していない。
+   // Lv3以降は「上がるが長続きしない」性質を強くする。
+   const erosion=[0,0,5,7,9,12,15][lv-1];
    if(erosion>0){
      state.restraint=clamp(state.restraint-erosion);
-     log(`絵里香の我慢疲れ：抑止力 -${erosion}（体型Lv.${lv}）`);
+     log(`絵里香の自制が早く揺らぐ：抑止力 -${erosion}（体型Lv.${lv}）`);
    }
  }
 }
@@ -2207,7 +2517,7 @@ async function advance(){
  state.lastFoodWasRefused=false;state.lastFoodTurnKey=null;
  addBubble('system',`${turns[state.turn].label}になりました。`);
  save();render();
- if(!state.pendingWeightEvent&&!state.pendingDate){maybeYuiBellyGrab(false);if(activeId==='erika')await maybeErikaDaypartEvent();if(!blockingEventType())await maybeCharacterInitiatedEvent(false);}
+ if(!state.pendingWeightEvent&&!state.pendingDate){maybeYuiBellyGrab(false);if(activeId==='erika')await maybeErikaDaypartEvent();if(!blockingEventType())await maybeCharacterInitiatedEvent(false);if(activeId==='emi'&&!blockingEventType())maybeEmiSystemTurnEvent();}
 }
 const MEAL_CATEGORIES={
  japanese:{name:'和食',tiers:[
@@ -2420,7 +2730,9 @@ function earlyStageGainBoost(){
 }
 function gainFactor(c){
  const tendency=c.gainTendency==='太りやすい'?1.35:c.gainTendency==='太りにくい'?.75:c.gainTendency==='かなり太りにくい'?.55:1;
- return tendency*earlyStageGainBoost();
+ let mult=tendency*earlyStageGainBoost();
+ if(c.id==='emi'&&evolutionStage()>=5)mult*=1.18;
+ return mult;
 }
 function foodAcceptanceChance(c,offer){let score=48;score+=(state.affection-50)*0.28;score+=(state.hunger-40)*0.42;score-=state.fullness*0.38;score-=state.restraint*0.42;if(c.appetite==='よく食べる')score+=14;if(c.appetite==='少食')score-=12;if(state.favoriteFoods.some(x=>offer.name.includes(x)||x.includes(offer.name)))score+=18;
  const learned=foodExperience(foodGrowthKey(offer));
@@ -2463,6 +2775,7 @@ function resolveFoodOffer(offer,text){
      if((state.weightInterest||0)>=50)restraintDelta=0;
      state.mood=clamp(state.mood+Math.min(8,Math.round(d*.7)));
    }
+   if(c.id==='erika'&&restraintDelta>0)restraintDelta=erikaRestraintDelta(restraintDelta,'食後');
    state.restraint=clamp(state.restraint+restraintDelta);
  }else{
    // 断る＝我慢で消耗。ここは従来通り抑止力を下げる。
@@ -2470,7 +2783,7 @@ function resolveFoodOffer(offer,text){
    if(c.id==='erika'){
      const lv=stageNum();
      // 高Lvほど、食べたいのに断る行為そのものが大きな我慢疲れになる。
-     restraintDelta-=Math.max(1,lv);
+     restraintDelta-=Math.max(1,lv+Math.max(0,lv-3));
    }
    state.restraint=clamp(state.restraint+restraintDelta);state.mood=clamp(state.mood-1);
  }
@@ -2479,7 +2792,7 @@ function resolveFoodOffer(offer,text){
  state.lastFoodResult=result;state.lastFoodWasRefused=!accepted;state.lastFoodTurnKey=currentTurnKey();log(result.log);save();render();return result;
 }
 function workIncome(){return Math.min(5000,1200+Math.floor((state.workCount||0)/3)*350)}
-function doWork(){if(state&&state.pendingWeightEvent){addBubble('system','体重変化イベントの選択肢を先に選んでください。','イベント中');return}if(state&&state.pendingDate){addBubble('system','デート中イベントを終えてからバイトしてください。','デート中');return}state.money=state.money??2500;state.workCount=state.workCount||0;const income=workIncome();state.workCount++;state.money+=income;addBubble('system',`バイトで ¥${income.toLocaleString()} 稼ぎました。バイトをしたため時間が進みます。`,`バイト #${state.workCount}`);log(`バイト +¥${income}（通算${state.workCount}回）`);advance()}
+function doWork(){if(state&&state.pendingWeightEvent){addBubble('system','体重変化イベントの選択肢を先に選んでください。','イベント中');return}if(state&&state.pendingDate){addBubble('system','デート中イベントを終えてからバイトしてください。','デート中');return}state.money=state.money??2500;state.workCount=state.workCount||0;const income=workIncome();state.workCount++;state.money+=income;addBubble('system',`バイトで ¥${income.toLocaleString()} 稼ぎました。バイトをしたため時間が進みます。`,`バイト #${state.workCount}`);log(`バイト +¥${income}（通算${state.workCount}回）`);if(activeId==='emi'){const lv=stageNum();const dep=state.emiMessDependence||0;const eatChance=clamp(24+dep*.42+state.hunger*.30-state.restraint*.18+Math.max(0,lv-1)*5,8,96);const eat=Math.random()*100<eatChance;addNarration('居酒屋バイト終わり。厨房から揚げ物やご飯の香りが漂い、絵美は少しだけ足を止めた。','絵美のバイト');addCGMessage(`絵美 Lv.${lv}：居酒屋バイトとまかない`,emiStoryCG('makanai_temptation'),'まかないCG');if(eat){const eff=applyGuaranteedFoodEffect({name:'高カロリーなまかない',fullness:28+lv*4,weight:.12+lv*.03,restraintHit:6+lv,tags:['oily','rice']},'居酒屋バイトのまかない');state.emiMessDependence=clamp((state.emiMessDependence||0)+(7+lv*2));state.mood=clamp(state.mood+3);addBubble('assistant','……今日くらいはいいでしょ。走ったし、バイトも頑張ったし。……うま。','まかないを食べた');addBubble('system',`まかない依存度 +${7+lv*2}｜満腹度 +${eff.fullnessDelta}｜体重 +${eff.weightGain.toFixed(2)}kg｜抑止力 ${eff.restraintDelta>=0?'+':''}${eff.restraintDelta}`,'まかない効果');log(`絵美がまかないを食べた。依存度+${7+lv*2}`);}else{state.emiMessDependence=clamp((state.emiMessDependence||0)+2);state.restraint=clamp(state.restraint+3);addBubble('assistant','……いや、今日はやめる。ここで食べたら絶対ズルズルいくし。','まかないを我慢');addBubble('system','まかない依存度 +2｜我慢して抑止力 +3','まかない効果');log('絵美がまかないを我慢した');}}advance()}
 function applyGuaranteedFoodEffect(food,sourceLabel='食事'){
  const c=CHARACTERS[activeId];updateEvolution(c);
  const before={fullness:state.fullness,hunger:state.hunger,restraint:state.restraint,weight:state.weight,weightInterest:state.weightInterest||0};
@@ -2500,6 +2813,7 @@ function applyGuaranteedFoodEffect(food,sourceLabel='食事'){
    state.mood=clamp(state.mood-eg.moodLoss);
  }
  if(c.id==='rei'){const d=weightGainAmount();state.weightInterest=Math.min(100,Math.max(state.weightInterest||0,Math.round(d*2.2+evolutionStage()*7)));if((state.weightInterest||0)>=50)restraintDelta=0}
+ if(c.id==='erika'&&restraintDelta>0)restraintDelta=erikaRestraintDelta(restraintDelta,sourceLabel);
  state.restraint=clamp(state.restraint+restraintDelta);
  recordFoodGrowth(food,true,sourceLabel);
  log(`${sourceLabel}: ${food.name}。満腹度+${fullnessDelta} / 体重+${weightGain.toFixed(2)}kg / 抑止力${restraintDelta>=0?'+':''}${restraintDelta}${regret?` / 罪悪感${regret}`:''}`);
@@ -2677,10 +2991,13 @@ function status(){const c=CHARACTERS[activeId];const hookInfo=activeId==='erika'
 関係 ${relationshipLabel()}｜好感度 ${Math.round(state.affection)}｜機嫌 ${Math.round(state.mood)}｜空腹 ${Math.round(state.hunger)}｜満腹 ${Math.round(state.fullness)}｜抑止力 ${Math.round(state.restraint)}
 ${c.height}cm / ${state.weight.toFixed(1)}kg｜体型 ${bodyType()}｜開始時から ${(state.weight-state.startWeight).toFixed(1)}kg
 所持金 ¥${Math.round(state.money??2500).toLocaleString()}｜バイト ${state.workCount||0}回｜次回収入 ¥${workIncome().toLocaleString()}｜食事Lv.${mealTier()+1}（${mealTierLabel()}）
-体重変化: ${evolutionLabel()}${c.id==='rei'?`｜体重増加への興味 ${state.weightInterest||0}/100`:''}${c.id==='erika'?`｜依存度 ${state.growthTraits?.dependence||0}/100｜体型焦り ${state.growthTraits?.weightAnxiety||0}/100｜放置感 ${state.erikaNeglectTurns||0}｜本日罪悪感 ${state.erikaFoodGuiltToday||0}`:''}${hookInfo}`)}
+体重変化: ${evolutionLabel()}${c.id==='rei'?`｜体重増加への興味 ${state.weightInterest||0}/100`:''}${c.id==='erika'?`｜依存度 ${state.growthTraits?.dependence||0}/100｜体型焦り ${state.growthTraits?.weightAnxiety||0}/100｜放置感 ${state.erikaNeglectTurns||0}｜本日罪悪感 ${state.erikaFoodGuiltToday||0}`:''}${c.id==='emi'?`
+まかない依存度 ${Math.round(state.emiMessDependence||0)}/100｜競技コンディション ${Math.round(refreshEmiCondition()||0)}/100｜後輩との関係 ${Math.round(state.emiJuniorBond||0)}/100
+陸上 ${state.emiTrackActive!==false?'継続中':'退部済み'}｜ダイエット ${state.emiDietMode?`進行中(${state.emiDietDaysLeft}日)`:state.emiDietLastResult==='success'?'直近成功':state.emiDietLastResult==='failure'?'直近失敗':'なし'}｜怪我 ${state.emiInjuryDaysLeft>0?`回復まで${state.emiInjuryDaysLeft}日`:'なし'}
+美咲 ${state.misakiWeight.toFixed(1)}kg｜体型Lv.${misakiBodyLv()}｜コンディション ${Math.round(state.misakiCondition||0)}/100｜ライバル度 ${Math.round(state.misakiRivalry||0)}/100`:''}${hookInfo}`)}
 function pressurePenalty(text){const c=CHARACTERS[activeId];const forceful=/お願い|頼む|いいから|食べてよ|食べなよ|絶対|もっと|無理やり|断らないで|せっかく/.test(text);let affLoss=forceful?6:3,moodLoss=forceful?5:2;if(c.id==='erika'){affLoss+=2;moodLoss+=1}if(c.id==='yui'&&state.affection<50)affLoss+=1;state.affection=clamp(state.affection-affLoss);state.mood=clamp(state.mood-moodLoss);const result={affectionDelta:-affLoss,moodDelta:-moodLoss,forceful,summary:`一度断った直後にさらに強く勧めたため、${c.name}は圧を感じた。好感度 -${affLoss}、機嫌 -${moodLoss}`,log:`断った直後の強引な再提案。好感度 -${affLoss} / 機嫌 -${moodLoss}`};log(result.log);return result}
 function pressureDemoReply(){const c=CHARACTERS[activeId];if(c.id==='risa')return'もう、さっき断ったでしょ。しつこいのは嫌だよ。';if(c.id==='emi')return'だからいらないって。しつこい。';if(c.id==='yui')return'ごめんね、そんなに押されるとちょっと困っちゃう。';if(c.id==='erika')return'しつこいですわ。不愉快です。';return'……断ったのに。そういうの、少し嫌。'}
-function demoReply(text,foodResult=null){const c=CHARACTERS[activeId];let aff=0,mood=0,reply='……うん。';if(foodResult){if(foodResult.accepted){if(c.id==='risa')reply=foodResult.food==='甘いもの'||foodResult.food==='パン'?'……それなら食べる。ちょっとだけね！':'うーん……まあ、今日はいいか。食べよ。';if(c.id==='emi')reply='……分かった。食べる。でもこれで部活に響いたら最悪だからね。';if(c.id==='yui')reply=foodResult.regret>0?'……また食べちゃった。断ろうとは思ったんだけどな。あとで絶対後悔するやつ……。':'え、いいの？ ……じゃあ、少しだけもらおうかな。';if(c.id==='erika'){const dep=state.growthTraits?.dependence||0;reply=dep>=60?'……本当は控えるつもりでしたのよ？ でも、あなたがそこまで言うなら……今回だけですわ。':'べ、別にあなたに勧められたからではありませんわ。今回は特別ですの。';}if(c.id==='rei')reply='……食べる。こういうのも、悪くないかも。'}else{if(c.id==='risa')reply='今日はやめとく。ちょっと気にしてるし。';if(c.id==='emi')reply='いらない。今は部活優先。';if(c.id==='yui')reply='ごめんね。今日はさすがにやめておく。';if(c.id==='erika')reply='結構ですわ。わたくし、今は要りませんの。';if(c.id==='rei')reply='……今日はいい。お腹、そこまで空いてない。'}return reply}if(c.id==='risa')reply='うんうん、それで？';if(c.id==='emi')reply=/太|体重/.test(text)?'は？ 太ってないし。変なこと言わないでよ。':'で、何？';if(c.id==='yui')reply='ふふ、そうなんだ。';if(c.id==='erika')reply=state.affection<40?'べ、別にあなたと話したいわけではありませんわ。':'……少しくらいなら、お付き合いしてあげてもよろしくてよ。';if(c.id==='rei')reply=state.affection<50?'……そう。あなたって、やっぱり少し変わってるね。':'……あなたと話すの、前より好きかも。';if(/好き|可愛い|かわいい|会いた/.test(text)){aff+=2;mood+=2}state.affection=clamp(state.affection+aff);state.mood=clamp(state.mood+mood);return reply}
+function demoReply(text,foodResult=null){const c=CHARACTERS[activeId];let aff=0,mood=0,reply='……うん。';if(foodResult){if(foodResult.accepted){if(c.id==='risa')reply=foodResult.food==='甘いもの'||foodResult.food==='パン'?'……それなら食べる。ちょっとだけね！':'うーん……まあ、今日はいいか。食べよ。';if(c.id==='emi')reply='……分かった。食べる。でもこれで陸上のタイムに響いたら最悪だからね。';if(c.id==='yui')reply=foodResult.regret>0?'……また食べちゃった。断ろうとは思ったんだけどな。あとで絶対後悔するやつ……。':'え、いいの？ ……じゃあ、少しだけもらおうかな。';if(c.id==='erika'){const dep=state.growthTraits?.dependence||0;reply=dep>=60?'……本当は控えるつもりでしたのよ？ でも、あなたがそこまで言うなら……今回だけですわ。':'べ、別にあなたに勧められたからではありませんわ。今回は特別ですの。';}if(c.id==='rei')reply='……食べる。こういうのも、悪くないかも。'}else{if(c.id==='risa')reply='今日はやめとく。ちょっと気にしてるし。';if(c.id==='emi')reply='いらない。今は陸上優先。';if(c.id==='yui')reply='ごめんね。今日はさすがにやめておく。';if(c.id==='erika')reply='結構ですわ。わたくし、今は要りませんの。';if(c.id==='rei')reply='……今日はいい。お腹、そこまで空いてない。'}return reply}if(c.id==='risa')reply='うんうん、それで？';if(c.id==='emi')reply=/太|体重/.test(text)?'は？ 太ってないし。変なこと言わないでよ。':'で、何？';if(c.id==='yui')reply='ふふ、そうなんだ。';if(c.id==='erika')reply=state.affection<40?'べ、別にあなたと話したいわけではありませんわ。':'……少しくらいなら、お付き合いしてあげてもよろしくてよ。';if(c.id==='rei')reply=state.affection<50?'……そう。あなたって、やっぱり少し変わってるね。':'……あなたと話すの、前より好きかも。';if(/好き|可愛い|かわいい|会いた/.test(text)){aff+=2;mood+=2}state.affection=clamp(state.affection+aff);state.mood=clamp(state.mood+mood);return reply}
 
 function moodBand(){
  const v=Math.round(state.mood);
@@ -2764,7 +3081,7 @@ function systemPrompt(){
 
 【キャラクターごとの描写傾向】
 - 梨沙: 表情豊か。視線を逸らす、制服や髪を整える、少し泣きそうになる等。
-- 絵美: 腕を組む、睨む、肩をすくめる、ぶっきらぼうな動作。
+- 絵美: 20歳の大学生。腕を組む、睨む、肩をすくめる、ぶっきらぼうな動作。大学陸上部の競技者らしい所作を自然に混ぜる。
 - 結衣: 苦笑、服の腰回りを気にする、柔らかい仕草、少し自虐的な反応。
 - 絵里香: 強がる、顎を上げる、視線を逸らす、動揺を隠そうとする。
 - 怜: じっと観察する、服や身体の変化を淡々と確認する、静かな反応。
@@ -2786,6 +3103,15 @@ function systemPrompt(){
 
 【絶対に守るキャラクタールール】
 ${c.rules}
+${c.id==='emi'?`【絵美の年齢・生活設定】
+絵美は20歳の大学生で、主人公とは大学の同級生。
+大学陸上部のエースとして競技を続けている。
+高校生、制服、高校のクラス、高校部活として描写しない。
+日常は大学キャンパス、講義、空きコマ、大学陸上部の練習、競技場、アルバイト、私服などを基本にする。`:''}
+${c.id==='erika'?`【絵里香の抑止力ルール】
+体型Lv1〜2では、絵里香本人は自分が太ったとは認めていない。そのため「太ったから食事を控えよう」という心理は原則発生せず、体型や食事への焦りを理由に抑止力が上がる描写は禁止。
+体型Lv3で初めて体重増加を認め、それ以降は服・鏡・食後の罪悪感などで抑止力が強く上昇することがある。
+ただしLv3以降の抑止力は非常に不安定。空腹、食べ物の匂い、主人公からの勧め、気分、我慢疲れなど些細なきっかけですぐ下がる。高Lvほど上下動を激しく描く。`:''}
 
 【体重増加による現在のキャラクター変化】
 ${characterEvolutionText(c)}
