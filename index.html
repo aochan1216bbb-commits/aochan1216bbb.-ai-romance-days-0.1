@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ja">
 <head>
 <!--
@@ -12,12 +13,11 @@
   js/systems/*.js    : stable shared-system facades
   Load order is intentional.
 -->
-
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/>
+<meta content="no-cache" http-equiv="Pragma"/>
+<meta content="0" http-equiv="Expires"/>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport">
 <title>AI Romance Days</title>
 <style>
 :root{--bg:#f7f2f5;--card:#fff;--text:#2a2327;--muted:#7e7178;--accent:#c86f93;--accent2:#f0c4d5;--shadow:0 8px 28px rgba(68,37,50,.12)}
@@ -64,16 +64,27 @@ details{margin-top:10px}.settingsGrid{display:grid;gap:8px;margin-top:10px}.sett
 @media(min-width:600px){.albumGrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .misaki{background:#ece4ff;color:#433168;border-bottom-left-radius:5px}.misaki .meta{color:#6c5b93}
 .systemNote{font-size:11px;color:#7a6b73;margin-top:6px;line-height:1.4}
+
+/* ===== v39 compact main UI ===== */
+.app{max-width:980px}#gameScreen>.top{padding:4px 0 3px}#gameScreen .header{padding:7px 10px;border-radius:13px}#gameScreen .day{font-size:17px}
+.mainPlayPanel{margin-top:6px!important;padding:10px!important;border-radius:15px!important}.mainPlayPanel .nameRow{margin-bottom:4px}.mainPlayPanel .profileMini{display:none}
+.mainPlayPanel .chat{height:clamp(285px,calc(100dvh - 355px),650px);min-height:285px;padding-bottom:4px}.mainPlayPanel .composer{margin-top:4px}.mainPlayPanel .composer textarea{min-height:42px;max-height:86px;padding:9px 10px}.mainPlayPanel .send{padding:10px 14px}
+.quickActions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:7px}.quickActions .btn{min-height:42px;padding:8px 4px;font-size:11px;line-height:1.25;border-radius:11px}
+.actionOptions,.utilityAccordion{margin-top:7px;border:1px solid #eadde2;border-radius:12px;background:#faf7f8;overflow:hidden}.actionOptions>summary,.utilityAccordion>summary{list-style:none;cursor:pointer;padding:8px 10px;font-size:12px;font-weight:800;display:flex;justify-content:space-between;align-items:center;color:#675860}.actionOptions>summary::-webkit-details-marker,.utilityAccordion>summary::-webkit-details-marker{display:none}.actionOptions>summary::after,.utilityAccordion>summary::after{content:'⌄';font-size:16px}.actionOptions[open]>summary::after,.utilityAccordion[open]>summary::after{transform:rotate(180deg)}
+.actionOptions .settingsGrid{padding:0 9px 9px;margin:0;grid-template-columns:72px 1fr;align-items:center}.actionOptions .settingsGrid label{margin:0}.actionOptions .settingsGrid select{padding:8px}.utilityBody{padding:0 9px 10px}.utilityBody .stats{margin:2px 0 7px}.utilityBody .hero{margin-top:5px;min-height:220px;max-height:520px}.utilityBody .hero img{max-height:500px}.secondaryControls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:8px}.secondaryControls .btn{font-size:12px;padding:9px}.secondaryControls .danger{grid-column:1/-1}.utilityBody details{margin-top:7px}.utilityBody .log{max-height:180px}
+.choiceModal{position:fixed!important;inset:0!important;z-index:10030!important;margin:0!important;padding:14px!important;border-radius:0!important;background:rgba(20,15,18,.76)!important;box-shadow:none!important;display:flex;align-items:center;justify-content:center;overflow:auto}.choiceModal.hidden{display:none!important}.choiceSheet{width:min(100%,620px);max-height:88dvh;overflow:auto;background:#fff;border-radius:19px;padding:15px;box-shadow:0 22px 70px rgba(0,0,0,.34)}.choiceKicker{font-size:11px;font-weight:900;color:#9a657c;margin-bottom:7px}.choiceSheet .settingsGrid{margin-top:9px}.choiceSheet .settingsGrid .btn{padding:12px;text-align:left;line-height:1.45}
+#weightEventModal{z-index:10040!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:14px!important}#weightEventModal.hidden{display:none!important}#weightEventModal>div{width:min(100%,620px)!important;max-height:90dvh;overflow:auto;margin:0!important}
+@media(min-width:760px){.quickActions{grid-template-columns:repeat(8,minmax(0,1fr))}.mainPlayPanel .chat{height:clamp(390px,calc(100dvh - 345px),700px)}.utilityBody .stats{grid-template-columns:repeat(6,1fr)}}@media(max-width:520px){.app{padding-left:7px;padding-right:7px}.mainPlayPanel .chat{height:clamp(280px,calc(100dvh - 345px),540px)}.choiceModal{align-items:flex-end;padding:8px!important}.choiceSheet{border-radius:20px 20px 9px 9px;max-height:86dvh}}
 </style>
-</head>
+</meta></meta></head>
 <body>
 <noscript><div style="max-width:640px;margin:12px auto;padding:12px;background:#ffe4e6;color:#9f1239;border-radius:12px;font-family:sans-serif">JavaScriptが無効です。Safari/Chromeなどで開いてください。</div></noscript>
 <div id="runtimeStatus" style="max-width:640px;margin:8px auto 0;padding:8px 12px;border-radius:10px;background:#fff3cd;color:#664d03;font:12px -apple-system,BlinkMacSystemFont,sans-serif">JavaScript確認中…</div>
-<div id="buildVersion" style="max-width:640px;margin:2px auto 6px;text-align:right;color:#8a7b82;font:10px -apple-system,BlinkMacSystemFont,sans-serif">BUILD 20260821-character-modules-v37</div>
-<div style="max-width:640px;margin:0 auto 8px;text-align:right;font:12px -apple-system,BlinkMacSystemFont,sans-serif"><a id="downloadPageLink" href="index.html" download style="color:#8a4c68;text-decoration:none;background:#fff;padding:6px 10px;border-radius:999px;box-shadow:0 2px 10px rgba(0,0,0,.06)">index.html をダウンロード</a></div>
+<div id="buildVersion" style="max-width:640px;margin:2px auto 6px;text-align:right;color:#8a7b82;font:10px -apple-system,BlinkMacSystemFont,sans-serif">BUILD 20260821-ui-popup-fixed-v39</div>
+<div style="max-width:640px;margin:0 auto 8px;text-align:right;font:12px -apple-system,BlinkMacSystemFont,sans-serif"><a download="" href="index.html" id="downloadPageLink" style="color:#8a4c68;text-decoration:none;background:#fff;padding:6px 10px;border-radius:999px;box-shadow:0 2px 10px rgba(0,0,0,.06)">index.html をダウンロード</a></div>
 <script>
 (function(){
-  var BUILD='20260821-character-modules-v37';
+  var BUILD='20260821-ui-popup-fixed-v39';
   try {
     var u=new URL(window.location.href);
     if(u.protocol==='http:'||u.protocol==='https:') {
@@ -88,7 +99,7 @@ details{margin-top:10px}.settingsGrid{display:grid;gap:8px;margin-top:10px}.sett
 })();
 </script>
 <script>
-(function(){var d=document.getElementById('downloadPageLink');if(d){d.href='index.html?v='+encodeURIComponent('20260821-character-modules-v37');}})();
+(function(){var d=document.getElementById('downloadPageLink');if(d){d.href='index.html?v='+encodeURIComponent('20260821-ui-popup-fixed-v39');}})();
 (function(){
   var e=document.getElementById('runtimeStatus');
   if(e){
@@ -99,12 +110,12 @@ details{margin-top:10px}.settingsGrid{display:grid;gap:8px;margin-top:10px}.sett
 })();
 </script>
 <div class="app">
-<section id="selectScreen" class="selectWrap">
-  <h1 class="selectTitle">AI Romance Days</h1><div class="selectSub">話したいキャラクターを選択</div>
-  <div id="characterGrid" class="characterGrid"></div>
-  <div class="selectSettings"><details><summary><b>OpenAI API 設定</b></summary><div class="settingsGrid">
+<section class="selectWrap" id="selectScreen">
+<h1 class="selectTitle">AI Romance Days</h1><div class="selectSub">話したいキャラクターを選択</div>
+<div class="characterGrid" id="characterGrid"></div>
+<div class="selectSettings"><details><summary><b>OpenAI API 設定</b></summary><div class="settingsGrid">
 <label class="small">APIキー</label>
-<input id="globalApiKey" type="password" placeholder="sk-proj-...（未入力ならデモ会話）" autocomplete="off" autocapitalize="off" spellcheck="false">
+<input autocapitalize="off" autocomplete="off" id="globalApiKey" placeholder="sk-proj-...（未入力ならデモ会話）" spellcheck="false" type="password"/>
 <label class="small">AIモデル</label>
 <select id="globalModel">
 <option value="gpt-5-nano">節約モード：GPT-5 nano（最安）</option>
@@ -118,87 +129,81 @@ details{margin-top:10px}.settingsGrid{display:grid;gap:8px;margin-top:10px}.sett
 <div class="hint">通常はGPT-5 nanoがおすすめです。GPT-5 miniは会話・情景描写の品質を上げたい場合に切り替えてください。APIキーはこの端末のブラウザ内に保存されます。公開用サイトではこの方式のまま共有しないでください。</div>
 </div></details></div>
 </section>
+<section class="hidden" id="gameScreen">
+<div class="top"><div class="header"><div><div class="day">DAY <span id="day">1</span></div><div class="small" id="headerRelationship">AI会話型 恋愛シミュレーション・経済・食事システムv1</div></div><div style="text-align:right"><div class="turn" id="turnLabel">☀ 朝</div><div class="small">1日3ターン</div></div></div>
+</div>
 
-<section id="gameScreen" class="hidden">
-  <div class="top"><div class="header"><div><div class="day">DAY <span id="day">1</span></div><div class="small" id="headerRelationship">AI会話型 恋愛シミュレーション・経済・食事システムv1</div></div><div style="text-align:right"><div class="turn" id="turnLabel">☀ 朝</div><div class="small">1日3ターン</div></div></div>
-  <div class="stats"><div class="stat"><b>♥ <span id="affection">0</span></b><span>好感度</span></div><div class="stat"><b>☺ <span id="mood">0</span></b><span>機嫌</span></div><div class="stat"><b>🍽 <span id="fullness">20</span></b><span>満腹度</span></div><div class="stat"><b>🛡 <span id="restraint">50</span></b><span>抑止力</span></div><div class="stat"><b><span id="weight">0</span>kg</b><span>体重</span></div><div class="stat"><b>¥<span id="money">0</span></b><span>所持金</span></div></div></div>
-  <div class="hero"><img id="characterImage" alt="キャラクター立ち絵"><div id="emotionBadge" class="emotionBadge">通常</div><div class="badge"><span id="height">0</span>cm / <span id="weightBadge">0</span>kg ・ <span id="bodyType">-</span></div></div>
-  <div class="panel"><div class="nameRow"><div class="name" id="charName">-</div><div class="bodyType" id="bodyTypeTop">-</div></div><div class="profileMini" id="profileMini"></div><div class="chat" id="chat"></div><div class="composer"><textarea id="message" placeholder="メッセージを入力…"></textarea><button type="button" class="send" id="sendBtn">送信</button></div><div class="settingsGrid" style="margin-top:10px"><label class="small">勧める食事</label><select id="mealSelect"><option value="japanese">和食</option><option value="ramen">ラーメン</option><option value="fried">揚げ物</option><option value="dessert">デザート</option></select><button type="button" class="btn accent" id="eventBtn">選んだ食事を勧める</button><label class="small">プレゼント</label><select id="giftSelect"></select><button type="button" class="btn accent" id="giftBtn">プレゼントする</button><label class="small">デート</label><select id="dateSelect"></select><button type="button" class="btn accent" id="dateBtn">デートに誘う</button></div>
-<div id="nightChoicePanel" class="panel hidden" style="margin-top:10px">
+<div class="panel mainPlayPanel"><div class="nameRow"><div class="name" id="charName">-</div><div class="bodyType" id="bodyTypeTop">-</div></div><div class="profileMini" id="profileMini"></div><div class="chat" id="chat"></div><div class="composer"><textarea id="message" placeholder="メッセージを入力…"></textarea><button class="send" id="sendBtn" type="button">送信</button></div><details class="actionOptions"><summary>食事・デート・プレゼントの選択</summary><div class="settingsGrid"><label class="small">食事</label><select id="mealSelect"><option value="japanese">和食</option><option value="ramen">ラーメン</option><option value="fried">揚げ物</option><option value="dessert">デザート</option></select><label class="small">プレゼント</label><select id="giftSelect"></select><label class="small">デート</label><select id="dateSelect"></select></div></details><div class="quickActions"><button class="btn accent" id="eventBtn" type="button">🍽 食事</button><button class="btn" id="workBtn" type="button">💼 バイト</button><button class="btn accent" id="dateBtn" type="button">♥ デート</button><button class="btn accent" id="restraintBtn" type="button">🛡 抑止力</button><button class="btn accent" id="giftBtn" type="button">🎁 プレゼント</button><button class="btn primary" id="advanceBtn" type="button">⏭ 次の時間</button><button class="btn" id="albumBtn" type="button">🖼 思い出</button><button class="btn" id="debugWeightBtn" type="button">＋5kg</button></div><details class="utilityAccordion"><summary>キャラ・ステータス・その他</summary><div class="utilityBody"><div class="stats"><div class="stat"><b>♥ <span id="affection">0</span></b><span>好感度</span></div><div class="stat"><b>☺ <span id="mood">0</span></b><span>機嫌</span></div><div class="stat"><b>🍽 <span id="fullness">20</span></b><span>満腹度</span></div><div class="stat"><b>🛡 <span id="restraint">50</span></b><span>抑止力</span></div><div class="stat"><b><span id="weight">0</span>kg</b><span>体重</span></div><div class="stat"><b>¥<span id="money">0</span></b><span>所持金</span></div></div><div class="hero"><img alt="キャラクター立ち絵" id="characterImage"/><div class="emotionBadge" id="emotionBadge">通常</div><div class="badge"><span id="height">0</span>cm / <span id="weightBadge">0</span>kg ・ <span id="bodyType">-</span></div></div><details><summary><b>キャラクタープロフィール</b></summary><div class="log" id="profileDetail"></div></details><details><summary><b>ゲームログ</b></summary><div class="log" id="gameLog"></div></details><details><summary>イベント発生デバッグ</summary><div class="log" id="hookDebugText"></div></details><div class="secondaryControls"><button class="btn" id="statusBtn" type="button">ステータス表示</button><button class="btn accent" id="characterSelectBtn" type="button">キャラ選択へ</button><button class="btn danger" id="resetBtn" type="button">このキャラを最初から</button></div></div></details>
+</div>
+
+
+</section>
+</div>
+<div aria-hidden="true" class="albumModal hidden" id="albumModal">
+<div class="albumSheet">
+<div class="albumHead">
+<div><b>思い出アルバム</b><div class="small" id="albumCount">0枚解放</div></div>
+<button class="btn" id="albumCloseBtn" type="button">閉じる</button>
+</div>
+<div class="albumGrid" id="albumGrid"></div>
+</div>
+</div>
+<div aria-hidden="true" class="cgViewer hidden" id="cgViewer">
+<button class="cgViewerClose" id="cgViewerClose" type="button">×</button>
+<img alt="思い出CG" id="cgViewerImage"/>
+<div class="cgViewerTitle" id="cgViewerTitle"></div>
+</div>
+<!-- Character profiles load before core so CHARACTERS can be assembled from modules. -->
+<script src="js/characters/risa.js?v=20260821-ui-popup-fixed-v39"></script>
+<script src="js/characters/yui.js?v=20260821-ui-popup-fixed-v39"></script>
+<script src="js/characters/erika.js?v=20260821-ui-popup-fixed-v39"></script>
+<script src="js/characters/emi.js?v=20260821-ui-popup-fixed-v39"></script>
+<script src="js/characters/rei.js?v=20260821-ui-popup-fixed-v39"></script>
+<script src="js/characters/registry.js?v=20260821-ui-popup-fixed-v39"></script>
+<script src="js/core.js?v=20260821-ui-popup-fixed-v39"></script>
+<!-- Character-specific systems that depend on core state/helpers. -->
+<script src="js/characters/emi_systems.js?v=20260821-ui-popup-fixed-v39"></script>
+<script src="js/events.js?v=20260821-ui-popup-fixed-v39"></script>
+<script src="js/ui.js?v=20260821-ui-popup-fixed-v39"></script>
+<script src="js/ai.js?v=20260821-ui-popup-fixed-v39"></script>
+<!-- Stable shared-system facades for future development. -->
+<script src="js/systems/food.js?v=20260821-ui-popup-fixed-v39"></script>
+<script src="js/systems/restraint.js?v=20260821-ui-popup-fixed-v39"></script>
+<script src="js/systems/weight.js?v=20260821-ui-popup-fixed-v39"></script>
+<script src="js/systems/memory.js?v=20260821-ui-popup-fixed-v39"></script>
+<script src="js/systems/relationship.js?v=20260821-ui-popup-fixed-v39"></script>
+<script src="js/systems/date.js?v=20260821-ui-popup-fixed-v39"></script>
+<div aria-modal="true" class="hidden" id="weightEventModal" role="dialog" style="position:fixed;inset:0;background:rgba(20,15,18,.72);z-index:9999;padding:18px;overflow:auto">
+<div style="max-width:560px;margin:24px auto;background:#fff;border-radius:22px;padding:14px;box-shadow:0 18px 60px rgba(0,0,0,.28)">
+<div id="weightEventTitle" style="font-size:20px;font-weight:900;margin:4px 2px 10px"></div>
+<img alt="体重段階イベント" id="weightEventImage" style="width:100%;height:auto;max-height:72vh;border-radius:16px;display:block;background:#eee;object-fit:contain;object-position:center"/>
+<div id="weightEventText" style="font-size:14px;line-height:1.7;margin:12px 2px"></div>
+<div class="settingsGrid" id="weightEventChoices"></div>
+</div>
+</div>
+<div aria-modal="true" class="choiceModal hidden" id="nightChoicePanel" role="dialog"><div class="choiceSheet"><div class="choiceKicker">夜の独白イベント</div>
 <div class="small" style="font-weight:800;margin-bottom:7px">夜の独白イベント</div>
 <div id="nightChoiceTitle" style="font-weight:800;margin-bottom:6px"></div>
 <div id="nightChoiceText" style="font-size:13px;line-height:1.6;margin-bottom:9px"></div>
-<div id="nightChoiceChoices" class="settingsGrid"></div>
-</div><div id="restraintEventPanel" class="panel hidden" style="margin-top:10px">
+<div class="settingsGrid" id="nightChoiceChoices"></div>
+</div></div><div aria-modal="true" class="choiceModal hidden" id="restraintEventPanel" role="dialog"><div class="choiceSheet"><div class="choiceKicker">抑止力への働きかけ</div>
 <div class="small" style="font-weight:800;margin-bottom:7px">抑止力への働きかけ</div>
 <div id="restraintEventText" style="font-size:13px;line-height:1.55;margin-bottom:9px"></div>
-<div id="restraintEventChance" class="small" style="margin-bottom:8px"></div>
-<div id="restraintEventChoices" class="settingsGrid"></div>
-</div><div id="routineChoicePanel" class="panel hidden" style="margin-top:10px">
+<div class="small" id="restraintEventChance" style="margin-bottom:8px"></div>
+<div class="settingsGrid" id="restraintEventChoices"></div>
+</div></div><div aria-modal="true" class="choiceModal hidden" id="routineChoicePanel" role="dialog"><div class="choiceSheet"><div class="choiceKicker">特殊イベント後の返答</div>
 <div class="small" style="font-weight:800;margin-bottom:7px">特殊イベント後の返答</div>
 <div id="routineChoiceTitle" style="font-weight:800;margin-bottom:6px"></div>
 <div id="routineChoiceText" style="font-size:13px;line-height:1.55;margin-bottom:9px"></div>
-<div id="routineChoiceHint" class="small" style="margin-bottom:8px"></div>
-<div id="routineChoices" class="settingsGrid"></div>
-</div><div id="initiativeChoicePanel" class="panel hidden" style="margin-top:10px">
+<div class="small" id="routineChoiceHint" style="margin-bottom:8px"></div>
+<div class="settingsGrid" id="routineChoices"></div>
+</div></div><div aria-modal="true" class="choiceModal hidden" id="initiativeChoicePanel" role="dialog"><div class="choiceSheet"><div class="choiceKicker">相手からの問いかけ</div>
 <div class="small" style="font-weight:800;margin-bottom:7px">相手からの問いかけ</div>
 <div id="initiativeChoiceText" style="font-size:13px;line-height:1.55;margin-bottom:9px"></div>
-<div id="initiativeChoices" class="settingsGrid"></div>
-</div><div id="dateEventPanel" class="panel hidden" style="margin-top:10px">
+<div class="settingsGrid" id="initiativeChoices"></div>
+</div></div><div aria-modal="true" class="choiceModal hidden" id="dateEventPanel" role="dialog"><div class="choiceSheet"><div class="choiceKicker">デート中イベント</div>
 <div class="small" style="font-weight:800;margin-bottom:7px">デート中イベント</div>
 <div id="dateEventText" style="font-size:13px;line-height:1.55;margin-bottom:9px"></div>
-<div id="dateEventChoices" class="settingsGrid"></div>
-</div><div class="controls"><button type="button" class="btn primary" id="advanceBtn">次の時間帯へ</button><button type="button" class="btn" id="workBtn">バイトする</button><button type="button" class="btn" id="statusBtn">ステータス表示</button><button type="button" class="btn accent" id="restraintBtn">抑止力に働きかける</button><button type="button" class="btn" id="albumBtn">思い出アルバム</button><button type="button" class="btn" id="debugWeightBtn">デバッグ：体重 +5kg</button><button type="button" class="btn accent" id="characterSelectBtn">キャラ選択へ</button><button type="button" class="btn danger" id="resetBtn" style="grid-column:1/-1">このキャラを最初から</button></div></div>
-  <div id="hookDebugPanel" class="panel hidden"><div class="small" style="font-weight:800;margin-bottom:7px">イベント発生デバッグ</div><div id="hookDebugText" class="log"></div></div>
-  <div class="panel"><details><summary><b>キャラクタープロフィール</b></summary><div class="log" id="profileDetail"></div></details><details><summary><b>ゲームログ</b></summary><div class="log" id="gameLog"></div></details></div>
-</section>
-</div>
-
-<div id="albumModal" class="albumModal hidden" aria-hidden="true">
-  <div class="albumSheet">
-    <div class="albumHead">
-      <div><b>思い出アルバム</b><div class="small" id="albumCount">0枚解放</div></div>
-      <button type="button" class="btn" id="albumCloseBtn">閉じる</button>
-    </div>
-    <div id="albumGrid" class="albumGrid"></div>
-  </div>
-</div>
-<div id="cgViewer" class="cgViewer hidden" aria-hidden="true">
-  <button type="button" id="cgViewerClose" class="cgViewerClose">×</button>
-  <img id="cgViewerImage" alt="思い出CG">
-  <div id="cgViewerTitle" class="cgViewerTitle"></div>
-</div>
-<!-- Character profiles load before core so CHARACTERS can be assembled from modules. -->
-<script src="js/characters/risa.js"></script>
-<script src="js/characters/yui.js"></script>
-<script src="js/characters/erika.js"></script>
-<script src="js/characters/emi.js"></script>
-<script src="js/characters/rei.js"></script>
-<script src="js/characters/registry.js"></script>
-
-<script src="js/core.js"></script>
-<!-- Character-specific systems that depend on core state/helpers. -->
-<script src="js/characters/emi_systems.js"></script>
-<script src="js/events.js"></script>
-<script src="js/ui.js"></script>
-<script src="js/ai.js"></script>
-
-<!-- Stable shared-system facades for future development. -->
-<script src="js/systems/food.js"></script>
-<script src="js/systems/restraint.js"></script>
-<script src="js/systems/weight.js"></script>
-<script src="js/systems/memory.js"></script>
-<script src="js/systems/relationship.js"></script>
-<script src="js/systems/date.js"></script>
-
-<div id="weightEventModal" class="hidden" style="position:fixed;inset:0;background:rgba(20,15,18,.72);z-index:9999;padding:18px;overflow:auto">
-  <div style="max-width:560px;margin:24px auto;background:#fff;border-radius:22px;padding:14px;box-shadow:0 18px 60px rgba(0,0,0,.28)">
-    <div id="weightEventTitle" style="font-size:20px;font-weight:900;margin:4px 2px 10px"></div>
-    <img id="weightEventImage" alt="体重段階イベント" style="width:100%;height:auto;max-height:72vh;border-radius:16px;display:block;background:#eee;object-fit:contain;object-position:center">
-    <div id="weightEventText" style="font-size:14px;line-height:1.7;margin:12px 2px"></div>
-    <div id="weightEventChoices" class="settingsGrid"></div>
-  </div>
-</div>
-
-</body>
+<div class="settingsGrid" id="dateEventChoices"></div>
+</div></div></body>
 </html>
