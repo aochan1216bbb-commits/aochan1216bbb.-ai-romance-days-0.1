@@ -30,6 +30,69 @@ function erodeEmiRestraint(reason='時間経過'){
  log(`絵美の自制が揺らぐ：抑止力 -${drop}（${reason} / Lv.${lv}）`);
  return drop;
 }
+function emiFoodInterest(){return clamp(Number(state?.emiFoodInterest||0))}
+function changeEmiFoodInterest(delta,reason='食体験'){
+ if(activeId!=='emi'||!state)return 0;
+ const before=emiFoodInterest();state.emiFoodInterest=clamp(before+(Number(delta)||0));
+ const d=Math.round((state.emiFoodInterest-before)*10)/10;
+ if(d)log(`食への興味 ${d>0?'+':''}${d}（${reason}）`);return d;
+}
+function emiApplyEventEffects(kind){
+ if(activeId!=='emi'||!state)return;
+ const lv=stageNum(),M={
+  morning_run:{weight:-(lv<=2?.16:lv<=4?.13:.10),hunger:10,fullness:-4,mood:2,condition:lv<=3?3:-2},
+  morning_yoga:{weight:-(lv<=3?.06:.04),hunger:4,mood:2,condition:lv<=3?2:0},
+  morning_clothes:{mood:lv>=3?-3:0,restraint:lv>=3?3:0},
+  morning_scale:{mood:lv>=3?-4:0,restraint:lv>=3?5:0},
+  day_lecture:{hunger:5},
+  day_practice:{weight:-(lv<=2?.22:lv<=4?.18:.12),hunger:12,fullness:-6,condition:lv<=3?3:-3},
+  day_junior_talk:{mood:lv>=4?-2:2},
+  day_clothes_accident:{mood:lv>=4?-(6+lv):-6,restraint:lv>=3?4:0},
+  night_stretch:{weight:-.03,hunger:3,mood:1,condition:1},
+  night_snack:{weight:.22+lv*.025,fullness:20+lv*2,hunger:-(18+lv*2),foodInterest:3+(lv>=4?1:0),restraint:lv>=3?-4:0},
+  night_convenience:{weight:.18+lv*.02,fullness:16+lv*2,hunger:-(14+lv),foodInterest:4,restraint:lv>=3?-4:0},
+  night_bath_mirror:{mood:lv>=4?-(3+lv):-4,restraint:lv>=3?4:0},
+  night_old_record:{mood:lv>=5?-(2+lv):-3,restraint:lv>=4?3:0},
+  night_spikes:{mood:lv>=5?-(3+lv):-5},night_track_video:{mood:lv>=5?-(2+lv):-4},
+  izakaya_work:{hunger:10,mood:-1,condition:-1}
+ };
+ const e=M[kind]||{},shown=[];
+ for(const [k,v] of Object.entries(e)){
+  if(!v)continue;
+  if(k==='weight')state.weight=Math.round(Math.max(40,state.weight+v)*100)/100;
+  else if(k==='fullness')state.fullness=clamp(state.fullness+v);
+  else if(k==='hunger')state.hunger=clamp(state.hunger+v);
+  else if(k==='mood')state.mood=clamp(state.mood+v);
+  else if(k==='restraint')state.restraint=clamp(state.restraint+v);
+  else if(k==='condition')state.emiCondition=clamp((state.emiCondition||70)+v);
+  else if(k==='foodInterest')changeEmiFoodInterest(v,kind);
+  const L={weight:'体重',fullness:'満腹度',hunger:'空腹度',mood:'機嫌',restraint:'抑止力',condition:'競技コンディション',foodInterest:'食への興味'}[k]||k;
+  shown.push(`${L} ${v>0?'+':''}${Number.isInteger(v)?v:v.toFixed(2)}`);
+ }
+ if(shown.length)addBubble('system',shown.join('｜'),'ステータス変化');
+}
+function emiFrustrationGuide(){
+ const lv=stageNum(),m=Math.round(state.mood||50),cond=Math.round(state.emiCondition||70);
+ const food=emiFoodInterest(),diet=!!state.emiDietMode,track=state.emiTrackActive!==false;
+ const struggling=(m<45)||(cond<48)||(diet&&food>=55);
+ const crisis=(m<28)||(lv>=5&&cond<38)||(lv>=6&&!track);
+ const base=[
+  '',
+  '陸上一筋で大きな挫折経験がほぼなく、自分の身体は努力すれば思い通りになると疑っていない。体型への不安を先回りして語らない。',
+  '身体の重さなどに違和感があっても「疲れてるだけ」「走ればすぐ戻る」と本気で処理する。まだ深刻な焦りはない。',
+  '増量を否定できなくなり、初めて対処不能感が出る。「食べる量を減らして走れば戻る」と自分に何度も言い聞かせる。平静を装うほど内心は焦っている。',
+  '努力しているのに戻らないことが初めての本格的な挫折になる。「ちゃんとやってるのに、なんで」と混乱する。失敗後は機嫌を崩しやすく、同じ言葉を自分に言い聞かせて平静を保とうとする。',
+  '余裕がかなり減る。体型や食事を指摘されると「分かってるって。私が一番分かってるから」と苛立ちやすい。「今日からちゃんとやる」「まだ何とかなる」と強く言い聞かせる一方、誘惑に負けた直後は自己嫌悪する。',
+  '退部という大きな挫折で「陸上ができる自分」という軸まで揺らいでいる。怒り一辺倒ではなく、後悔・混乱・喪失感が増える。「あの時止めてれば」と過去を振り返る。',
+  '昔の記録や写真との落差が辛い。食への興味は残っているため、食べたい気持ちと「こんなはずじゃなかった」という深い後悔が同居する。諦めきってはおらず、自分を立て直そうとする言葉も時折出る。'
+ ][lv]||'';
+ const pressure=crisis
+  ?'現在は心理的余裕がほぼない。問いかけを増やさず、短い独り言、苛立ち、言葉に詰まる反応、投げやりになりかける反応を自然に混ぜる。ただし毎回同じ表現にしない。'
+  :struggling
+   ?'最近うまくいっていないため余裕が減っている。自分への言い聞かせが増え、失敗や誘惑の直後は普段より機嫌が悪くなる。主人公に八つ当たりしすぎず、まず自分自身への苛立ちとして出す。'
+   :'まだ心理的余裕がある。強がりや自信を保ち、必要以上に暗くしない。';
+ return `【絵美の挫折・余裕モデル】${base} ${pressure} 現在: 機嫌${m}/100、競技コンディション${cond}/100、食への興味${Math.round(food)}/100、ダイエット${diet?'中':'外'}、陸上${track?'継続':'退部'}。`;
+}
 function emiWeightMindsetGuide(lv=stageNum()){
  if(lv<=1)return '本調子。体型や走力に違和感はなく、自分が崩れる想像もしていない。';
  if(lv===2)return 'ごく小さな変化はあるが、本人はまだ太ったとは認識しない。「たまたま」「気のせい」くらいに流す。';
@@ -80,7 +143,9 @@ function emiRoutineCandidates(){
  if(t===0)keys=['morning_run','morning_change','morning_scale','morning_mirror','morning_breakfast_conflict','morning_oversleep'];
  if(t===1)keys=['day_lecture','day_practice','day_junior_talk','day_record_check','day_cafeteria','day_stairs','day_trainingwear_rip','day_former_junior','day_see_track'];
  if(t===2)keys=['night_stretch','night_snack','night_convenience','night_bath_mirror','night_old_record','night_spikes','night_track_video'];
- return keys.filter(k=>{const d=EMI_ROUTINE_EVENT_DEFS[k];if(!d||lv<d.min||lv>d.max)return false;if((k==='morning_run'||k==='day_practice'||k==='day_junior_talk'||k==='day_record_check'||k==='day_trainingwear_rip')&&state.emiTrackActive===false)return false;if(state.emiInjuryDaysLeft>0&&(k==='morning_run'||k==='day_practice'))return false;return true});
+ const available=keys.filter(k=>{const d=EMI_ROUTINE_EVENT_DEFS[k];if(!d||lv<d.min||lv>d.max)return false;if((k==='morning_run'||k==='day_practice'||k==='day_junior_talk'||k==='day_record_check'||k==='day_trainingwear_rip')&&state.emiTrackActive===false)return false;if(state.emiInjuryDaysLeft>0&&(k==='morning_run'||k==='day_practice'))return false;return true});
+ if(t===0&&available.includes('morning_run'))return [...available,'morning_run','morning_run','morning_run'];
+ return available;
 }
 function emitEmiAIEvent(meta,facts,fallbackNarration='',fallbackDialogue='……。',extraRules=''){
  if(activeId!=='emi'||!state)return Promise.resolve(false);
@@ -89,9 +154,9 @@ function emitEmiAIEvent(meta,facts,fallbackNarration='',fallbackDialogue='……
  const ctx=`絵美専用イベント。これはゲーム側ですでに発生・結果確定済みの出来事であり、結果を変更しないこと。
 イベント名:${meta}
 確定した出来事:${facts}
-現在:体型Lv.${lv} / ${state.weight.toFixed(1)}kg / 機嫌${Math.round(state.mood)} / 満腹度${Math.round(state.fullness)} / 抑止力${Math.round(state.restraint)} / 競技コンディション${Math.round(refreshEmiCondition())} / まかない依存度${Math.round(state.emiMessDependence||0)}
+現在:体型Lv.${lv} / ${state.weight.toFixed(1)}kg / 機嫌${Math.round(state.mood)} / 満腹度${Math.round(state.fullness)} / 抑止力${Math.round(state.restraint)} / 競技コンディション${Math.round(refreshEmiCondition())} / まかない依存度${Math.round(state.emiMessDependence||0)} / 食への興味${Math.round(state.emiFoodInterest||0)}\n${emiFrustrationGuide()}
 陸上:${state.emiTrackActive!==false?'継続中':'退部済み'} / 怪我:${state.emiInjuryDaysLeft>0?'療養中':'なし'} / ダイエット:${state.emiDietMode?'進行中':'通常'}
-体型変化への現在の心理:${emiWeightMindsetGuide(lv)}
+体型変化への現在の心理:${emiFrustrationGuide()} ${emiWeightMindsetGuide(lv)}
 ${lv===1?'Lv1なので完全に本調子。体型・走力・服・息切れへの違和感や不安を一切出さない。抑止力は低めで、食事を断るなら「満腹だから」「今はお腹が空いていないから」など身体的満腹感を理由にする。':''}
 ${lv===2?'Lv2では本人はまだ太ったことを自覚していない。明確な体型不安やダイエット発言はしない。抑止力はまだ低めで、満腹時の拒否をダイエット意識として描写しない。':''}
 ${lv>=3?'Lv3以降は体重増加を自覚しており、焦って抑止力を上げようとする。ただし自制は非常に不安定で、疲労・空腹・時間経過・誘惑など些細なことで簡単に崩れる。高い抑止力を「強い意志が長期間続いている」と描写しない。':''}
@@ -124,13 +189,15 @@ function maybeEmiDaypartEvent(force=false){
  state.emiRoutineSeen[key]=kind;
  showEmiMemoryCG(kind,lv,`絵美 Lv.${lv}：${d.title}`,'絵美の日常CG');
  let facts=d.text(lv),extra='';
+ const effectKinds=new Set(['morning_run','morning_yoga','morning_clothes','morning_scale','day_lecture','day_practice','day_junior_talk','day_clothes_accident','night_stretch','night_snack','night_convenience','night_bath_mirror','night_old_record','night_spikes','night_track_video']);
+ if(effectKinds.has(kind))emiApplyEventEffects(kind);
  const privateMonologue=(state.turn===0||state.turn===2);
  if(privateMonologue){
    extra+=` 【朝・夜イベントの最重要ルール】これは主人公不在の一人きりの私生活イベント。居酒屋バイトが同じ夜に発生していても別時間帯の出来事として両立してよい。絵美は一人で考え、迷い、小声で独り言を言う。主人公の姿・視線・返事・行動・台詞を絶対に登場させない。「ねえ」「見て」「どう思う？」など主人公へ呼びかける会話形式も禁止。dialogueは独り言または心の声として書く。`;
  }
  if(kind==='day_junior_talk'){emiJuniorBondDelta(lv>=4?-1:2,'後輩との会話');extra+=' 後輩もその場にいる。絵美は先輩としてのプライドを保ちつつ、現在Lvに応じた余裕または焦りを出す。';}
  if(kind==='morning_scale'&&lv===2)extra+=' 体重計の数字に深刻な意味を見出さず、誤差程度に受け止める。';
- if(kind==='night_snack')extra+=state.emiDietMode?' ダイエット中なので食べたい気持ちと我慢の葛藤を出す。':' 疲労や空腹をきっかけに迷うが、結果を勝手に「食べた」と確定しない。';
+ if(kind==='night_snack')extra+=' 今回は夜食を実際に食べた結果が確定している。Lv3以降なら食後の後悔も描く。';
  if(kind==='night_spikes'||kind==='night_track_video'||kind==='day_see_track')extra+=' 退部後の未練や昔との比較を自然に描くが、同じ懐古表現を繰り返さない。';
  emitEmiAIEvent(privateMonologue?`${d.title}（独り言）`:d.title,facts,d.text(lv),lv===1?'うん、今日も調子いい。':'……ちょっと気になるかも。',extra);
  log(`絵美の日常イベント: ${d.title}`);
@@ -278,7 +345,7 @@ function runEmiTournament(){
  const title=`絵美 Lv.${lv}：大会結果`;
  showEmiMemoryCG('tournament_result',lv,title,'大会結果CG');
  let misakiLine='';
- if(result==='勝利'){state.mood=clamp(state.mood+8); state.affection=clamp(state.affection+3); state.restraint=clamp(state.restraint+5); emiJuniorBondDelta(5,'大会で良い結果'); misakiLine='ちっ……今回はあんたの勝ち。でも次は絶対負けない。';}
+ if(result==='勝利'){state.mood=clamp(state.mood+8); changeAffection(3,'絵美イベント'); state.restraint=clamp(state.restraint+5); emiJuniorBondDelta(5,'大会で良い結果'); misakiLine='ちっ……今回はあんたの勝ち。でも次は絶対負けない。';}
  else if(result==='接戦'){state.mood=clamp(state.mood+1); state.restraint=clamp(state.restraint+2); emiJuniorBondDelta(2,'大会で善戦'); misakiLine='ふーん、今日はちょっとだけやるじゃん。';}
  else if(result==='苦戦'){state.mood=clamp(state.mood-6); state.restraint=clamp(state.restraint+4); emiJuniorBondDelta(-3,'大会で苦戦'); misakiLine='その程度？ らしくないね。'; maybeStartEmiDiet('大会結果に焦った');}
  else {state.mood=clamp(state.mood-12); state.restraint=clamp(state.restraint+6); emiJuniorBondDelta(-6,'大会で惨敗'); misakiLine='本気でそのまま続けるつもり？ 見てるこっちがつらいんだけど。'; maybeStartEmiDiet('大敗して危機感が強まった');}
@@ -316,13 +383,14 @@ function maybeEmiIzakayaShift(){
  state.emiLastIzakayaShiftDay=state.day;
  const lv=stageNum(),dep=state.emiMessDependence||0;
  showEmiMemoryCG('night_izakaya_work',lv,`絵美 Lv.${lv}：居酒屋バイト`,'居酒屋バイトCG');
+ emiApplyEventEffects('izakaya_work');
  let eatChance;
  if(lv<=2){
    // 痩せていた頃は「回復のためのまかない」として自然に食べる。満腹時だけ断りやすい。
    eatChance=state.fullness>=88?5:state.fullness>=78?28:clamp(82+state.hunger*.12,78,95);
  }else{
    // 増量を自覚後は毎回まず我慢しようとする。ただし抑止力が低いほど食欲に負ける。
-   eatChance=72+dep*.28+state.hunger*.34-state.fullness*.46-state.restraint*.72+(lv-3)*3;
+   eatChance=58+dep*.24+emiFoodInterest()*.72+state.hunger*.34-state.fullness*.46-state.restraint*.72+(lv-3)*3;
    if(state.emiDietMode)eatChance-=12;
    eatChance=clamp(eatChance,6,94);
  }

@@ -43,7 +43,7 @@ function syncChoiceModalState(){
  document.body.classList.toggle('choiceOpen',any);
 }
 
-function render(){if(!activeId||!state)return;trackRelationshipStage();const c=CHARACTERS[activeId];$('day').textContent=state.day;$('turnLabel').textContent=turns[state.turn].label;$('affection').textContent=Math.round(state.affection);$('mood').textContent=Math.round(state.mood);$('fullness').textContent=Math.round(state.fullness);$('restraint').textContent=Math.round(state.restraint);$('weight').textContent=state.weight.toFixed(1);$('money').textContent=Math.round(state.money??2500).toLocaleString();$('weightBadge').textContent=state.weight.toFixed(1);$('height').textContent=c.height;$('charName').textContent=c.name;$('headerRelationship').textContent=`${c.relationship} / ${relationshipLabel()}`;const bt=bodyType();$('bodyType').textContent=bt;$('bodyTypeTop').textContent=bt;$('profileMini').textContent=`${c.age}歳｜関係:${relationshipLabel()}｜${c.speech}｜主人公バイト${state.workCount||0}回${c.id==='emi'?`｜まかない依存${Math.round(state.emiMessDependence||0)}/100｜競技コンディション${Math.round(refreshEmiCondition()||0)}/100`:''}`;const eb=$('emotionBadge');if(eb)eb.textContent=emotionLabel(state.lastEmotion||'normal');const img=$('characterImage');img.dataset.fallback='';img.dataset.stageFallback='0';img.onload=()=>{img.style.visibility='visible'};img.onerror=()=>{if(img.dataset.stageFallback==='0'){img.dataset.stageFallback='1';img.src=`assets/${c.id}/standing_01.webp?v=${APP_BUILD}`}else{placeholder(img,c.name)}};img.style.visibility='visible';img.src=imagePath(c);const chat=$('chat');chat.innerHTML='';state.history.forEach(m=>{if(m.role==='narration')addNarration(m.content,m.meta,false);else if(m.role==='cg')addCGMessage(m.title,m.path,m.meta,false);else addBubble(m.role,m.content,m.meta,false)});chat.scrollTop=chat.scrollHeight;$('gameLog').innerHTML=state.gameLog.slice().reverse().map(x=>`<div>• ${escapeHtml(x)}</div>`).join('')||'<div>まだログはありません。</div>';$('profileDetail').innerHTML=`<b>性格</b><br>${escapeHtml(c.personality)}<br><br><b>食欲 / 太りやすさ / 運動</b><br>${escapeHtml(c.appetite)} / ${escapeHtml(c.gainTendency)} / ${escapeHtml(currentExerciseText(c))}<br><br><b>体型・体重への考え</b><br>${escapeHtml(currentBodyViewText(c))}<br><br><b>好きな食べ物</b><br>${escapeHtml(state.favoriteFoods.length?state.favoriteFoods.join('、'):'特になし')}<br><br><b>その他</b><br>${escapeHtml(currentFeaturesText(c))}${c.id==='emi'?`<br><br><b>絵美専用システム</b><br>まかない依存度 ${Math.round(state.emiMessDependence||0)}/100<br>競技コンディション ${Math.round(refreshEmiCondition()||0)}/100<br>後輩との関係 ${Math.round(state.emiJuniorBond||0)}/100<br>陸上継続 ${state.emiTrackActive!==false?'継続中':'退部済み'}<br>ダイエット ${state.emiDietMode?`進行中（残り${state.emiDietDaysLeft}日）`:(state.emiDietLastResult==='success'?'直近成功':state.emiDietLastResult==='failure'?'直近失敗':'未実施 / 終了')}<br>怪我 ${state.emiInjuryDaysLeft>0?`回復まで${state.emiInjuryDaysLeft}日`:'なし'}<br>ライバル美咲 ${state.misakiWeight.toFixed(1)}kg / 体型Lv.${misakiBodyLv()} / コンディション ${Math.round(state.misakiCondition||0)}/100<br>居酒屋バイト 週3〜4回のランダムシフト（夜のみ）`:''}`;renderDateEvent();renderWeightEvent();renderInitiativeChoices();renderRestraintEvent();renderRoutineChoices();renderNightChoice();renderCGGallery();renderHookDebugPanel();syncEventLockUI();syncChoiceModalState();}
+function render(){if(!activeId||!state)return;trackRelationshipStage();const c=CHARACTERS[activeId];$('day').textContent=state.day;$('turnLabel').textContent=turns[state.turn].label;$('affection').textContent=Math.round(state.affection);$('mood').textContent=Math.round(state.mood);$('fullness').textContent=Math.round(state.fullness);$('restraint').textContent=Math.round(state.restraint);const fic=$('emiFoodInterestCard'),fiv=$('emiFoodInterestValue');if(fic)fic.style.display=activeId==='emi'?'block':'none';if(fiv)fiv.textContent=Math.round(state.emiFoodInterest||0);$('weight').textContent=state.weight.toFixed(1);$('money').textContent=Math.round(state.money??2500).toLocaleString();$('weightBadge').textContent=state.weight.toFixed(1);$('height').textContent=c.height;$('charName').textContent=c.name;$('headerRelationship').textContent=`${c.relationship} / ${relationshipLabel()}`;const bt=bodyType();$('bodyType').textContent=bt;$('bodyTypeTop').textContent=bt;$('profileMini').textContent=`${c.age}歳｜関係:${relationshipLabel()}｜${c.speech}｜主人公バイト${state.workCount||0}回${c.id==='emi'?`｜まかない依存${Math.round(state.emiMessDependence||0)}/100｜競技コンディション${Math.round(refreshEmiCondition()||0)}/100`:''}`;const eb=$('emotionBadge');if(eb)eb.textContent=emotionLabel(state.lastEmotion||'normal');const img=$('characterImage');img.dataset.fallback='';img.dataset.stageFallback='0';img.onload=()=>{img.style.visibility='visible'};img.onerror=()=>{if(img.dataset.stageFallback==='0'){img.dataset.stageFallback='1';img.src=`assets/${c.id}/standing_01.webp?v=${APP_BUILD}`}else{placeholder(img,c.name)}};img.style.visibility='visible';img.src=imagePath(c);const chat=$('chat');chat.innerHTML='';state.history.forEach(m=>{if(m.role==='narration')addNarration(m.content,m.meta,false);else if(m.role==='cg')addCGMessage(m.title,m.path,m.meta,false);else addBubble(m.role,m.content,m.meta,false)});chat.scrollTop=chat.scrollHeight;$('gameLog').innerHTML=state.gameLog.slice().reverse().map(x=>`<div>• ${escapeHtml(x)}</div>`).join('')||'<div>まだログはありません。</div>';$('profileDetail').innerHTML=`<b>性格</b><br>${escapeHtml(c.personality)}<br><br><b>食欲 / 太りやすさ / 運動</b><br>${escapeHtml(c.appetite)} / ${escapeHtml(c.gainTendency)} / ${escapeHtml(currentExerciseText(c))}<br><br><b>体型・体重への考え</b><br>${escapeHtml(currentBodyViewText(c))}<br><br><b>好きな食べ物</b><br>${escapeHtml(state.favoriteFoods.length?state.favoriteFoods.join('、'):'特になし')}<br><br><b>その他</b><br>${escapeHtml(currentFeaturesText(c))}${c.id==='emi'?`<br><br><b>絵美専用システム</b><br>まかない依存度 ${Math.round(state.emiMessDependence||0)}/100<br>食への興味 ${Math.round(state.emiFoodInterest||0)}/100<br>競技コンディション ${Math.round(refreshEmiCondition()||0)}/100<br>後輩との関係 ${Math.round(state.emiJuniorBond||0)}/100<br>陸上継続 ${state.emiTrackActive!==false?'継続中':'退部済み'}<br>ダイエット ${state.emiDietMode?`進行中（残り${state.emiDietDaysLeft}日）`:(state.emiDietLastResult==='success'?'直近成功':state.emiDietLastResult==='failure'?'直近失敗':'未実施 / 終了')}<br>怪我 ${state.emiInjuryDaysLeft>0?`回復まで${state.emiInjuryDaysLeft}日`:'なし'}<br>ライバル美咲 ${state.misakiWeight.toFixed(1)}kg / 体型Lv.${misakiBodyLv()} / コンディション ${Math.round(state.misakiCondition||0)}/100<br>居酒屋バイト 週3〜4回のランダムシフト（夜のみ）`:''}`;renderDateEvent();renderWeightEvent();renderInitiativeChoices();renderRestraintEvent();renderRoutineChoices();renderNightChoice();renderCGGallery();renderHookDebugPanel();syncEventLockUI();syncChoiceModalState();}
 
 function normalizeEmotion(v){
  const x=String(v||'normal').toLowerCase();
@@ -525,7 +525,7 @@ async function resolveInitiativeChoice(i){
  const ch=p.choices[i];if(!ch)return;
  const box=$('initiativeChoices');if(box)box.querySelectorAll('button').forEach(b=>b.disabled=true);
  const before=state.affection,wasLover=!!state.isLover;
- state.affection=clamp(state.affection+ch.affection);state.mood=clamp(state.mood+ch.mood);
+ changeAffection(ch.affection,'交流');state.mood=clamp(state.mood+ch.mood);
  if(p.type==='confession'){
    if(ch.confession==='accept'){state.isLover=true;state.confessionCompleted=true;state.confessionDeferredUntilDay=0}
    else if(ch.confession==='wait'){state.confessionDeferredUntilDay=state.day+4}
@@ -787,8 +787,8 @@ function applySimpleNightEffect(ev){
    detail.push(`体重 +${wg.toFixed(2)}kg`,'満腹度 +22','抑止力 -4');
    updateEvolution(c);
  }
- if(ev.id==='what_did_he_think'){state.affection=clamp(state.affection+1);const d=state.mood>=60?-2:2;state.restraint=clamp(state.restraint+d);detail.push('好感度 +1',`抑止力 ${d>=0?'+':''}${d}`)}
- if(ev.id==='date_photo'){state.restraint=clamp(state.restraint+3);state.affection=clamp(state.affection+1);detail.push('抑止力 +3','好感度 +1')}
+ if(ev.id==='what_did_he_think'){changeAffection(1,'交流');const d=state.mood>=60?-2:2;state.restraint=clamp(state.restraint+d);detail.push('好感度 +1',`抑止力 ${d>=0?'+':''}${d}`)}
+ if(ev.id==='date_photo'){state.restraint=clamp(state.restraint+3);changeAffection(1,'交流');detail.push('抑止力 +3','好感度 +1')}
  if(ev.id==='body_heavy'){state.restraint=clamp(state.restraint+5);detail.push('抑止力 +5')}
  if(ev.id==='past_self'){const d=randomInt(2,5);state.restraint=clamp(state.restraint+d);detail.push(`抑止力 +${d}`)}
  if(ev.id==='catch_breath'){const d=randomInt(4,8);state.restraint=clamp(state.restraint+d);detail.push(`抑止力 +${d}`)}
@@ -1600,15 +1600,15 @@ function foodAcceptanceChance(c,offer){let score=48;score+=(state.affection-50)*
  score+=characterFoodModifier(c,offer).accept;
  if(c.id==='risa'&&(offer.tags.includes('sweet')||offer.tags.includes('bread')))score+=26;
  if(c.id==='emi'){
-   const lv=stageNum();
+   const lv=stageNum(),interest=emiFoodInterest();
    if(lv<=2){
-     // Lv1〜2は「太るから我慢」ではない。抑止力の影響をほぼ消し、満腹感を強く効かせる。
-     score+=state.restraint*.42;
+     score+=state.restraint*.42+interest*.48;
      score-=Math.max(0,state.fullness-50)*1.15;
-     if(state.fullness>=80)score=Math.min(score,8);
-     if(state.fullness>=90)score=Math.min(score,2);
+     if(state.fullness>=80)score=Math.min(score,8+interest*.12);
+     if(state.fullness>=90)score=Math.min(score,2+interest*.08);
    }else{
-     score-=state.restraint*.18;
+     score-=state.restraint*.18;score+=interest*.62;
+     if(interest>=70)score+=10;if(interest>=85)score+=10;
    }
  }
  if(c.id==='yui'){score+=20;if(offer.isGift)score=96;else score=Math.max(score,70-state.fullness*0.18)}
@@ -1675,7 +1675,24 @@ function resolveFoodOffer(offer,text){
    if(c.id==='emi'&&stageNum()<=2)capEmiLowStageRestraint('食事を断った後');
  }
  recordFoodGrowth(offer,accepted,offer.isGift?'食べ物プレゼント':'主人公からの食事提案');
- const result={accepted,food:offer.name,isGift:offer.isGift,chance:Math.round(chance),fullnessDelta,weightGain:Number(weightGain.toFixed(2)),restraintDelta,regret,before,after:{fullness:state.fullness,hunger:state.hunger,restraint:state.restraint,weight:state.weight,weightInterest:state.weightInterest||0},summary:accepted?`${c.name}は${offer.name}を食べた。満腹度 +${fullnessDelta}、体重 +${weightGain.toFixed(2)}kg相当、食後の罪悪感・自制で抑止力 ${restraintDelta>=0?'+':''}${restraintDelta}${c.id==='rei'&&restraintDelta===0?'（体重増加への興味が育ち、今回は上昇なし）':''}${regret?`、罪悪感 ${regret}`:''}`:`${c.name}は${offer.name}を断った。我慢で抑止力 ${restraintDelta}`,log:accepted?`${offer.name}を受け入れた（判定${Math.round(chance)}%）。満腹度 +${fullnessDelta} / 体重 +${weightGain.toFixed(2)}kg / 抑止力 ${restraintDelta>=0?'+':''}${restraintDelta}`:`${offer.name}を断った（判定${Math.round(chance)}%）。我慢で抑止力 ${restraintDelta}`};
+ if(c.id==='emi'&&accepted)changeEmiFoodInterest(offer.isGift?2:3,offer.isGift?'食べ物プレゼント':'主人公との食事');
+ let emiRegretText='';
+ if(c.id==='emi'&&accepted&&!offer.isGift){
+  const lv=stageNum();
+  emiRegretText=[
+   '',
+   '食後も体型を気にせず、後悔はほぼない。',
+   'まだ増量を認めていないが、食べすぎた時だけ「ちょっと食べたかな」と軽く引っかかる。',
+   '増量を自覚し始め、「大丈夫、次から控えれば戻せる」と無理に言い聞かせた後、「また食べちゃった」と小さく後悔する。',
+   '「まだ戻せる、大丈夫」と繰り返し言い聞かせるが、「ちゃんとやってるのに、なんで」と余裕がなくなり、食後の後悔と苛立ちが明確になる。',
+   '満足した直後に「また我慢できなかった」と自己嫌悪し、「分かってる、今日からちゃんとやるから」と苛立ちながら自分に言い聞かせる。',
+   '食欲に負けたことを強く後悔し、退部した現状と結びつけて「あの時ちゃんと止めてれば」と混乱する。以前のように簡単な解決策を言えなくなる。',
+   '食べる喜びの直後に深い後悔が来て、過去の自分を思い出し「こんなはずじゃなかった」と強く悔やむ。'
+  ][lv]||'';
+  if(lv>=3)state.mood=clamp(state.mood-Math.min(6,lv-2));
+ }
+
+ const result={emiRegretText,accepted,food:offer.name,isGift:offer.isGift,chance:Math.round(chance),fullnessDelta,weightGain:Number(weightGain.toFixed(2)),restraintDelta,regret,before,after:{fullness:state.fullness,hunger:state.hunger,restraint:state.restraint,weight:state.weight,weightInterest:state.weightInterest||0},summary:accepted?`${c.name}は${offer.name}を食べた。満腹度 +${fullnessDelta}、体重 +${weightGain.toFixed(2)}kg相当、食後の罪悪感・自制で抑止力 ${restraintDelta>=0?'+':''}${restraintDelta}${c.id==='rei'&&restraintDelta===0?'（体重増加への興味が育ち、今回は上昇なし）':''}${regret?`、罪悪感 ${regret}`:''}${emiRegretText?`。絵美の食後反応: ${emiRegretText}`:''}`:`${c.name}は${offer.name}を断った。我慢で抑止力 ${restraintDelta}`,log:accepted?`${offer.name}を受け入れた（判定${Math.round(chance)}%）。満腹度 +${fullnessDelta} / 体重 +${weightGain.toFixed(2)}kg / 抑止力 ${restraintDelta>=0?'+':''}${restraintDelta}`:`${offer.name}を断った（判定${Math.round(chance)}%）。我慢で抑止力 ${restraintDelta}`};
  state.lastFoodResult=result;state.lastFoodWasRefused=!accepted;state.lastFoodTurnKey=currentTurnKey();log(result.log);save();render();return result;
 }
 function workIncome(){return Math.min(5000,1200+Math.floor((state.workCount||0)/3)*350)}
@@ -1711,6 +1728,7 @@ function applyGuaranteedFoodEffect(food,sourceLabel='食事'){
  state.restraint=clamp(state.restraint+restraintDelta);
  if(c.id==='emi'&&stageNum()<=2)capEmiLowStageRestraint(sourceLabel);
  recordFoodGrowth(food,true,sourceLabel);
+ if(c.id==='emi')changeEmiFoodInterest(sourceLabel.includes('まかない')?5:(sourceLabel.includes('デート')?3:2),sourceLabel);
  log(`${sourceLabel}: ${food.name}。満腹度+${fullnessDelta} / 体重+${weightGain.toFixed(2)}kg / 抑止力${restraintDelta>=0?'+':''}${restraintDelta}${regret?` / 罪悪感${regret}`:''}`);
  return {fullnessDelta,weightGain:Number(weightGain.toFixed(2)),restraintDelta,regret};
 }
@@ -1732,7 +1750,7 @@ async function giveGift(){
   // 好みに合うほど少し上乗せされるが、最大でも +8 に制限する。
   ag=Math.min(8,Math.max(1,Math.round(g.baseAffection*.5*(1+pref*.10))));
   mg=Math.max(1,Math.round(g.mood*(1+Math.max(0,pref)*.12)));
-  state.affection=clamp(state.affection+ag);
+  changeAffection(ag,'交流');
   state.mood=clamp(state.mood+mg);
   if(g.food)foodEffect=applyGuaranteedFoodEffect(g.food,'食べ物プレゼント')
 }
@@ -1796,7 +1814,7 @@ ${c.id==='erika'?erikaRequestConflict('デートの誘い',false):''}
 
  state.money-=d.price;
  const ag=1,mg=Math.max(1,Math.round(d.mood*(1+Math.max(0,j.pref)*.1)));
- state.affection=clamp(state.affection+ag);state.mood=clamp(state.mood+mg);
+ changeAffection(ag,'交流');state.mood=clamp(state.mood+mg);
  state.pendingDate={key,name:d.name,pref:j.pref,affectionGained:ag};
  state.todayDateKey=key;state.todayDateName=d.name;
  if(c.id==='emi'){const dlv=stageNum(),dpath=memoryCGPath('date',key,dlv);unlockCG(`date:${activeId}:${key}:${dlv}`,`${c.name}と${d.name} Lv.${dlv}`,dpath);addCGMessage(`${c.name}と${d.name} Lv.${dlv}`,dpath,'デートCG');}
@@ -1836,7 +1854,7 @@ async function resolveDateChoice(i,autoTriggered=false){
  const remaining=Math.max(0,5-already);
  const ag=rawAg>0?Math.min(rawAg,remaining):rawAg;
  state.pendingDate.affectionGained=already+Math.max(0,ag);
- state.affection=clamp(state.affection+ag);state.mood=clamp(state.mood+mg);
+ changeAffection(ag,'交流');state.mood=clamp(state.mood+mg);
  if(choice.restraint)state.restraint=clamp(state.restraint+choice.restraint);
  if(choice.fullness)state.fullness=clamp(state.fullness+choice.fullness);
  let foodEffect=null;if(choice.food)foodEffect=applyGuaranteedFoodEffect(choice.food,'デート中の食事');
@@ -1894,7 +1912,7 @@ ${c.height}cm / ${state.weight.toFixed(1)}kg｜体型 ${bodyType()}｜開始時�
 美咲 ${state.misakiWeight.toFixed(1)}kg｜体型Lv.${misakiBodyLv()}｜コンディション ${Math.round(state.misakiCondition||0)}/100｜ライバル度 ${Math.round(state.misakiRivalry||0)}/100`:''}${hookInfo}`)}
 function pressurePenalty(text){const c=CHARACTERS[activeId];const forceful=/お願い|頼む|いいから|食べてよ|食べなよ|絶対|もっと|無理やり|断らないで|せっかく/.test(text);let affLoss=forceful?6:3,moodLoss=forceful?5:2;if(c.id==='erika'){affLoss+=2;moodLoss+=1}if(c.id==='yui'&&state.affection<50)affLoss+=1;state.affection=clamp(state.affection-affLoss);state.mood=clamp(state.mood-moodLoss);const result={affectionDelta:-affLoss,moodDelta:-moodLoss,forceful,summary:`一度断った直後にさらに強く勧めたため、${c.name}は圧を感じた。好感度 -${affLoss}、機嫌 -${moodLoss}`,log:`断った直後の強引な再提案。好感度 -${affLoss} / 機嫌 -${moodLoss}`};log(result.log);return result}
 function pressureDemoReply(){const c=CHARACTERS[activeId];if(c.id==='risa')return'もう、さっき断ったでしょ。しつこいのは嫌だよ。';if(c.id==='emi')return'もう、いらないって言ったでしょ。何度も言われると困るんだけど。';if(c.id==='yui')return'ごめんね、そんなに押されるとちょっと困っちゃう。';if(c.id==='erika')return'しつこいですわ。不愉快です。';return'……断ったのに。そういうの、少し嫌。'}
-function demoReply(text,foodResult=null){const c=CHARACTERS[activeId];let aff=0,mood=0,reply='……うん。';if(foodResult){if(foodResult.accepted){if(c.id==='risa')reply=foodResult.food==='甘いもの'||foodResult.food==='パン'?'……それなら食べる。ちょっとだけね！':'うーん……まあ、今日はいいか。食べよ。';if(c.id==='emi')reply='……分かった、食べる。でもこれでタイムに響いたらちょっと嫌だからね。';if(c.id==='yui')reply=foodResult.regret>0?'……また食べちゃった。断ろうとは思ったんだけどな。あとで絶対後悔するやつ……。':'え、いいの？ ……じゃあ、少しだけもらおうかな。';if(c.id==='erika'){const dep=state.growthTraits?.dependence||0;reply=dep>=60?'……本当は控えるつもりでしたのよ？ でも、あなたがそこまで言うなら……今回だけですわ。':'べ、別にあなたに勧められたからではありませんわ。今回は特別ですの。';}if(c.id==='rei')reply='……食べる。こういうのも、悪くないかも。'}else{if(c.id==='risa')reply='今日はやめとく。ちょっと気にしてるし。';if(c.id==='emi')reply='今日はいいかな。今は陸上の方を優先したいし。';if(c.id==='yui')reply='ごめんね。今日はさすがにやめておく。';if(c.id==='erika')reply='結構ですわ。わたくし、今は要りませんの。';if(c.id==='rei')reply='……今日はいい。お腹、そこまで空いてない。'}return reply}if(c.id==='risa')reply='うんうん、それで？';if(c.id==='emi')reply=/太|体重/.test(text)?'え、ちょっと。まだそこまでじゃないでしょ。変なこと言わないでよ。':'うん、それで？';if(c.id==='yui')reply='ふふ、そうなんだ。';if(c.id==='erika')reply=state.affection<40?'べ、別にあなたと話したいわけではありませんわ。':'……少しくらいなら、お付き合いしてあげてもよろしくてよ。';if(c.id==='rei')reply=state.affection<50?'……そう。あなたって、やっぱり少し変わってるね。':'……あなたと話すの、前より好きかも。';if(/好き|可愛い|かわいい|会いた/.test(text)){aff+=2;mood+=2}state.affection=clamp(state.affection+aff);state.mood=clamp(state.mood+mood);return reply}
+function demoReply(text,foodResult=null){const c=CHARACTERS[activeId];let aff=0,mood=0,reply='……うん。';if(foodResult){if(foodResult.accepted){if(c.id==='risa')reply=foodResult.food==='甘いもの'||foodResult.food==='パン'?'……それなら食べる。ちょっとだけね！':'うーん……まあ、今日はいいか。食べよ。';if(c.id==='emi')reply='……分かった、食べる。でもこれでタイムに響いたらちょっと嫌だからね。';if(c.id==='yui')reply=foodResult.regret>0?'……また食べちゃった。断ろうとは思ったんだけどな。あとで絶対後悔するやつ……。':'え、いいの？ ……じゃあ、少しだけもらおうかな。';if(c.id==='erika'){const dep=state.growthTraits?.dependence||0;reply=dep>=60?'……本当は控えるつもりでしたのよ？ でも、あなたがそこまで言うなら……今回だけですわ。':'べ、別にあなたに勧められたからではありませんわ。今回は特別ですの。';}if(c.id==='rei')reply='……食べる。こういうのも、悪くないかも。'}else{if(c.id==='risa')reply='今日はやめとく。ちょっと気にしてるし。';if(c.id==='emi')reply='今日はいいかな。今は陸上の方を優先したいし。';if(c.id==='yui')reply='ごめんね。今日はさすがにやめておく。';if(c.id==='erika')reply='結構ですわ。わたくし、今は要りませんの。';if(c.id==='rei')reply='……今日はいい。お腹、そこまで空いてない。'}return reply}if(c.id==='risa')reply='うんうん、それで？';if(c.id==='emi')reply=/太|体重/.test(text)?'え、ちょっと。まだそこまでじゃないでしょ。変なこと言わないでよ。':'うん、それで？';if(c.id==='yui')reply='ふふ、そうなんだ。';if(c.id==='erika')reply=state.affection<40?'べ、別にあなたと話したいわけではありませんわ。':'……少しくらいなら、お付き合いしてあげてもよろしくてよ。';if(c.id==='rei')reply=state.affection<50?'……そう。あなたって、やっぱり少し変わってるね。':'……あなたと話すの、前より好きかも。';if(/好き|可愛い|かわいい|会いた/.test(text)){aff+=2;mood+=2}changeAffection(aff,'交流');state.mood=clamp(state.mood+mood);return reply}
 
 function moodBand(){
  const v=Math.round(state.mood);

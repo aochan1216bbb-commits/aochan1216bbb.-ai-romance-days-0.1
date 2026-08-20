@@ -122,7 +122,7 @@ async function resolveRoutineChoice(i){
  const box=$('routineChoices');if(box)box.querySelectorAll('button').forEach(b=>b.disabled=true);
  const charId=ch.charId||activeId;const c=CHARACTERS[charId]||CHARACTERS[activeId];
  const beforeAff=state.affection,beforeMood=state.mood,beforeRes=state.restraint;
- state.affection=clamp(state.affection+(ch.affection||0));state.mood=clamp(state.mood+(ch.mood||0));if(ch.restraintDelta)state.restraint=clamp(state.restraint+ch.restraintDelta);
+ changeAffection((ch.affection||0),'イベント');state.mood=clamp(state.mood+(ch.mood||0));if(ch.restraintDelta)state.restraint=clamp(state.restraint+ch.restraintDelta);
  const playerLine=await generatePlayerChoiceLine(ch.label,`特殊イベント後の返答 / キャラクター:${c.name} / 状況:${p.situation||p.intro||''} / 返答意図:${ch.tone}`);
  addBubble('user',playerLine,'特殊イベントへの返答');
  const ctx=`特殊イベント直後の会話分岐。
@@ -483,7 +483,7 @@ async function resolveWeightEventChoice(index){
  const btnBox=$('weightEventChoices');if(btnBox)btnBox.querySelectorAll('button').forEach(b=>b.disabled=true);
 
  const before={affection:state.affection,mood:state.mood,restraint:state.restraint,weight:state.weight};
- state.affection=clamp(state.affection+(choice.affection||0));
+ changeAffection((choice.affection||0),'イベント');
  state.mood=clamp(state.mood+(choice.mood||0));
  {
    let rd=choice.restraint||0;
